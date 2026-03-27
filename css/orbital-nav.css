@@ -162,6 +162,54 @@ body.panel-open {
   background: radial-gradient(circle, rgba(184, 162, 114, 0.15), transparent 65%);
 }
 
+/* --- Return hint (only visible in mini state) --- */
+.orbital__return-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease-out);
+  z-index: 10;
+}
+
+.orbital.orbital--mini .orbital__return-hint {
+  opacity: 0.5;
+}
+
+.orbital.orbital--mini:hover .orbital__return-hint {
+  opacity: 1;
+}
+
+.orbital__return-icon {
+  font-size: 1.2rem;
+  color: var(--color-gold);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.orbital.orbital--mini:hover .orbital__return-icon {
+  transform: translateX(-4px);
+}
+
+.orbital__return-text {
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.orbital.orbital--mini:hover .orbital__return-text {
+  color: var(--color-gold);
+}
+
 .orbital.orbital--mini .orbital__indicator {
   opacity: 0 !important;
   pointer-events: none;
