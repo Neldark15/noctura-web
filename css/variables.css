@@ -1,0 +1,101 @@
+/* ===================================
+   NOCTURA — Design Tokens
+   =================================== */
+
+:root {
+  /* --- Primary Backgrounds --- */
+  --color-black:        #0A0A0A;
+  --color-graphite:     #1A1A1E;
+  --color-anthracite:   #2A2A2F;
+  --color-charcoal:     #3A3A40;
+
+  /* --- Primary Text --- */
+  --color-bone:         #E8E0D4;
+  --color-ivory:        #F5F0E8;
+  --color-muted:        #8A8A8E;
+
+  /* --- Accents --- */
+  --color-silver:       #C0C0C8;
+  --color-wine:         #6B1D3A;
+  --color-night-blue:   #1B2A4A;
+  --color-deep-purple:  #2D1B4E;
+  --color-gold:         #B8A272;
+
+  /* --- Functional --- */
+  --color-overlay:      rgba(10, 10, 10, 0.85);
+  --color-glass:        rgba(26, 26, 30, 0.60);
+
+  /* --- Font Families --- */
+  --font-display:  'Cormorant Garamond', Georgia, serif;
+  --font-body:     'Inter', 'Helvetica Neue', sans-serif;
+  --font-accent:   'Libre Baskerville', Georgia, serif;
+
+  /* --- Font Scale (clamp) --- */
+  --fs-xs:    clamp(0.70rem, 0.65rem + 0.25vw, 0.80rem);
+  --fs-sm:    clamp(0.80rem, 0.75rem + 0.30vw, 0.93rem);
+  --fs-base:  clamp(0.95rem, 0.88rem + 0.35vw, 1.10rem);
+  --fs-md:    clamp(1.15rem, 1.00rem + 0.50vw, 1.40rem);
+  --fs-lg:    clamp(1.60rem, 1.30rem + 1.00vw, 2.20rem);
+  --fs-xl:    clamp(2.40rem, 1.80rem + 2.00vw, 4.00rem);
+  --fs-xxl:   clamp(3.50rem, 2.50rem + 3.50vw, 7.00rem);
+
+  /* --- Font Weights --- */
+  --fw-light:     300;
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+
+  /* --- Letter Spacing --- */
+  --ls-tight:   -0.02em;
+  --ls-normal:    0;
+  --ls-wide:      0.08em;
+  --ls-ultra:     0.20em;
+
+  /* --- Line Heights --- */
+  --lh-tight:   1.10;
+  --lh-heading: 1.20;
+  --lh-body:    1.65;
+
+  /* --- Spacing --- */
+  --space-xs:   0.5rem;
+  --space-sm:   1rem;
+  --space-md:   2rem;
+  --space-lg:   4rem;
+  --space-xl:   8rem;
+  --space-xxl:  12rem;
+
+  /* --- Layout --- */
+  --container-width: 1200px;
+  --container-padding: 2rem;
+
+  /* --- Transitions --- */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 0.3s;
+  --duration-normal: 0.6s;
+
+  /* --- Neo-Skeuomorphic Depth (light at 315°) --- */
+  --shadow-surface-1:
+    inset 1px 1px 0 rgba(255,255,255,0.03),
+    0 2px 8px rgba(0,0,0,0.4),
+    0 1px 2px rgba(0,0,0,0.3);
+  --shadow-surface-2:
+    inset 1px 1px 0 rgba(255,255,255,0.05),
+    0 4px 16px rgba(0,0,0,0.5),
+    0 2px 4px rgba(0,0,0,0.35);
+  --shadow-surface-3:
+    inset 1px 1px 1px rgba(255,255,255,0.06),
+    0 8px 32px rgba(0,0,0,0.6),
+    0 4px 8px rgba(0,0,0,0.4);
+  --shadow-inset:
+    inset 0 2px 4px rgba(0,0,0,0.5),
+    inset 0 -1px 0 rgba(255,255,255,0.03);
+  --shadow-pressed:
+    inset 0 2px 6px rgba(0,0,0,0.6),
+    inset 0 -1px 0 rgba(255,255,255,0.02);
+
+  /* --- Gold Glows --- */
+  --glow-gold-subtle: 0 0 12px rgba(184,162,114,0.08);
+  --glow-gold-medium: 0 0 20px rgba(184,162,114,0.15), 0 0 40px rgba(184,162,114,0.05);
+  --glow-gold-strong: 0 0 30px rgba(184,162,114,0.25), 0 0 60px rgba(184,162,114,0.08);
+}

@@ -1,0 +1,58 @@
+/* ===================================
+   Client Logos Marquee
+   =================================== */
+
+.clients {
+  padding: var(--space-lg) 0 var(--space-md);
+  overflow: hidden;
+}
+
+.clients__label {
+  display: block;
+  text-align: center;
+  margin-bottom: var(--space-md);
+}
+
+.clients__marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.clients__track {
+  display: flex;
+  gap: var(--space-lg);
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.clients__logo {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-charcoal);
+  white-space: nowrap;
+  text-transform: uppercase;
+  transition: color var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.clients__logo:hover {
+  color: var(--color-muted);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.clients__marquee:hover .clients__track {
+  animation-play-state: paused;
+}

@@ -1,0 +1,67 @@
+/* ===================================
+   About / Esencia Section
+   =================================== */
+
+.about {
+  padding: var(--space-xl) 0;
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* --- Vertical Label --- */
+.about__label-wrap {
+  position: relative;
+  height: 100%;
+  min-height: 300px;
+}
+
+.about__label {
+  position: sticky;
+  top: 50%;
+  transform: rotate(-90deg) translateX(-50%);
+  transform-origin: left center;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-anthracite);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+/* --- Content --- */
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 640px;
+}
+
+.about__text {
+  color: var(--color-bone);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.about__text em {
+  font-family: var(--font-accent);
+  font-style: italic;
+  color: var(--color-ivory);
+}
+
+.about__highlight {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  line-height: var(--lh-heading);
+  padding-left: var(--space-md);
+  border-left: 1px solid var(--color-gold);
+}

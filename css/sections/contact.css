@@ -1,0 +1,323 @@
+/* ===================================
+   Contact Section — Glassmorphism
+   =================================== */
+
+.contact {
+  padding: var(--space-xl) 0;
+  background-color: var(--color-graphite);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gradient glow behind form */
+.contact::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(45, 27, 78, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* --- Grid Layout --- */
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+/* ===== LEFT: Info Column ===== */
+.contact__info {
+  padding-top: var(--space-md);
+}
+
+.contact__heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  line-height: var(--lh-heading);
+  margin-bottom: var(--space-md);
+}
+
+.contact__desc {
+  font-size: var(--fs-base);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  margin-bottom: var(--space-lg);
+  max-width: 400px;
+}
+
+/* --- Detail Items --- */
+.contact__details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.contact__detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.contact__detail-label {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.contact__detail-value {
+  font-size: var(--fs-sm);
+  color: var(--color-bone);
+}
+
+a.contact__detail-value {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+a.contact__detail-value::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transition: width var(--duration-fast) var(--ease-out);
+}
+
+a.contact__detail-value:hover::after {
+  width: 100%;
+}
+
+/* --- Social Links --- */
+.contact__socials {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.contact__social-link {
+  color: var(--color-charcoal);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-wide);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.contact__social-link:hover {
+  color: var(--color-ivory);
+}
+
+/* ===== RIGHT: Glass Form Card ===== */
+.contact__form-wrap {
+  background: rgba(26, 26, 30, 0.45);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  position: relative;
+  box-shadow: var(--shadow-surface-2);
+}
+
+/* Subtle inner glow at top */
+.contact__form-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.08), transparent);
+}
+
+/* --- Form --- */
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group__input,
+.form-group__textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: var(--space-sm) var(--space-sm);
+  padding-top: 1.5rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--color-bone);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out);
+  outline: none;
+}
+
+.form-group__input:focus,
+.form-group__textarea:focus {
+  border-color: rgba(184, 162, 114, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(184, 162, 114, 0.06), var(--shadow-inset);
+}
+
+.form-group__textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group__label {
+  position: absolute;
+  left: var(--space-sm);
+  top: 1.2rem;
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  pointer-events: none;
+  transition: transform var(--duration-fast) var(--ease-out),
+              font-size var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
+}
+
+.form-group__input:focus ~ .form-group__label,
+.form-group__input:not(:placeholder-shown) ~ .form-group__label,
+.form-group__textarea:focus ~ .form-group__label,
+.form-group__textarea:not(:placeholder-shown) ~ .form-group__label {
+  transform: translateY(-0.75rem);
+  font-size: var(--fs-xs);
+  color: var(--color-gold);
+}
+
+/* --- Service & Budget Tag Selectors --- */
+.form-group__select-label {
+  display: block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 0.75rem;
+}
+
+.form-group__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.form-tag {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-tag:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-bone);
+}
+
+.form-tag.selected {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(184, 162, 114, 0.08);
+  box-shadow: var(--glow-gold-subtle);
+}
+
+.form-tag:active {
+  transform: scale(0.95);
+  box-shadow: var(--shadow-pressed);
+}
+
+.tag-ripple {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(184,162,114,0.25);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+/* --- Submit Button --- */
+.contact__submit {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-bone);
+  padding: 1rem var(--space-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  margin-top: var(--space-xs);
+}
+
+.contact__submit {
+  box-shadow: var(--shadow-surface-1);
+  transition: all var(--duration-fast) var(--ease-out), transform 0.15s, box-shadow 0.15s;
+}
+
+.contact__submit:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(184, 162, 114, 0.06);
+  box-shadow: var(--shadow-surface-2), var(--glow-gold-subtle);
+  transform: translateY(-1px);
+}
+
+.contact__submit:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-pressed);
+}
+
+.contact__submit-icon {
+  font-size: 1.1rem;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.contact__submit:hover .contact__submit-icon {
+  transform: translateX(4px);
+}
+
+/* --- Success State --- */
+.contact__submit.success {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  pointer-events: none;
+}

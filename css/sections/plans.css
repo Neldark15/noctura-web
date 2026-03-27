@@ -1,0 +1,492 @@
+/* ===================================
+   Plans / Pricing — Integral Philosophy
+   =================================== */
+
+.plans {
+  padding: var(--space-xl) 0;
+  background-color: var(--color-black);
+  position: relative;
+}
+
+/* ===== Header + Philosophy ===== */
+.plans__header {
+  margin-bottom: var(--space-xl);
+  max-width: 620px;
+}
+
+.plans__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  line-height: var(--lh-heading);
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.plans__philosophy {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  max-width: 540px;
+}
+
+.plans__flow {
+  font-family: var(--font-accent);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--color-gold);
+  opacity: 0.7;
+  margin-top: var(--space-sm);
+  max-width: 540px;
+}
+
+/* ===== Foundation — First Month Block ===== */
+.plans__foundation {
+  margin-bottom: var(--space-xl);
+  padding: var(--space-lg);
+  background: rgba(26, 26, 30, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  position: relative;
+  box-shadow: var(--shadow-surface-2);
+}
+
+/* Top glow line */
+.plans__foundation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184, 162, 114, 0.2), transparent);
+}
+
+.plans__foundation-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.plans__foundation-moon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 20px 5px rgba(184, 162, 114, 0.1),
+    0 0 40px 10px rgba(184, 162, 114, 0.05);
+}
+
+.plans__foundation-moon::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    transparent 50%,
+    rgba(10, 10, 10, 0.25) 70%,
+    rgba(10, 10, 10, 0.6) 85%,
+    var(--color-black) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.plans__foundation-moon .plan-card__moon-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+.plans__foundation-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-light);
+  color: var(--color-gold);
+  margin-bottom: 0.25rem;
+}
+
+.plans__foundation-subtitle {
+  font-size: var(--fs-xs);
+  color: var(--color-charcoal);
+  letter-spacing: var(--ls-wide);
+}
+
+/* --- Service Cards Grid --- */
+.plans__foundation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.plans__service-card {
+  padding: var(--space-sm);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  box-shadow: var(--shadow-surface-1);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out),
+              transform 0.3s var(--ease-out),
+              box-shadow 0.3s var(--ease-out);
+}
+
+.plans__service-card:hover {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-surface-2);
+}
+
+.plans__service-number {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-gold);
+  opacity: 0.5;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.plans__service-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-regular);
+  color: var(--color-ivory);
+  margin-bottom: 0.4rem;
+}
+
+.plans__service-desc {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  line-height: 1.55;
+}
+
+/* ===== Rhythm Section — What Changes ===== */
+.plans__rhythm {
+  margin-bottom: var(--space-xl);
+}
+
+.plans__rhythm-header {
+  margin-bottom: var(--space-lg);
+}
+
+.plans__rhythm-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  margin-bottom: var(--space-xs);
+}
+
+.plans__rhythm-desc {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  max-width: 520px;
+}
+
+/* ===== Plan Cards Grid ===== */
+.plans__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+/* --- Plan Card --- */
+.plan-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: var(--space-md);
+  box-shadow: var(--shadow-surface-1);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out),
+              transform 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out);
+  position: relative;
+}
+
+.plan-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-surface-3);
+}
+
+/* Featured card (Creciente) */
+.plan-card--featured {
+  background: rgba(26, 26, 30, 0.45);
+  border-color: rgba(184, 162, 114, 0.2);
+}
+
+.plan-card--featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184, 162, 114, 0.3), transparent);
+}
+
+.plan-card--featured:hover {
+  border-color: rgba(184, 162, 114, 0.35);
+  box-shadow: var(--shadow-surface-3), var(--glow-gold-medium);
+}
+
+/* Badge */
+.plan-card__badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(184, 162, 114, 0.25);
+  border-radius: 100px;
+  background: rgba(184, 162, 114, 0.06);
+}
+
+/* --- Moon in Card --- */
+.plan-card__moon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: var(--space-md);
+  box-shadow:
+    0 0 20px 4px rgba(180, 200, 255, 0.08),
+    0 0 40px 8px rgba(180, 200, 255, 0.04);
+  flex-shrink: 0;
+}
+
+.plan-card__moon-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+}
+
+/* Soft vignette to blend moon edges */
+.plan-card__moon-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    transparent 50%,
+    rgba(10, 10, 10, 0.25) 70%,
+    rgba(10, 10, 10, 0.6) 85%,
+    var(--color-black) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.plan-card__moon-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to left,
+    var(--color-black) 0%,
+    var(--color-black) 30%,
+    rgba(10, 10, 10, 0.7) 45%,
+    rgba(10, 10, 10, 0.3) 58%,
+    transparent 72%
+  );
+}
+
+/* Featured card moon gets a gold glow */
+.plan-card--featured .plan-card__moon-wrap {
+  box-shadow:
+    0 0 24px 6px rgba(184, 162, 114, 0.1),
+    0 0 48px 12px rgba(184, 162, 114, 0.05);
+}
+
+/* --- Typography --- */
+.plan-card__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  margin-bottom: 0.5rem;
+}
+
+.plan-card--featured .plan-card__name {
+  color: var(--color-gold);
+}
+
+.plan-card__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  margin-bottom: var(--space-sm);
+}
+
+/* --- Price --- */
+.plan-card__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-bottom: var(--space-sm);
+}
+
+.plan-card__amount {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+}
+
+.plan-card--featured .plan-card__amount {
+  color: var(--color-gold);
+}
+
+.plan-card__period {
+  font-size: var(--fs-xs);
+  color: var(--color-charcoal);
+}
+
+/* --- Divider --- */
+.plan-card__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: var(--space-sm) 0;
+}
+
+/* --- Features List --- */
+.plan-card__features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.plan-card__features li {
+  font-size: var(--fs-xs);
+  color: var(--color-bone);
+  line-height: 1.5;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.plan-card__features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-charcoal);
+}
+
+/* Highlight features (the differentiators) */
+.plan-card__feature-highlight {
+  color: var(--color-ivory) !important;
+  font-weight: var(--fw-medium);
+}
+
+.plan-card__feature-highlight::before {
+  background: var(--color-gold) !important;
+  box-shadow: 0 0 6px rgba(184, 162, 114, 0.4);
+}
+
+.plan-card--featured .plan-card__features li::before {
+  background: var(--color-gold);
+  opacity: 0.5;
+}
+
+.plan-card--featured .plan-card__feature-highlight::before {
+  opacity: 1 !important;
+}
+
+/* ===== Rituales Individuales ===== */
+.plans__individual {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.plans__individual-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  margin-bottom: 0.5rem;
+}
+
+.plans__individual-desc {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  margin-bottom: var(--space-md);
+}
+
+.plans__individual-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.plans__individual-tag {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.plans__individual-tag:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-bone);
+}
+
+/* ===== Conditions ===== */
+.plans__conditions {
+  text-align: center;
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.plans__conditions p {
+  font-size: var(--fs-xs);
+  color: var(--color-charcoal);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-body);
+}

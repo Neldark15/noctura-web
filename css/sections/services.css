@@ -1,0 +1,241 @@
+/* ===================================
+   Services Section
+   =================================== */
+
+.services {
+  padding: var(--space-xl) 0;
+}
+
+.services__header {
+  margin-bottom: var(--space-lg);
+}
+
+/* --- Accordion --- */
+.services__list {
+  border-top: 1px solid var(--color-anthracite);
+}
+
+.service-item {
+  border-bottom: 1px solid var(--color-anthracite);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gold left accent bar — appears on active */
+.service-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--color-gold);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.5s var(--ease-out);
+  z-index: 2;
+  box-shadow: 0 0 8px rgba(184, 162, 114, 0.3);
+}
+
+.service-item.active::before {
+  transform: scaleY(1);
+}
+
+.service-item__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) 0;
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease-out), padding 0.3s var(--ease-out);
+}
+
+.service-item__header:hover {
+  padding-left: var(--space-sm);
+  padding-right: var(--space-sm);
+  background-color: rgba(42, 42, 47, 0.3);
+}
+
+.service-item__left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-md);
+}
+
+.service-item__number {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  letter-spacing: var(--ls-wide);
+  min-width: 2rem;
+  transition: color 0.3s var(--ease-out), text-shadow 0.3s var(--ease-out);
+}
+
+/* Number glows gold on hover */
+.service-item__header:hover .service-item__number {
+  color: var(--color-gold);
+  text-shadow: 0 0 10px rgba(184, 162, 114, 0.3);
+}
+
+.service-item.active .service-item__number {
+  color: var(--color-gold);
+}
+
+.service-item__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-regular);
+  color: var(--color-ivory);
+  transition: color var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+
+/* Gold underline sweep */
+.service-item__name::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-out);
+}
+
+/* Hover preview line — sweeps to 30% */
+.service-item__header:hover .service-item__name::after {
+  transform: scaleX(0.3);
+}
+
+/* Full sweep on active */
+.service-item.active .service-item__name::after {
+  transform: scaleX(1);
+}
+
+.service-item.active .service-item__name {
+  color: var(--color-gold);
+}
+
+.service-item__header:hover .service-item__name {
+  color: var(--color-gold);
+}
+
+.service-item__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.service-item__brief {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  max-width: 250px;
+  text-align: right;
+  transition: color 0.3s var(--ease-out);
+}
+
+/* Brief text highlights on hover */
+.service-item__header:hover .service-item__brief {
+  color: var(--color-charcoal);
+}
+
+.service-item__toggle {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.service-item__toggle span {
+  position: absolute;
+  background-color: var(--color-silver);
+  transition: transform var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out);
+}
+
+/* Toggle turns gold on hover */
+.service-item__header:hover .service-item__toggle span {
+  background-color: rgba(184, 162, 114, 0.5);
+}
+
+.service-item.active .service-item__toggle span {
+  background-color: var(--color-gold);
+}
+
+.service-item__toggle span:first-child {
+  width: 16px;
+  height: 1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.service-item__toggle span:last-child {
+  width: 1px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.service-item.active .service-item__toggle span:last-child {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+/* --- Expandable Content --- */
+.service-item__content {
+  height: 0;
+  overflow: hidden;
+}
+
+.service-item__content-inner {
+  padding: 0 0 var(--space-md) calc(2rem + var(--space-md));
+  max-width: 700px;
+}
+
+.service-item__description {
+  font-size: var(--fs-base);
+  color: var(--color-bone);
+  line-height: var(--lh-body);
+  margin-bottom: var(--space-md);
+}
+
+/* --- Deliverable Tags --- */
+.service-item__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.service-item__tag {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-muted);
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(184, 162, 114, 0.12);
+  border-radius: 100px;
+  background: rgba(184, 162, 114, 0.03);
+  transition: border-color 0.3s var(--ease-out),
+              color 0.3s var(--ease-out),
+              background-color 0.3s var(--ease-out),
+              transform 0.3s var(--ease-out);
+  cursor: default;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.service-item__tag:hover {
+  border-color: rgba(184, 162, 114, 0.35);
+  color: var(--color-gold);
+  background: rgba(184, 162, 114, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Active item background glow */
+.service-item.active {
+  background: linear-gradient(90deg, rgba(184, 162, 114, 0.02) 0%, transparent 40%);
+}

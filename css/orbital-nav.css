@@ -1,0 +1,181 @@
+/* ===================================
+   Orbital Navigation — SPA Panel System
+   =================================== */
+
+/* --- Panel Viewport (slides in from right) --- */
+.panel-viewport {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 75vw;
+  height: 100vh;
+  transform: translateX(105%);
+  opacity: 0;
+  z-index: 10;
+  background: var(--color-black);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.panel-viewport.active {
+  pointer-events: auto;
+}
+
+.panel-viewport__scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 162, 114, 0.2) transparent;
+}
+
+.panel-viewport__scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-viewport__scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-viewport__scroll::-webkit-scrollbar-thumb {
+  background: rgba(184, 162, 114, 0.2);
+  border-radius: 2px;
+}
+
+/* --- Panels --- */
+.panel {
+  display: none;
+  min-height: 100vh;
+}
+
+.panel.active {
+  display: block;
+}
+
+/* --- Left edge fade for panel viewport --- */
+.panel-viewport::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(10, 10, 10, 0.6), transparent);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* --- Close/Back button at top of panel --- */
+.panel-viewport__close {
+  position: fixed;
+  top: 1.5rem;
+  left: calc(25vw + 1.5rem);
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid rgba(184, 162, 114, 0.15);
+  border-radius: 100px;
+  padding: 0.4rem 1rem;
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: color 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
+}
+
+.panel-viewport__close.visible {
+  pointer-events: auto;
+}
+
+.panel-viewport__close:hover {
+  color: var(--color-gold);
+  border-color: rgba(184, 162, 114, 0.35);
+}
+
+.panel-viewport__close-icon {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.panel-viewport__close:hover .panel-viewport__close-icon {
+  transform: translateX(-3px);
+}
+
+/* --- Body state --- */
+body.panel-open {
+  overflow: hidden;
+}
+
+/* --- Hero content hidden state --- */
+.hero__content.is-hidden {
+  pointer-events: none;
+}
+
+.hero__scroll.is-hidden {
+  pointer-events: none;
+}
+
+/* --- Orbital mini state --- */
+.orbital.orbital--mini {
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.orbital.orbital--mini .orbital__ring {
+  border-width: 2px;
+  border-color: rgba(184, 162, 114, 0.2);
+}
+
+.orbital.orbital--mini::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 162, 114, 0.1), transparent 65%);
+  animation: miniOrbitalPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes miniOrbitalPulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* Expand hint on hover */
+.orbital.orbital--mini:hover .orbital__ring {
+  border-color: rgba(184, 162, 114, 0.35);
+}
+
+.orbital.orbital--mini:hover::after {
+  background: radial-gradient(circle, rgba(184, 162, 114, 0.15), transparent 65%);
+}
+
+.orbital.orbital--mini .orbital__indicator {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.orbital.orbital--mini .orbital__dot {
+  opacity: 0 !important;
+}
+
+.orbital.orbital--mini .orbital__shine {
+  opacity: 0 !important;
+}
+
+/* --- Nav active state --- */
+.nav__link.nav--active {
+  color: var(--color-gold);
+}

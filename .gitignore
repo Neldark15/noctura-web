@@ -1,0 +1,11 @@
+# Project files (client assets, not for public repo)
+Proyectos/
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Temp/misc
+*.tmp
+.DS_Store
+Thumbs.db
+png-transparent-full-moon-earth-supermoon-.png

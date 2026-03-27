@@ -1,0 +1,139 @@
+/* --- Text Split Animation --- */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.15;
+}
+
+.word__inner {
+  display: inline-block;
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+/* ===================================
+   Base Styles
+   =================================== */
+
+html {
+  font-size: 16px;
+  scroll-snap-type: y proximity;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-base);
+  line-height: var(--lh-body);
+  color: var(--color-bone);
+  background-color: var(--color-black);
+  overflow-x: hidden;
+}
+
+body.loading {
+  overflow: hidden;
+}
+
+::selection {
+  background-color: var(--color-wine);
+  color: var(--color-ivory);
+}
+
+/* --- Headings --- */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--color-ivory);
+  line-height: var(--lh-heading);
+}
+
+h1 { font-size: var(--fs-xxl); font-weight: var(--fw-light); }
+h2 { font-size: var(--fs-xl); font-weight: var(--fw-light); }
+h3 { font-size: var(--fs-lg); font-weight: var(--fw-regular); }
+
+/* --- Links --- */
+a {
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+a:hover {
+  color: var(--color-ivory);
+}
+
+/* --- Section Label (quiet uppercase) --- */
+.section-label {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* --- Smooth scrollbar (webkit) --- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-anthracite);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-charcoal);
+}
+
+/* --- Screen Reader Only --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* --- Noise/Grain Overlay --- */
+.noise-overlay {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.04;
+  background: repeating-conic-gradient(#808080 0 0.0001%, transparent 0 0.0005%) 50% / 200px 200px;
+  mix-blend-mode: overlay;
+  animation: grain 0.5s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .noise-overlay { animation: none; }
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-5%, -5%); }
+  50% { transform: translate(5%, 0); }
+  75% { transform: translate(-2%, 5%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* --- Scroll Progress Bar --- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-gold);
+  z-index: 1001;
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}

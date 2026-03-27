@@ -1,0 +1,449 @@
+/* ===================================
+   Hero Section
+   =================================== */
+
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(45, 27, 78, 0.12), transparent 70%);
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero__content * {
+  pointer-events: auto;
+}
+
+/* --- Logo Display --- */
+.hero__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  overflow: visible;
+}
+
+.hero__logo-letter {
+  font-family: var(--font-display);
+  font-size: var(--fs-xxl);
+  font-weight: var(--fw-semibold);
+  color: var(--color-ivory);
+  letter-spacing: var(--ls-wide);
+  line-height: 1;
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero__logo-moon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+/* --- Real Moon Image (Hero) --- */
+.moon-real {
+  position: relative;
+  width: clamp(3.20rem, 2.40rem + 3.20vw, 6.50rem);
+  height: clamp(3.20rem, 2.40rem + 3.20vw, 6.50rem);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    0 0 8px 2px rgba(180, 200, 255, 0.15),
+    0 0 24px 6px rgba(180, 200, 255, 0.08),
+    0 0 48px 12px rgba(180, 200, 255, 0.04);
+  margin: 0 -0.15em;
+  flex-shrink: 0;
+}
+
+.moon-real__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  max-width: none;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  pointer-events: none;
+}
+
+/* Soft vignette to blend moon edges into the background */
+.moon-real::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    transparent 55%,
+    rgba(10, 10, 10, 0.3) 72%,
+    rgba(10, 10, 10, 0.7) 85%,
+    var(--color-black) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.moon-real__shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  /* Terminator shadow: soft-edged gradient that slides horizontally */
+  background: linear-gradient(to left,
+    var(--color-black) 0%,
+    var(--color-black) 30%,
+    rgba(10, 10, 10, 0.7) 45%,
+    rgba(10, 10, 10, 0.3) 58%,
+    transparent 72%
+  );
+  /* Start covering the moon (new moon) */
+  clip-path: inset(0 0 0 0);
+  transform: translateX(0%);
+}
+
+/* --- Subtitle (Studio & Consulting) --- */
+.hero__subtitle {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-charcoal);
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* --- Tagline --- */
+.hero__tagline {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-muted);
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* --- Scroll Indicator --- */
+.hero__scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+}
+
+.hero__scroll-text {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--color-silver), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ===================================
+   Orbital HUD System
+   =================================== */
+
+.orbital {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+  transform-style: preserve-3d;
+}
+
+.orbital__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 162, 114, 0.1);
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.8);
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.orbital__ring--0 {
+  width: 140px;
+  height: 140px;
+  animation: orbitSpin 45s linear infinite reverse;
+  border-color: rgba(184, 162, 114, 0.06);
+}
+
+.orbital__ring--1 {
+  width: 220px;
+  height: 220px;
+  animation: orbitSpin 60s linear infinite;
+}
+
+.orbital__ring--2 {
+  width: 340px;
+  height: 340px;
+  animation: orbitSpin 90s linear infinite reverse;
+  border-style: dashed;
+  border-color: rgba(184, 162, 114, 0.07);
+}
+
+.orbital__ring--3 {
+  width: 480px;
+  height: 480px;
+  animation: orbitSpin 120s linear infinite;
+}
+
+.orbital__ring--4 {
+  width: 640px;
+  height: 640px;
+  animation: orbitSpin 150s linear infinite reverse;
+  border-style: dashed;
+  border-color: rgba(184, 162, 114, 0.07);
+}
+
+.orbital__ring--5 {
+  width: 800px;
+  height: 800px;
+  animation: orbitSpin 180s linear infinite;
+  border-color: rgba(184, 162, 114, 0.05);
+}
+
+@keyframes orbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* --- Orbital Dots --- */
+.orbital__dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  animation: orbitalPulse 3s ease-in-out infinite;
+}
+
+/* Micro-dots for ring 0 */
+.orbital__dot--0a,
+.orbital__dot--0b {
+  width: 2px;
+  height: 2px;
+}
+
+.orbital__dot--0a {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0.5s;
+}
+
+.orbital__dot--0b {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 2s;
+}
+
+.orbital__dot--1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0s;
+}
+
+.orbital__dot--2 {
+  bottom: 10%;
+  right: 5%;
+  animation-delay: 1s;
+}
+
+/* Extra micro-dot on ring 2 */
+.orbital__dot--2b {
+  width: 3px;
+  height: 3px;
+  top: 15%;
+  left: 8%;
+  animation-delay: 1.5s;
+}
+
+.orbital__dot--3 {
+  top: 20%;
+  left: 2%;
+  animation-delay: 2s;
+}
+
+.orbital__dot--4 {
+  top: 8%;
+  right: 12%;
+  animation-delay: 0.8s;
+}
+
+.orbital__dot--5 {
+  bottom: 15%;
+  left: 8%;
+  animation-delay: 1.8s;
+}
+
+@keyframes orbitalPulse {
+  0%, 100% { opacity: 0.3; box-shadow: none; }
+  50% { opacity: 1; box-shadow: 0 0 8px rgba(184, 162, 114, 0.4); }
+}
+
+/* --- Orbital Indicators --- */
+.orbital__indicator {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transform-origin: center;
+  opacity: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.3s var(--ease-out);
+  padding: 0.3rem 0.5rem;
+  border-radius: 100px;
+}
+
+.orbital__indicator:hover {
+  opacity: 1 !important;
+}
+
+.orbital__indicator:hover .orbital__indicator-dot {
+  box-shadow: 0 0 10px rgba(184, 162, 114, 0.6);
+  transform: scale(1.3);
+}
+
+.orbital__indicator:hover .orbital__indicator-text {
+  color: var(--color-gold);
+}
+
+.orbital__indicator--1 {
+  top: -12px;
+  right: 18%;
+  animation: orbitCounterSpin 90s linear infinite reverse;
+}
+
+.orbital__indicator--2 {
+  bottom: 5%;
+  left: 2%;
+  animation: orbitCounterSpin 120s linear infinite;
+}
+
+.orbital__indicator--3 {
+  top: 10%;
+  right: -2%;
+  animation: orbitCounterSpin 120s linear infinite;
+}
+
+.orbital__indicator--4 {
+  bottom: 8%;
+  left: 10%;
+  animation: orbitCounterSpin 150s linear infinite reverse;
+}
+
+.orbital__indicator--5 {
+  top: 15%;
+  right: 5%;
+  animation: orbitCounterSpin 180s linear infinite;
+}
+
+/* Counter-rotate to keep text upright */
+@keyframes orbitCounterSpin {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+.orbital__indicator-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  box-shadow: 0 0 6px rgba(184, 162, 114, 0.3);
+  flex-shrink: 0;
+  transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.orbital__indicator-text {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: color 0.3s var(--ease-out);
+}
+
+/* --- Orbital Shine (dynamic light) --- */
+.orbital__shine {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at var(--shine-x, 50%) var(--shine-y, 50%),
+    rgba(184, 162, 114, 0.06) 0%,
+    rgba(184, 162, 114, 0.02) 30%,
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .orbital__ring,
+  .orbital__indicator {
+    animation: none !important;
+  }
+  .orbital__dot {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}

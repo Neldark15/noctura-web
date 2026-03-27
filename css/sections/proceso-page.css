@@ -1,0 +1,595 @@
+/* ===================================
+   Proceso Page — Neural 3D Interface
+   =================================== */
+
+/* === Proceso Hero === */
+.proceso-hero {
+  padding: var(--space-xl) 0 var(--space-lg);
+  text-align: center;
+  position: relative;
+}
+
+.proceso-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xxl);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  line-height: var(--lh-heading);
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.proceso-hero__subtitle {
+  font-family: var(--font-accent);
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--color-muted);
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* === Neural Scene Container === */
+.proceso-scene {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 50%, rgba(45, 27, 78, 0.08) 0%, transparent 70%);
+}
+
+#neuralCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* === Phase Navigation Dots === */
+.proceso-scene__nav {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-sm);
+  z-index: 10;
+}
+
+.phase-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 162, 114, 0.2);
+  background: rgba(26, 26, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.phase-dot:hover {
+  border-color: rgba(184, 162, 114, 0.4);
+  color: var(--color-bone);
+  transform: translateY(-2px);
+}
+
+.phase-dot.active {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  box-shadow: var(--glow-gold-medium);
+  background: rgba(184, 162, 114, 0.08);
+}
+
+/* === Detail Panels === */
+.proceso-panels {
+  position: absolute;
+  top: 50%;
+  right: var(--space-lg);
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 340px;
+  pointer-events: none;
+}
+
+.proceso-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: none;
+}
+
+.proceso-panel.active {
+  pointer-events: auto;
+}
+
+.proceso-panel__glass {
+  background: rgba(26, 26, 30, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(184, 162, 114, 0.12);
+  border-radius: 6px;
+  padding: var(--space-md);
+  box-shadow: var(--shadow-surface-2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gold accent line at top */
+.proceso-panel__glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 162, 114, 0.35), transparent);
+}
+
+.proceso-panel__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.proceso-panel__number {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-gold);
+  opacity: 0.6;
+}
+
+.proceso-panel__moon-label {
+  font-family: var(--font-accent);
+  font-size: var(--fs-xs);
+  font-style: italic;
+  color: var(--color-charcoal);
+}
+
+.proceso-panel__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  margin-bottom: var(--space-sm);
+}
+
+.proceso-panel__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.proceso-panel__list li {
+  font-size: var(--fs-xs);
+  color: var(--color-bone);
+  padding-left: 1rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.proceso-panel__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  box-shadow: 0 0 6px rgba(184, 162, 114, 0.4);
+}
+
+.proceso-panel__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: var(--space-sm);
+}
+
+/* === Phase Labels on Scene === */
+.proceso-scene__labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.phase-label-3d {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.phase-label-3d__number {
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  color: var(--color-gold);
+  opacity: 0.4;
+  display: block;
+  transform: translateY(6px);
+  transition: opacity 0.4s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+.phase-label-3d__name {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-ultra);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
+  display: block;
+  position: relative;
+  transition: color 0.4s var(--ease-out), text-shadow 0.4s var(--ease-out);
+}
+
+.phase-label-3d.visible {
+  opacity: 1;
+}
+
+.phase-label-3d.active .phase-label-3d__number {
+  opacity: 0.8;
+}
+
+.phase-label-3d.active .phase-label-3d__name {
+  color: var(--color-gold);
+  text-shadow: 0 0 12px rgba(184, 162, 114, 0.4), 0 0 24px rgba(184, 162, 114, 0.15);
+}
+
+/* Underline sweep on active */
+.phase-label-3d__name::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transform: translateX(-50%);
+  transition: width 0.5s var(--ease-out);
+  box-shadow: 0 0 6px rgba(184, 162, 114, 0.3);
+}
+
+.phase-label-3d.active .phase-label-3d__name::after {
+  width: 100%;
+}
+
+/* Hover state (raycaster hovering on node) */
+.phase-label-3d.hovered .phase-label-3d__name {
+  color: var(--color-bone);
+}
+
+.phase-label-3d.hovered .phase-label-3d__number {
+  opacity: 0.6;
+}
+
+/* === 2D Fallback === */
+.proceso-scene__fallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.proceso-scene__fallback.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.neural-fallback {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+}
+
+.neural-fallback__node {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.neural-fallback__node:hover,
+.neural-fallback__node.active {
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px rgba(184, 162, 114, 0.5));
+}
+
+.neural-fallback__node-core {
+  fill: var(--color-gold);
+  opacity: 0.8;
+}
+
+.neural-fallback__connection {
+  stroke: var(--color-gold);
+  stroke-width: 0.8;
+  opacity: 0.2;
+  fill: none;
+  stroke-dasharray: 6 10;
+  animation: neural-flow 3s linear infinite;
+}
+
+.neural-fallback__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: var(--color-muted);
+  text-anchor: middle;
+}
+
+@keyframes neural-flow {
+  to { stroke-dashoffset: -32; }
+}
+
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.neural-fallback__dot {
+  fill: var(--color-gold);
+  animation: neural-pulse 2.5s ease-in-out infinite;
+}
+
+/* === Journey Section (Scroll timeline) === */
+.proceso-journey {
+  padding: var(--space-xl) 0;
+  position: relative;
+}
+
+.proceso-journey__timeline {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Vertical line */
+.proceso-journey__timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(184, 162, 114, 0.2), rgba(184, 162, 114, 0.2), transparent);
+  transform: translateX(-50%);
+}
+
+.journey-phase {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-lg);
+  padding: var(--space-lg) 0;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.journey-phase:nth-child(even) {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.journey-phase__dot {
+  position: absolute;
+  left: 50%;
+  top: var(--space-lg);
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  background: var(--color-black);
+  z-index: 2;
+  box-shadow: 0 0 12px rgba(184, 162, 114, 0.3);
+}
+
+.journey-phase__content {
+  flex: 1;
+  max-width: calc(50% - var(--space-lg));
+}
+
+.journey-phase__number {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-medium);
+  color: var(--color-gold);
+  opacity: 0.5;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.journey-phase__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-light);
+  color: var(--color-ivory);
+  margin-bottom: var(--space-xs);
+}
+
+.journey-phase__moon-label {
+  font-family: var(--font-accent);
+  font-size: var(--fs-xs);
+  font-style: italic;
+  color: var(--color-charcoal);
+  margin-bottom: var(--space-sm);
+  display: block;
+}
+
+.journey-phase__desc {
+  font-size: var(--fs-sm);
+  color: var(--color-muted);
+  line-height: var(--lh-body);
+  margin-bottom: var(--space-sm);
+}
+
+.journey-phase__deliverables {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.journey-phase__deliverables li {
+  font-size: var(--fs-xs);
+  color: var(--color-bone);
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* === Preloader (simplified) === */
+.proceso-preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.proceso-preloader__text {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-semibold);
+  color: var(--color-ivory);
+  letter-spacing: var(--ls-wide);
+  opacity: 0;
+}
+
+/* === Responsive === */
+@media (max-width: 1200px) {
+  .proceso-panels {
+    width: 300px;
+    right: var(--space-md);
+  }
+}
+
+@media (max-width: 900px) {
+  .proceso-scene {
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg) 0;
+  }
+
+  #neuralCanvas {
+    display: none;
+  }
+
+  .proceso-scene__fallback {
+    display: flex !important;
+  }
+
+  .proceso-panels {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: 400px;
+    margin: var(--space-md) auto 0;
+  }
+
+  .proceso-panel {
+    position: relative;
+  }
+
+  .proceso-scene__labels {
+    display: none;
+  }
+
+  .proceso-scene__nav {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-bottom: var(--space-md);
+  }
+
+  .proceso-journey__timeline::before {
+    left: 24px;
+  }
+
+  .journey-phase,
+  .journey-phase:nth-child(even) {
+    flex-direction: column;
+    text-align: left;
+    padding-left: 56px;
+  }
+
+  .journey-phase__dot {
+    left: 24px;
+  }
+
+  .journey-phase__content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .proceso-hero__title {
+    font-size: var(--fs-xl);
+  }
+
+  .proceso-panels {
+    max-width: 100%;
+    padding: 0 var(--space-sm);
+  }
+
+  .proceso-panel__glass {
+    padding: var(--space-sm);
+  }
+
+  .phase-dot {
+    width: 38px;
+    height: 38px;
+  }
+}

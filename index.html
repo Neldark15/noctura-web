@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOCTURA — Estrategia. Identidad. Percepción.</title>
+  <meta name="description" content="NOCTURA — Firma de marketing, imagen e identidad corporativa. Construimos marcas que resuenan.">
+  <meta property="og:title" content="NOCTURA — Estrategia. Identidad. Percepción.">
+  <meta property="og:description" content="Firma de marketing, imagen e identidad corporativa. Oscura, elegante, estratégica.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0A0A0A">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css?v=9">
+  <link rel="stylesheet" href="css/layout.css?v=8">
+  <link rel="stylesheet" href="css/components.css?v=9">
+  <link rel="stylesheet" href="css/sections/hero.css?v=11">
+  <link rel="stylesheet" href="css/sections/about.css">
+  <link rel="stylesheet" href="css/sections/services.css?v=10">
+  <link rel="stylesheet" href="css/sections/portfolio.css?v=2">
+  <link rel="stylesheet" href="css/sections/contact.css?v=9">
+  <link rel="stylesheet" href="css/sections/manifesto.css">
+  <link rel="stylesheet" href="css/sections/plans.css">
+  <link rel="stylesheet" href="css/sections/process.css?v=2">
+  <link rel="stylesheet" href="css/sections/clients.css">
+  <link rel="stylesheet" href="css/sections/testimonials.css">
+  <link rel="stylesheet" href="css/orbital-nav.css?v=1">
+  <link rel="stylesheet" href="css/responsive.css?v=10">
+</head>
+<body class="loading">
+
+  <!-- ====== NOISE/GRAIN OVERLAY ====== -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- ====== SCROLL PROGRESS ====== -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- ====== PRELOADER ====== -->
+  <div class="preloader" id="preloader">
+    <div class="preloader__phases">
+      <div class="preloader__moon-wrap">
+        <img src="assets/images/moon.png" alt="" class="preloader__moon-img" id="preloaderMoonImg">
+        <div class="preloader__moon-shadow" id="preloaderShadow"></div>
+      </div>
+      <div class="preloader__phase-label">NOCTURA</div>
+    </div>
+  </div>
+
+  <!-- ====== CUSTOM CURSOR ====== -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ====== NAVIGATION ====== -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__logo">
+        <div class="nav__logo-inner">
+          <span class="nav__logo-n">N</span>
+          <span class="nav__logo-moon">
+            <img src="assets/images/moon.png" alt="" class="nav__logo-moon-img" draggable="false">
+            <span class="nav__logo-moon-shadow" id="navMoonShadow"></span>
+          </span>
+          <span class="nav__logo-text">CTURA</span>
+        </div>
+      </a>
+      <div class="nav__links">
+        <a href="#about" class="nav__link" data-panel="esencia" data-hover>Esencia</a>
+        <a href="#services" class="nav__link" data-panel="servicios" data-hover>Servicios</a>
+        <a href="proceso.html" class="nav__link" data-hover>Proceso</a>
+        <a href="#portfolio" class="nav__link" data-panel="trabajo" data-hover>Trabajo</a>
+        <a href="#contact" class="nav__link" data-panel="contacto" data-hover>Contacto</a>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ====== MOBILE MENU ====== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu__links">
+      <a href="#about" class="mobile-menu__link" data-hover>Esencia</a>
+      <a href="#services" class="mobile-menu__link" data-hover>Servicios</a>
+      <a href="proceso.html" class="mobile-menu__link" data-hover>Proceso</a>
+      <a href="#portfolio" class="mobile-menu__link" data-hover>Trabajo</a>
+      <a href="#contact" class="mobile-menu__link" data-hover>Contacto</a>
+    </div>
+  </div>
+
+  <!-- ====== HERO ====== -->
+  <section class="hero" id="hero">
+    <!-- Orbital System -->
+    <div class="orbital" id="orbital">
+      <!-- Ring 0 — inner pulse -->
+      <div class="orbital__ring orbital__ring--0">
+        <span class="orbital__dot orbital__dot--0a"></span>
+        <span class="orbital__dot orbital__dot--0b"></span>
+      </div>
+      <!-- Ring 1 -->
+      <div class="orbital__ring orbital__ring--1">
+        <span class="orbital__dot orbital__dot--1"></span>
+      </div>
+      <!-- Ring 2 -->
+      <div class="orbital__ring orbital__ring--2">
+        <span class="orbital__dot orbital__dot--2"></span>
+        <span class="orbital__dot orbital__dot--2b"></span>
+        <a href="#services" class="orbital__indicator orbital__indicator--1" data-panel="servicios" data-magnetic data-hover>
+          <span class="orbital__indicator-dot"></span>
+          <span class="orbital__indicator-text">Servicios</span>
+        </a>
+      </div>
+      <!-- Ring 3 -->
+      <div class="orbital__ring orbital__ring--3">
+        <span class="orbital__dot orbital__dot--3"></span>
+        <a href="#about" class="orbital__indicator orbital__indicator--2" data-panel="esencia" data-magnetic data-hover>
+          <span class="orbital__indicator-dot"></span>
+          <span class="orbital__indicator-text">Esencia</span>
+        </a>
+        <a href="#portfolio" class="orbital__indicator orbital__indicator--3" data-panel="trabajo" data-magnetic data-hover>
+          <span class="orbital__indicator-dot"></span>
+          <span class="orbital__indicator-text">Trabajo</span>
+        </a>
+      </div>
+      <!-- Ring 4 — outer -->
+      <div class="orbital__ring orbital__ring--4">
+        <span class="orbital__dot orbital__dot--4"></span>
+        <a href="proceso.html" class="orbital__indicator orbital__indicator--4" data-magnetic data-hover>
+          <span class="orbital__indicator-dot"></span>
+          <span class="orbital__indicator-text">Proceso</span>
+        </a>
+      </div>
+      <!-- Ring 5 — outermost -->
+      <div class="orbital__ring orbital__ring--5">
+        <span class="orbital__dot orbital__dot--5"></span>
+        <a href="#contact" class="orbital__indicator orbital__indicator--5" data-panel="contacto" data-magnetic data-hover>
+          <span class="orbital__indicator-dot"></span>
+          <span class="orbital__indicator-text">Contacto</span>
+        </a>
+      </div>
+      <!-- Dynamic light overlay -->
+      <div class="orbital__shine"></div>
+    </div>
+
+    <div class="hero__content">
+      <div class="hero__logo" aria-label="NOCTURA">
+        <span class="hero__logo-letter">N</span>
+        <span class="hero__logo-moon" id="heroMoonWrap">
+          <div class="moon-real" id="moonReal">
+            <img src="assets/images/moon.png" alt="" class="moon-real__img" draggable="false">
+            <div class="moon-real__shadow" id="heroMoonShadow"></div>
+          </div>
+        </span>
+        <span class="hero__logo-letter">C</span>
+        <span class="hero__logo-letter">T</span>
+        <span class="hero__logo-letter">U</span>
+        <span class="hero__logo-letter">R</span>
+        <span class="hero__logo-letter">A</span>
+      </div>
+      <p class="hero__subtitle">Studio & Consulting</p>
+      <p class="hero__tagline">Estrategia &nbsp;·&nbsp; Identidad &nbsp;·&nbsp; Percepción</p>
+    </div>
+    <div class="hero__scroll">
+      <span class="hero__scroll-text">Scroll</span>
+      <span class="hero__scroll-line"></span>
+    </div>
+  </section>
+
+  <!-- ====== PANEL VIEWPORT (SPA Navigation) ====== -->
+  <button class="panel-viewport__close" id="panelClose">
+    <span class="panel-viewport__close-icon">&larr;</span> Volver
+  </button>
+  <div class="panel-viewport" id="panelViewport" aria-hidden="true">
+    <div class="panel-viewport__scroll" id="panelScroll">
+
+      <!-- ─── Panel: Esencia ─── -->
+      <div class="panel" data-panel="esencia">
+
+  <!-- ====== ABOUT / ESENCIA ====== -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about__inner">
+        <div class="about__label-wrap">
+          <span class="about__label">Esencia</span>
+        </div>
+        <div class="about__content">
+          <p class="about__text">
+            No decoramos. <em>Decodificamos.</em> Cada marca lleva una identidad latente — una frecuencia que la mayoría de las agencias nunca sintoniza. Nosotros la encontramos, la afilamos y la hacemos inconfundible.
+          </p>
+          <div class="section-divider"></div>
+          <p class="about__text">
+            NOCTURA nace de la convicción de que la imagen corporativa no es cosmética. Es estrategia hecha visible. Es la diferencia entre existir y <em>imponerse.</em>
+          </p>
+          <blockquote class="about__highlight">
+            "No buscamos encajar con todo el mundo. Atraemos a quienes valoran una propuesta más audaz, estética y bien pensada."
+          </blockquote>
+          <p class="about__text">
+            Trabajamos desde la oscuridad sofisticada, la precisión visual y la intención creativa. Nuestro territorio es la noche, la luna, el silencio que impone — ese espacio donde las marcas dejan de ser superficiales y se convierten en símbolo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MANIFESTO ====== -->
+  <section class="manifesto">
+    <div class="container">
+      <p class="manifesto__text">
+        No creamos marcas <em>bonitas.</em><br>
+        Creamos marcas <span class="manifesto__gold">inevitables.</span>
+      </p>
+    </div>
+  </section>
+
+      </div><!-- /panel esencia -->
+
+      <!-- ─── Panel: Servicios ─── -->
+      <div class="panel" data-panel="servicios">
+
+  <!-- ====== SERVICES ====== -->
+  <section class="services" id="services">
+    <div class="container">
+      <div class="services__header">
+        <span class="section-label">Lo que hacemos</span>
+      </div>
+      <div class="services__list">
+
+        <div class="service-item">
+          <div class="service-item__header" data-hover>
+            <div class="service-item__left">
+              <span class="service-item__number">01</span>
+              <h3 class="service-item__name">Estrategia e Identidad de Marca</h3>
+            </div>
+            <div class="service-item__right">
+              <span class="service-item__brief">Tu esencia hecha sistema</span>
+              <div class="service-item__toggle"><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="service-item__content">
+            <div class="service-item__content-inner">
+              <p class="service-item__description">Cuestionario de identidad, estrategia de posicionamiento, diseño de logotipo o rediseño, Logo Pack completo (tipografías, paleta cromática, mini guía), Mini Brandbook y carta sensorial de negocio. No entregamos un logo — entregamos un lenguaje visual con intención y dirección.</p>
+              <div class="service-item__tags">
+                <span class="service-item__tag">Logotipo</span>
+                <span class="service-item__tag">Logo Pack</span>
+                <span class="service-item__tag">Mini Brandbook</span>
+                <span class="service-item__tag">Carta Sensorial</span>
+                <span class="service-item__tag">Posicionamiento</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-item__header" data-hover>
+            <div class="service-item__left">
+              <span class="service-item__number">02</span>
+              <h3 class="service-item__name">Presencia Digital y Social Media</h3>
+            </div>
+            <div class="service-item__right">
+              <span class="service-item__brief">Contenido que posiciona</span>
+              <div class="service-item__toggle"><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="service-item__content">
+            <div class="service-item__content-inner">
+              <p class="service-item__description">Diseño de perfil, publicaciones mensuales con adaptaciones para stories, y reuniones quincenales de análisis. Desde 4 hasta 12 piezas al mes según tu plan. Cada publicación es una pieza con propósito — no llenamos feeds, construimos percepción.</p>
+              <div class="service-item__tags">
+                <span class="service-item__tag">Diseño de Perfil</span>
+                <span class="service-item__tag">Publicaciones</span>
+                <span class="service-item__tag">Stories</span>
+                <span class="service-item__tag">Análisis Quincenal</span>
+                <span class="service-item__tag">Estrategia de Contenido</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-item__header" data-hover>
+            <div class="service-item__left">
+              <span class="service-item__number">03</span>
+              <h3 class="service-item__name">Diseño Gráfico y Piezas Visuales</h3>
+            </div>
+            <div class="service-item__right">
+              <span class="service-item__brief">Cada pieza comunica</span>
+              <div class="service-item__toggle"><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="service-item__content">
+            <div class="service-item__content-inner">
+              <p class="service-item__description">Menús, rótulos, material corporativo, presentaciones y cualquier elemento gráfico que tu marca necesite. También diseñamos fachadas comerciales y señalética. Nada es decorativo — todo refuerza tu identidad con consistencia y elegancia.</p>
+              <div class="service-item__tags">
+                <span class="service-item__tag">Menús</span>
+                <span class="service-item__tag">Rótulos</span>
+                <span class="service-item__tag">Material Corporativo</span>
+                <span class="service-item__tag">Presentaciones</span>
+                <span class="service-item__tag">Señalética</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-item__header" data-hover>
+            <div class="service-item__left">
+              <span class="service-item__number">04</span>
+              <h3 class="service-item__name">Asesoría Espacial y Arquitectónica</h3>
+            </div>
+            <div class="service-item__right">
+              <span class="service-item__brief">Tu espacio, tu marca</span>
+              <div class="service-item__toggle"><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="service-item__content">
+            <div class="service-item__content-inner">
+              <p class="service-item__description">Asesoría espacial personalizada, propuestas de moodboard para ambientación, distribución arquitectónica y diseño de fachadas. Tu espacio físico es una extensión de tu marca — lo hacemos sentir como tal.</p>
+              <div class="service-item__tags">
+                <span class="service-item__tag">Moodboard</span>
+                <span class="service-item__tag">Ambientación</span>
+                <span class="service-item__tag">Distribución</span>
+                <span class="service-item__tag">Fachadas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-item__header" data-hover>
+            <div class="service-item__left">
+              <span class="service-item__number">05</span>
+              <h3 class="service-item__name">Mentoría Estratégica y Consultoría</h3>
+            </div>
+            <div class="service-item__right">
+              <span class="service-item__brief">Visión con estructura</span>
+              <div class="service-item__toggle"><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="service-item__content">
+            <div class="service-item__content-inner">
+              <p class="service-item__description">Mentoría creativa personalizada, asesoría de emprendimiento, asesoría técnica tributaria, apoyo en inscripción de empresas y permisos de funcionamiento. No solo construimos marcas — acompañamos negocios desde la idea hasta su operación real.</p>
+              <div class="service-item__tags">
+                <span class="service-item__tag">Mentoría Creativa</span>
+                <span class="service-item__tag">Emprendimiento</span>
+                <span class="service-item__tag">Asesoría Tributaria</span>
+                <span class="service-item__tag">Inscripción de Empresas</span>
+                <span class="service-item__tag">Permisos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PLANS / PRICING ====== -->
+  <section class="plans" id="plans">
+    <div class="container">
+
+      <!-- Header + Philosophy -->
+      <div class="plans__header">
+        <span class="section-label">Planes de Consultoría Creativa</span>
+        <h2 class="plans__title">Misma profundidad.<br>Diferente ritmo.</h2>
+        <p class="plans__philosophy">No le bajamos la calidad a nadie. Cada cliente recibe el mismo primer mes de inmersión integral — la misma estrategia, la misma identidad, la misma profundidad. Lo que cambia es la frecuencia de contenido mensual, no la esencia del trabajo.</p>
+        <p class="plans__flow">El primer mes construimos todo el universo de tu marca. A partir del segundo, lo activamos con contenido constante.</p>
+      </div>
+
+      <!-- ===== What Everyone Gets (First Month) ===== -->
+      <div class="plans__foundation">
+        <div class="plans__foundation-header">
+          <div class="plans__foundation-moon">
+            <img src="assets/images/moon.png" alt="" class="plan-card__moon-img" draggable="false">
+          </div>
+          <div>
+            <h3 class="plans__foundation-title">Mes uno: Construimos tu marca</h3>
+            <p class="plans__foundation-subtitle">Dedicado a crear todo tu sistema de identidad — incluido en todos los planes, sin excepciones</p>
+          </div>
+        </div>
+        <div class="plans__foundation-grid">
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">01</span>
+            <h4 class="plans__service-name">Cuestionario de Identidad</h4>
+            <p class="plans__service-desc">Una inmersión profunda en el ADN de tu marca. Extraemos tu esencia, tus valores, tu voz y tu visión para que cada decisión creativa nazca de lo que realmente eres.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">02</span>
+            <h4 class="plans__service-name">Estrategia de Marca</h4>
+            <p class="plans__service-desc">Definimos tu territorio simbólico, tu posicionamiento y tu personalidad. No es un documento — es la brújula que guía cada elemento visual y verbal de tu marca.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">03</span>
+            <h4 class="plans__service-name">Logotipo + Logo Pack</h4>
+            <p class="plans__service-desc">Diseño o rediseño de logotipo con su sistema completo: tipografías, paleta cromática y mini guía de uso. Un lenguaje visual coherente, no solo un símbolo bonito.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">04</span>
+            <h4 class="plans__service-name">Mini Brandbook</h4>
+            <p class="plans__service-desc">El manual esencial de tu marca condensado. Cómo se ve, cómo habla, cómo se aplica. Para que cualquier persona que toque tu marca mantenga la coherencia.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">05</span>
+            <h4 class="plans__service-name">Diseño de Perfil Digital</h4>
+            <p class="plans__service-desc">Tu presencia en redes sociales diseñada con intención. Avatar, portada, highlights y todo lo que necesitas para que tu perfil comunique antes de que alguien lea una palabra.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">06</span>
+            <h4 class="plans__service-name">1 Pieza Gráfica Digital</h4>
+            <p class="plans__service-desc">Menú, rótulo, flyer, presentación o cualquier elemento visual que tu negocio necesite para operar. Diseñado dentro de tu nuevo sistema de identidad.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">07</span>
+            <h4 class="plans__service-name">Carta Sensorial de Negocio</h4>
+            <p class="plans__service-desc">Definimos cómo tu marca se percibe más allá de lo visual — texturas, aromas, ambientes, sonidos. Una guía para que tu espacio físico sea una extensión de tu identidad.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">08</span>
+            <h4 class="plans__service-name">Moodboard de Ambientación</h4>
+            <p class="plans__service-desc">Una propuesta visual de cómo debería sentirse tu espacio. Materiales, colores, iluminación y atmósfera alineados con tu marca. Tu espacio también comunica.</p>
+          </div>
+
+          <div class="plans__service-card">
+            <span class="plans__service-number">09</span>
+            <h4 class="plans__service-name">Sesión de Mentoría Creativa</h4>
+            <p class="plans__service-desc">Una sesión personalizada para alinear tu visión con la estrategia. Aclaramos dudas, definimos prioridades y te damos herramientas para pensar tu marca como un sistema vivo.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== The Difference: Monthly Rhythm ===== -->
+      <div class="plans__rhythm">
+        <div class="plans__rhythm-header">
+          <h3 class="plans__rhythm-title">Desde el mes dos: tu marca cobra vida</h3>
+          <p class="plans__rhythm-desc">Con tu identidad lista, comenzamos a producir contenido. Cada publicación nace de la estrategia que construimos juntos — la calidad es la misma, lo que cambia es la frecuencia.</p>
+        </div>
+
+        <div class="plans__grid">
+
+          <!-- Plan Nueva -->
+          <div class="plan-card">
+            <div class="plan-card__moon-wrap">
+              <img src="assets/images/moon.png" alt="" class="plan-card__moon-img" draggable="false">
+              <div class="plan-card__moon-shadow" style="transform: translateX(0%);"></div>
+            </div>
+            <h3 class="plan-card__name">Nueva</h3>
+            <p class="plan-card__desc">Para marcas que comienzan con visión clara y un ritmo sostenido.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__amount">$139</span>
+              <span class="plan-card__period">/ mes + IVA</span>
+            </div>
+            <div class="plan-card__divider"></div>
+            <ul class="plan-card__features">
+              <li class="plan-card__feature-highlight">4 publicaciones al mes</li>
+              <li class="plan-card__feature-highlight">4 adaptaciones para stories</li>
+              <li>Reunión de análisis cada 15 días</li>
+              <li>Primer mes de inmersión incluido</li>
+            </ul>
+          </div>
+
+          <!-- Plan Creciente -->
+          <div class="plan-card plan-card--featured">
+            <div class="plan-card__badge">Más elegido</div>
+            <div class="plan-card__moon-wrap">
+              <img src="assets/images/moon.png" alt="" class="plan-card__moon-img" draggable="false">
+              <div class="plan-card__moon-shadow" style="transform: translateX(-50%);"></div>
+            </div>
+            <h3 class="plan-card__name">Creciente</h3>
+            <p class="plan-card__desc">Para marcas que buscan presencia consistente y crecimiento visible.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__amount">$199</span>
+              <span class="plan-card__period">/ mes + IVA</span>
+            </div>
+            <div class="plan-card__divider"></div>
+            <ul class="plan-card__features">
+              <li class="plan-card__feature-highlight">8 publicaciones al mes</li>
+              <li class="plan-card__feature-highlight">8 adaptaciones para stories</li>
+              <li>Reunión de análisis cada 15 días</li>
+              <li>Primer mes de inmersión incluido</li>
+            </ul>
+          </div>
+
+          <!-- Plan Completa -->
+          <div class="plan-card">
+            <div class="plan-card__moon-wrap">
+              <img src="assets/images/moon.png" alt="" class="plan-card__moon-img" draggable="false">
+              <div class="plan-card__moon-shadow" style="transform: translateX(-100%);"></div>
+            </div>
+            <h3 class="plan-card__name">Completa</h3>
+            <p class="plan-card__desc">Para marcas que desean dominar su presencia digital con máxima frecuencia.</p>
+            <div class="plan-card__price">
+              <span class="plan-card__amount">$299</span>
+              <span class="plan-card__period">/ mes + IVA</span>
+            </div>
+            <div class="plan-card__divider"></div>
+            <ul class="plan-card__features">
+              <li class="plan-card__feature-highlight">12 publicaciones al mes</li>
+              <li class="plan-card__feature-highlight">12 adaptaciones para stories</li>
+              <li>Reunión de análisis cada 15 días</li>
+              <li>Primer mes de inmersión incluido</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===== Rituales Individuales ===== -->
+      <div class="plans__individual">
+        <h3 class="plans__individual-title">Rituales Individuales</h3>
+        <p class="plans__individual-desc">Servicios especializados fuera de los planes — precio según evaluación del proyecto</p>
+        <div class="plans__individual-grid">
+          <span class="plans__individual-tag">Asesoría Espacial Personalizada</span>
+          <span class="plans__individual-tag">Diseño de Elemento Gráfico</span>
+          <span class="plans__individual-tag">Diseño de Fachada o Rótulo</span>
+          <span class="plans__individual-tag">Distribución Arquitectónica</span>
+          <span class="plans__individual-tag">Permisos de Funcionamiento</span>
+          <span class="plans__individual-tag">Inscripción de Empresas</span>
+          <span class="plans__individual-tag">Asesoría de Emprendimiento</span>
+          <span class="plans__individual-tag">Asesoría Técnica Tributaria</span>
+        </div>
+      </div>
+
+      <!-- Conditions -->
+      <div class="plans__conditions">
+        <p>Inicio del proceso con el 50% del total &nbsp;·&nbsp; Tiempo de entrega: 5 a 10 días hábiles &nbsp;·&nbsp; Tener el valor de cambiar y hacer la diferencia</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== PROCESS TEASER ====== -->
+  <section class="process-teaser" id="process">
+    <div class="container">
+      <div class="process-teaser__inner">
+        <div class="process-teaser__phases">
+          <div class="process-teaser__moon">
+            <img src="assets/images/moon.png" alt="" draggable="false">
+            <div class="process-teaser__moon-shadow" style="transform: translateX(0%);"></div>
+          </div>
+          <span class="process-teaser__divider"></span>
+          <div class="process-teaser__moon">
+            <img src="assets/images/moon.png" alt="" draggable="false">
+            <div class="process-teaser__moon-shadow" style="transform: translateX(-35%);"></div>
+          </div>
+          <span class="process-teaser__divider"></span>
+          <div class="process-teaser__moon">
+            <img src="assets/images/moon.png" alt="" draggable="false">
+            <div class="process-teaser__moon-shadow" style="transform: translateX(-65%);"></div>
+          </div>
+          <span class="process-teaser__divider"></span>
+          <div class="process-teaser__moon">
+            <img src="assets/images/moon.png" alt="" draggable="false">
+            <div class="process-teaser__moon-shadow" style="transform: translateX(-100%);"></div>
+          </div>
+        </div>
+        <div class="process-teaser__content">
+          <span class="section-label">Nuestro proceso</span>
+          <h2 class="process-teaser__title">De la oscuridad a la luz</h2>
+          <p class="process-teaser__desc">Cuatro fases lunares que transforman tu visión en una marca que impone.</p>
+          <a href="proceso.html" class="process-teaser__cta" data-magnetic data-hover>
+            <span>Explorar el proceso</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+      </div><!-- /panel servicios -->
+
+      <!-- ─── Panel: Trabajo ─── -->
+      <div class="panel" data-panel="trabajo">
+
+  <!-- ====== PORTFOLIO ====== -->
+  <section class="portfolio" id="portfolio">
+    <div class="container">
+      <div class="portfolio__header">
+        <span class="section-label">Trabajo seleccionado</span>
+      </div>
+      <div class="portfolio__grid">
+
+        <div class="project-card" data-hover>
+          <img class="project-card__bg" src="assets/images/portfolio/nova-proyecto.png" alt="NOVA — Proyecto arquitectónico" loading="lazy">
+          <div class="project-card__overlay"></div>
+          <div class="project-card__shine"></div>
+          <div class="project-card__edge"></div>
+          <div class="project-card__info">
+            <span class="project-card__category">Identidad Visual · Presencia Digital</span>
+            <h3 class="project-card__title">NOVA Arquitectos</h3>
+            <div class="project-card__line"></div>
+          </div>
+        </div>
+
+        <div class="project-card" data-hover>
+          <img class="project-card__bg" src="assets/images/portfolio/arqsa-blueprint.png" alt="ARQSA — Casa Fernández" loading="lazy">
+          <div class="project-card__overlay"></div>
+          <div class="project-card__shine"></div>
+          <div class="project-card__edge"></div>
+          <div class="project-card__info">
+            <span class="project-card__category">Identidad Corporativa</span>
+            <h3 class="project-card__title">ARQSA</h3>
+            <div class="project-card__line"></div>
+          </div>
+        </div>
+
+        <div class="project-card" data-hover>
+          <img class="project-card__bg" src="assets/images/portfolio/genesis-interior.jpg" alt="Genesis Experiences — Lake House" loading="lazy">
+          <div class="project-card__overlay"></div>
+          <div class="project-card__shine"></div>
+          <div class="project-card__edge"></div>
+          <div class="project-card__info">
+            <span class="project-card__category">Estrategia de Marca · Hospitalidad</span>
+            <h3 class="project-card__title">Genesis Experiences</h3>
+            <div class="project-card__line"></div>
+          </div>
+        </div>
+
+        <div class="project-card" data-hover>
+          <img class="project-card__bg" src="assets/images/portfolio/arqsa-oficinas.png" alt="ARQSA — Oficinas GEA" loading="lazy">
+          <div class="project-card__overlay"></div>
+          <div class="project-card__shine"></div>
+          <div class="project-card__edge"></div>
+          <div class="project-card__info">
+            <span class="project-card__category">Diseño de Espacios · Social Media</span>
+            <h3 class="project-card__title">ARQSA — Oficinas GEA</h3>
+            <div class="project-card__line"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CLIENT LOGOS ====== -->
+  <section class="clients">
+    <div class="container">
+      <span class="section-label clients__label">Marcas que confían</span>
+    </div>
+    <div class="clients__marquee">
+      <div class="clients__track">
+        <span class="clients__logo">NOVA</span>
+        <span class="clients__logo">ARQSA</span>
+        <span class="clients__logo">GENESIS EXPERIENCES</span>
+        <span class="clients__logo">NOVA</span>
+        <span class="clients__logo">ARQSA</span>
+        <span class="clients__logo">GENESIS EXPERIENCES</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="clients__logo">NOVA</span>
+        <span class="clients__logo">ARQSA</span>
+        <span class="clients__logo">GENESIS EXPERIENCES</span>
+        <span class="clients__logo">NOVA</span>
+        <span class="clients__logo">ARQSA</span>
+        <span class="clients__logo">GENESIS EXPERIENCES</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== TESTIMONIALS ====== -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="testimonials__inner">
+
+        <div class="testimonial" id="testimonial1">
+          <blockquote class="testimonial__quote">
+            "Noctura no nos dio un logo. Nos dio una identidad que la gente reconoce antes de leer nuestro nombre. Cada detalle transmite lo que somos."
+          </blockquote>
+          <div class="testimonial__author">
+            <span class="testimonial__name">Arq. Sevillano Aguilar</span>
+            <span class="testimonial__role">Director, ARQSA</span>
+          </div>
+        </div>
+
+        <div class="testimonial" id="testimonial2">
+          <blockquote class="testimonial__quote">
+            "Entendieron nuestra visión mejor que nosotros mismos. El resultado no se siente diseñado — se siente inevitable."
+          </blockquote>
+          <div class="testimonial__author">
+            <span class="testimonial__name">Equipo Genesis</span>
+            <span class="testimonial__role">Genesis Experiences</span>
+          </div>
+        </div>
+
+        <div class="testimonial" id="testimonial3">
+          <blockquote class="testimonial__quote">
+            "Nuestra presencia digital pasó de existir a impactar. Noctura convirtió nuestra marca en algo que la gente recuerda."
+          </blockquote>
+          <div class="testimonial__author">
+            <span class="testimonial__name">NOVA</span>
+            <span class="testimonial__role">Construcción y Acabados Arquitectónicos</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="testimonials__nav">
+        <button class="testimonials__dot active" data-index="0" aria-label="Testimonio 1"></button>
+        <button class="testimonials__dot" data-index="1" aria-label="Testimonio 2"></button>
+        <button class="testimonials__dot" data-index="2" aria-label="Testimonio 3"></button>
+      </div>
+    </div>
+  </section>
+
+      </div><!-- /panel trabajo -->
+
+      <!-- ─── Panel: Contacto ─── -->
+      <div class="panel" data-panel="contacto">
+
+  <!-- ====== CONTACT ====== -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact__grid">
+
+        <!-- Left: Info Column -->
+        <div class="contact__info">
+          <h2 class="contact__heading">Hablemos de<br>tu marca.</h2>
+          <p class="contact__desc">Cuéntanos sobre tu proyecto. Mientras más sepamos, mejor podemos orientar nuestra propuesta. Sin compromisos, sin plantillas.</p>
+
+          <div class="contact__details">
+            <div class="contact__detail">
+              <span class="contact__detail-label">Email</span>
+              <a href="mailto:somos@noctura-studio.com" class="contact__detail-value" data-hover>somos@noctura-studio.com</a>
+            </div>
+            <div class="contact__detail">
+              <span class="contact__detail-label">WhatsApp</span>
+              <a href="https://wa.me/50372440647" class="contact__detail-value" data-hover>+503 7244 0647</a>
+            </div>
+            <div class="contact__detail">
+              <span class="contact__detail-label">Respuesta</span>
+              <span class="contact__detail-value">Dentro de 24-48 hrs</span>
+            </div>
+          </div>
+
+          <div class="contact__socials">
+            <a href="https://instagram.com/somosnoctura" target="_blank" rel="noopener" class="contact__social-link" data-hover>@somosnoctura</a>
+            <a href="https://instagram.com/arq.nelsonmorales" target="_blank" rel="noopener" class="contact__social-link" data-hover>@arq.nelsonmorales</a>
+          </div>
+        </div>
+
+        <!-- Right: Glass Form -->
+        <div class="contact__form-wrap">
+          <form class="contact__form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <input type="text" class="form-group__input" id="name" placeholder=" " required>
+                <label for="name" class="form-group__label">Nombre completo</label>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-group__input" id="company" placeholder=" ">
+                <label for="company" class="form-group__label">Empresa / Marca</label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <input type="email" class="form-group__input" id="email" placeholder=" " required>
+                <label for="email" class="form-group__label">Email</label>
+              </div>
+              <div class="form-group">
+                <input type="tel" class="form-group__input" id="phone" placeholder=" ">
+                <label for="phone" class="form-group__label">Teléfono (opcional)</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <span class="form-group__select-label">¿Qué necesitas?</span>
+              <div class="form-group__tags" id="serviceTags">
+                <button type="button" class="form-tag" data-value="plan-nueva">Plan Nueva</button>
+                <button type="button" class="form-tag" data-value="plan-creciente">Plan Creciente</button>
+                <button type="button" class="form-tag" data-value="plan-completa">Plan Completa</button>
+                <button type="button" class="form-tag" data-value="asesoria-espacial">Asesoría Espacial</button>
+                <button type="button" class="form-tag" data-value="diseno-grafico">Diseño Gráfico</button>
+                <button type="button" class="form-tag" data-value="fachada-rotulo">Fachada / Rótulo</button>
+                <button type="button" class="form-tag" data-value="asesoria-arquitectonica">Distribución Arquitectónica</button>
+                <button type="button" class="form-tag" data-value="emprendimiento">Emprendimiento</button>
+                <button type="button" class="form-tag" data-value="otro">Otro</button>
+              </div>
+              <input type="hidden" name="services" id="servicesInput">
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-group__textarea" id="message" placeholder=" " required></textarea>
+              <label for="message" class="form-group__label">Cuéntanos sobre tu proyecto</label>
+            </div>
+
+            <button type="submit" class="contact__submit" data-hover>
+              <span class="contact__submit-text">Enviar mensaje</span>
+              <span class="contact__submit-icon">&rarr;</span>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__logo">
+          <div class="nav__logo-inner">
+            <span class="nav__logo-n">N</span>
+            <span class="nav__logo-moon">
+              <img src="assets/images/moon.png" alt="" class="nav__logo-moon-img" draggable="false">
+              <span class="nav__logo-moon-shadow footer-moon-shadow"></span>
+            </span>
+            <span class="nav__logo-text">CTURA</span>
+          </div>
+        </div>
+        <span class="footer__text">&copy; 2026 NOCTURA Studio & Consulting. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+      </div><!-- /panel contacto -->
+
+    </div><!-- /panel-viewport__scroll -->
+  </div><!-- /panel-viewport -->
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis Smooth Scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- Scripts (cache-bust: update ?v= when editing) -->
+  <script src="js/smooth-scroll.js?v=8"></script>
+  <script src="js/moon.js?v=8"></script>
+  <script src="js/loader.js?v=8"></script>
+  <script src="js/navigation.js?v=8"></script>
+  <script src="js/cursor.js?v=9"></script>
+  <script src="js/animations.js?v=12"></script>
+  <script src="js/orbital-nav.js?v=1"></script>
+  <script src="js/main.js?v=9"></script>
+</body>
+</html>
