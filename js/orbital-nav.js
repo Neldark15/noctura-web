@@ -9,7 +9,6 @@ const OrbitalNav = {
   scrollEl: null,
   orbital: null,
   heroContent: null,
-  heroScroll: null,
   closeBtn: null,
   indicators: null,
   navLinks: null,
@@ -26,7 +25,6 @@ const OrbitalNav = {
     this.scrollEl = document.getElementById('panelScroll');
     this.orbital = document.getElementById('orbital');
     this.heroContent = document.querySelector('.hero__content');
-    this.heroScroll = document.querySelector('.hero__scroll');
     this.closeBtn = document.getElementById('panelClose');
     this.indicators = this.orbital.querySelectorAll('.orbital__indicator');
     this.navLinks = document.querySelectorAll('.nav__link[data-panel]');
@@ -142,13 +140,12 @@ const OrbitalNav = {
     });
 
     // 1. Fade hero content
-    tl.to([this.heroContent, this.heroScroll], {
+    tl.to(this.heroContent, {
       opacity: 0,
       duration: 0.4,
       ease: 'power2.in',
       onComplete: () => {
         this.heroContent.classList.add('is-hidden');
-        this.heroScroll.classList.add('is-hidden');
       }
     }, 0);
 
@@ -262,13 +259,12 @@ const OrbitalNav = {
     }, 0.8);
 
     // 5. Fade hero content back
-    tl.to([this.heroContent, this.heroScroll], {
+    tl.to(this.heroContent, {
       opacity: 1,
       duration: 0.6,
       ease: 'power2.out',
       onStart: () => {
         this.heroContent.classList.remove('is-hidden');
-        this.heroScroll.classList.remove('is-hidden');
       }
     }, 0.7);
   },

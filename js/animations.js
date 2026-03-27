@@ -93,7 +93,7 @@ const Animations = {
   },
 
   showAllImmediately() {
-    gsap.set('.hero__logo-letter, .hero__logo-moon, .hero__subtitle, .hero__tagline, .hero__scroll', { opacity: 1, y: 0 });
+    gsap.set('.hero__logo-letter, .hero__logo-moon, .hero__subtitle, .hero__tagline', { opacity: 1, y: 0 });
     gsap.set('.about__text', { opacity: 1, y: 0 });
     gsap.set('.process__phase', { opacity: 1, y: 0 });
     gsap.set('.orbital__ring, .orbital__indicator', { opacity: 1, scale: 1 });
@@ -147,12 +147,6 @@ const Animations = {
       ease: 'power3.out'
     }, 1.3);
 
-    // Scroll indicator
-    tl.to('.hero__scroll', {
-      opacity: 0.6,
-      duration: 0.8,
-      ease: 'power2.out'
-    }, 1.4);
   },
 
   scrollAnimations() {
