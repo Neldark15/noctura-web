@@ -99,7 +99,7 @@ const NeuralScene = {
       // Core sphere (bright gold center)
       const coreGeo = new THREE.SphereGeometry(0.12, 32, 32);
       const coreMat = new THREE.MeshBasicMaterial({
-        color: 0xB8A272,
+        color: 0xB4BECD,
         transparent: true,
         opacity: 0.9
       });
@@ -111,7 +111,7 @@ const NeuralScene = {
       // Inner glow
       const glowGeo = new THREE.SphereGeometry(0.22, 32, 32);
       const glowMat = new THREE.MeshBasicMaterial({
-        color: 0xB8A272,
+        color: 0xB4BECD,
         transparent: true,
         opacity: 0,
         side: THREE.BackSide
@@ -123,7 +123,7 @@ const NeuralScene = {
       // Outer pulse ring
       const ringGeo = new THREE.RingGeometry(0.28, 0.30, 64);
       const ringMat = new THREE.MeshBasicMaterial({
-        color: 0xB8A272,
+        color: 0xB4BECD,
         transparent: true,
         opacity: 0,
         side: THREE.DoubleSide
@@ -190,7 +190,7 @@ const NeuralScene = {
       const points = curve.getPoints(60);
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       const material = new THREE.LineBasicMaterial({
-        color: 0xB8A272,
+        color: 0xB4BECD,
         transparent: true,
         opacity: 0
       });
@@ -243,7 +243,7 @@ const NeuralScene = {
       for (let i = 0; i < particleCount; i++) {
         const geo = new THREE.SphereGeometry(0.018, 8, 8);
         const mat = new THREE.MeshBasicMaterial({
-          color: 0xB8A272,
+          color: 0xB4BECD,
           transparent: true,
           opacity: 0
         });
@@ -282,7 +282,7 @@ const NeuralScene = {
     geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
     const mat = new THREE.PointsMaterial({
-      color: 0xB8A272,
+      color: 0xB4BECD,
       size: 0.012,
       transparent: true,
       opacity: 0,

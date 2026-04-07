@@ -10,7 +10,7 @@
   text-align: center;
   position: relative;
   padding: 0;
-  background: radial-gradient(ellipse at 50% 40%, rgba(45, 27, 78, 0.12), transparent 70%);
+  background: radial-gradient(ellipse at 50% 40%, rgba(30, 35, 50, 0.18), transparent 70%);
   perspective: 1200px;
   perspective-origin: 50% 50%;
 }
@@ -60,14 +60,15 @@
 /* --- Real Moon Image (Hero) --- */
 .moon-real {
   position: relative;
-  width: clamp(3.20rem, 2.40rem + 3.20vw, 6.50rem);
-  height: clamp(3.20rem, 2.40rem + 3.20vw, 6.50rem);
+  width: clamp(3.40rem, 2.50rem + 3.40vw, 6.80rem);
+  height: clamp(3.40rem, 2.50rem + 3.40vw, 6.80rem);
   border-radius: 50%;
   overflow: hidden;
   box-shadow:
-    0 0 8px 2px rgba(180, 200, 255, 0.15),
-    0 0 24px 6px rgba(180, 200, 255, 0.08),
-    0 0 48px 12px rgba(180, 200, 255, 0.04);
+    0 0 6px 1px rgba(220, 225, 235, 0.25),
+    0 0 20px 4px rgba(200, 210, 225, 0.15),
+    0 0 50px 10px rgba(180, 195, 215, 0.08),
+    0 0 90px 20px rgba(160, 175, 200, 0.04);
   margin: 0 -0.15em;
   flex-shrink: 0;
 }
@@ -198,7 +199,7 @@
 .orbital__ring {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(184, 162, 114, 0.1);
+  border: 1px solid rgba(180, 190, 205, 0.1);
   top: 50%;
   left: 50%;
   opacity: 0;
@@ -211,7 +212,7 @@
   width: 140px;
   height: 140px;
   animation: orbitSpin 45s linear infinite reverse;
-  border-color: rgba(184, 162, 114, 0.06);
+  border-color: rgba(180, 190, 205, 0.06);
 }
 
 .orbital__ring--1 {
@@ -225,7 +226,7 @@
   height: 340px;
   animation: orbitSpin 90s linear infinite reverse;
   border-style: dashed;
-  border-color: rgba(184, 162, 114, 0.07);
+  border-color: rgba(180, 190, 205, 0.07);
 }
 
 .orbital__ring--3 {
@@ -239,14 +240,14 @@
   height: 640px;
   animation: orbitSpin 150s linear infinite reverse;
   border-style: dashed;
-  border-color: rgba(184, 162, 114, 0.07);
+  border-color: rgba(180, 190, 205, 0.07);
 }
 
 .orbital__ring--5 {
   width: 800px;
   height: 800px;
   animation: orbitSpin 180s linear infinite;
-  border-color: rgba(184, 162, 114, 0.05);
+  border-color: rgba(180, 190, 205, 0.05);
 }
 
 @keyframes orbitSpin {
@@ -327,7 +328,7 @@
 
 @keyframes orbitalPulse {
   0%, 100% { opacity: 0.3; box-shadow: none; }
-  50% { opacity: 1; box-shadow: 0 0 8px rgba(184, 162, 114, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 8px rgba(180, 190, 205, 0.4); }
 }
 
 /* --- Orbital Indicators --- */
@@ -351,7 +352,7 @@
 }
 
 .orbital__indicator:hover .orbital__indicator-dot {
-  box-shadow: 0 0 10px rgba(184, 162, 114, 0.6);
+  box-shadow: 0 0 10px rgba(180, 190, 205, 0.6);
   transform: scale(1.3);
 }
 
@@ -400,7 +401,7 @@
   height: 5px;
   border-radius: 50%;
   background: var(--color-gold);
-  box-shadow: 0 0 6px rgba(184, 162, 114, 0.3);
+  box-shadow: 0 0 6px rgba(180, 190, 205, 0.3);
   flex-shrink: 0;
   transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out);
 }
@@ -427,8 +428,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle at var(--shine-x, 50%) var(--shine-y, 50%),
-    rgba(184, 162, 114, 0.06) 0%,
-    rgba(184, 162, 114, 0.02) 30%,
+    rgba(180, 190, 205, 0.06) 0%,
+    rgba(180, 190, 205, 0.02) 30%,
     transparent 60%
   );
   pointer-events: none;

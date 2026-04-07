@@ -1,43 +1,44 @@
 /* ===================================
    NOCTURA — Design Tokens
+   Refined: Lunar Cold Silver System
    =================================== */
 
 :root {
   /* --- Primary Backgrounds --- */
-  --color-black:        #0A0A0A;
-  --color-graphite:     #1A1A1E;
-  --color-anthracite:   #2A2A2F;
-  --color-charcoal:     #3A3A40;
+  --color-black:        #08080A;
+  --color-graphite:     #141418;
+  --color-anthracite:   #222228;
+  --color-charcoal:     #38383F;
 
   /* --- Primary Text --- */
-  --color-bone:         #E8E0D4;
-  --color-ivory:        #F5F0E8;
-  --color-muted:        #8A8A8E;
+  --color-bone:         #D8D4CE;
+  --color-ivory:        #EDEAE5;
+  --color-muted:        #7E7F86;
 
-  /* --- Accents --- */
-  --color-silver:       #C0C0C8;
-  --color-wine:         #6B1D3A;
+  /* --- Accents (Lunar Cold Palette) --- */
+  --color-silver:       #B0B3BC;
+  --color-wine:         #4A1832;
   --color-night-blue:   #1B2A4A;
   --color-deep-purple:  #2D1B4E;
-  --color-gold:         #B8A272;
+  --color-gold:         #B8B0A4;
 
   /* --- Functional --- */
-  --color-overlay:      rgba(10, 10, 10, 0.85);
-  --color-glass:        rgba(26, 26, 30, 0.60);
+  --color-overlay:      rgba(8, 8, 10, 0.88);
+  --color-glass:        rgba(20, 20, 24, 0.65);
 
   /* --- Font Families --- */
   --font-display:  'Cormorant Garamond', Georgia, serif;
   --font-body:     'Inter', 'Helvetica Neue', sans-serif;
   --font-accent:   'Libre Baskerville', Georgia, serif;
 
-  /* --- Font Scale (clamp) --- */
-  --fs-xs:    clamp(0.70rem, 0.65rem + 0.25vw, 0.80rem);
-  --fs-sm:    clamp(0.80rem, 0.75rem + 0.30vw, 0.93rem);
-  --fs-base:  clamp(0.95rem, 0.88rem + 0.35vw, 1.10rem);
-  --fs-md:    clamp(1.15rem, 1.00rem + 0.50vw, 1.40rem);
-  --fs-lg:    clamp(1.60rem, 1.30rem + 1.00vw, 2.20rem);
-  --fs-xl:    clamp(2.40rem, 1.80rem + 2.00vw, 4.00rem);
-  --fs-xxl:   clamp(3.50rem, 2.50rem + 3.50vw, 7.00rem);
+  /* --- Font Scale (clamp) — slightly larger base for legibility --- */
+  --fs-xs:    clamp(0.72rem, 0.67rem + 0.25vw, 0.82rem);
+  --fs-sm:    clamp(0.82rem, 0.77rem + 0.30vw, 0.95rem);
+  --fs-base:  clamp(1.00rem, 0.92rem + 0.40vw, 1.15rem);
+  --fs-md:    clamp(1.18rem, 1.02rem + 0.55vw, 1.45rem);
+  --fs-lg:    clamp(1.65rem, 1.35rem + 1.00vw, 2.30rem);
+  --fs-xl:    clamp(2.50rem, 1.85rem + 2.10vw, 4.20rem);
+  --fs-xxl:   clamp(3.60rem, 2.60rem + 3.50vw, 7.20rem);
 
   /* --- Font Weights --- */
   --fw-light:     300;
@@ -46,15 +47,15 @@
   --fw-semibold:  600;
 
   /* --- Letter Spacing --- */
-  --ls-tight:   -0.02em;
+  --ls-tight:   -0.015em;
   --ls-normal:    0;
-  --ls-wide:      0.08em;
-  --ls-ultra:     0.20em;
+  --ls-wide:      0.10em;
+  --ls-ultra:     0.22em;
 
   /* --- Line Heights --- */
   --lh-tight:   1.10;
-  --lh-heading: 1.20;
-  --lh-body:    1.65;
+  --lh-heading: 1.18;
+  --lh-body:    1.70;
 
   /* --- Spacing --- */
   --space-xs:   0.5rem;
@@ -94,8 +95,8 @@
     inset 0 2px 6px rgba(0,0,0,0.6),
     inset 0 -1px 0 rgba(255,255,255,0.02);
 
-  /* --- Gold Glows --- */
-  --glow-gold-subtle: 0 0 12px rgba(184,162,114,0.08);
-  --glow-gold-medium: 0 0 20px rgba(184,162,114,0.15), 0 0 40px rgba(184,162,114,0.05);
-  --glow-gold-strong: 0 0 30px rgba(184,162,114,0.25), 0 0 60px rgba(184,162,114,0.08);
+  /* --- Lunar Glows (cold silver/white) --- */
+  --glow-gold-subtle: 0 0 12px rgba(200,210,225,0.06);
+  --glow-gold-medium: 0 0 20px rgba(200,210,225,0.12), 0 0 40px rgba(200,210,225,0.04);
+  --glow-gold-strong: 0 0 30px rgba(200,210,225,0.20), 0 0 60px rgba(200,210,225,0.06);
 }
