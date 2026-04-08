@@ -34,8 +34,8 @@
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 8px 20px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(184, 162, 114, 0.06);
-  border-color: rgba(184, 162, 114, 0.1);
+    0 0 20px rgba(180, 190, 205, 0.06);
+  border-color: rgba(180, 190, 205, 0.1);
 }
 
 .project-card__bg {
@@ -54,20 +54,20 @@
   transform: scale(1.05);
 }
 
-/* Dark gradient overlay */
+/* Dark gradient overlay — always strong at bottom for text legibility */
 .project-card__overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(10, 10, 10, 0.9) 0%, rgba(10, 10, 10, 0.3) 50%, rgba(10, 10, 10, 0.1) 100%);
+  background: linear-gradient(to top, rgba(8, 8, 10, 0.92) 0%, rgba(8, 8, 10, 0.6) 40%, rgba(8, 8, 10, 0.15) 100%);
   transition: opacity 0.4s var(--ease-out);
   z-index: 1;
 }
 
 .project-card:hover .project-card__overlay {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 /* Light reflection / shine layer — positioned via JS */
@@ -115,23 +115,22 @@
   opacity: 1;
 }
 
-/* --- Info Panel --- */
+/* --- Info Panel — always visible --- */
 .project-card__info {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   padding: var(--space-md);
-  transform: translateY(10px) translateZ(30px);
-  opacity: 0;
+  transform: translateY(0) translateZ(30px);
+  opacity: 1;
   transition: transform var(--duration-fast) var(--ease-out),
               opacity var(--duration-fast) var(--ease-out);
   z-index: 4;
 }
 
 .project-card:hover .project-card__info {
-  transform: translateY(0) translateZ(30px);
-  opacity: 1;
+  transform: translateY(-4px) translateZ(30px);
 }
 
 .project-card__category {
@@ -139,8 +138,9 @@
   font-weight: var(--fw-medium);
   letter-spacing: var(--ls-ultra);
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-silver);
   margin-bottom: 0.5rem;
+  display: block;
 }
 
 .project-card__title {
@@ -155,11 +155,11 @@
   width: 40px;
   height: 1px;
   background-color: var(--color-gold);
-  transform: scaleX(0);
+  transform: scaleX(1);
   transform-origin: left;
   transition: transform var(--duration-fast) var(--ease-out) 0.1s;
 }
 
 .project-card:hover .project-card__line {
-  transform: scaleX(1);
+  width: 60px;
 }
