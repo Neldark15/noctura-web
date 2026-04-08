@@ -4,7 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize shared modules
-  SmoothScroll.init();
+  // NOTE: Lenis smooth scroll is intentionally NOT initialized on this page.
+  // It conflicts with ScrollTrigger's pin on the neural scene section,
+  // causing jitter/trembling when scrolling through the pinned canvas.
   Navigation.init();
   CustomCursor.init();
 
@@ -99,36 +101,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const sceneEl = document.getElementById('procesoScene');
     if (!sceneEl || window.innerWidth <= 900) return;
 
-    // Detect Safari for pin optimization
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-    // Pause Lenis during pinned section to prevent scroll fighting
     ScrollTrigger.create({
       trigger: sceneEl,
       start: 'top top',
       end: '+=300%',
       pin: true,
       pinSpacing: true,
-      // transform-based pinning is smoother in Safari than position:fixed
-      pinType: isSafari ? 'transform' : 'fixed',
-      // Higher scrub = smoother but less responsive; Safari needs more smoothing
-      scrub: isSafari ? 2 : 1,
+      scrub: 1.5,
       anticipatePin: 1,
       onUpdate: (self) => {
         const progress = self.progress;
         const phase = Math.min(Math.floor(progress * 4), 3);
         if (phase !== NeuralScene.activeNode && phase >= 0) {
           NeuralScene.activateNode(phase);
-        }
-      },
-      onToggle: (self) => {
-        // Pause/resume Lenis when entering/leaving pinned section
-        if (window.lenis) {
-          if (self.isActive) {
-            window.lenis.options.wheelMultiplier = isSafari ? 0.6 : 0.8;
-          } else {
-            window.lenis.options.wheelMultiplier = isSafari ? 1.0 : 1.5;
-          }
         }
       }
     });
