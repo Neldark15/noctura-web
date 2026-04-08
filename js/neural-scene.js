@@ -81,13 +81,17 @@ const NeuralScene = {
     );
     this.camera.position.set(0, 0, 8); // Start far, animate closer
 
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: true,
-      alpha: true
+      antialias: !isSafari, // Disable antialiasing on Safari for performance
+      alpha: true,
+      powerPreference: 'high-performance'
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Cap pixel ratio: Safari struggles with WebGL at high DPR
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSafari ? 1.5 : 2));
 
     this.raycaster = new THREE.Raycaster();
   },

@@ -14,12 +14,17 @@ const SmoothScroll = {
 
     if (typeof Lenis === 'undefined') return;
 
+    // Detect Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     this.lenis = new Lenis({
-      duration: 0.6,
+      duration: isSafari ? 0.8 : 0.6,
       easing: (t) => 1 - Math.pow(1 - t, 3),
       orientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.8
+      wheelMultiplier: isSafari ? 1.0 : 1.5,
+      touchMultiplier: isSafari ? 1.2 : 1.5,
+      syncTouch: false
     });
 
     // Expose globally for navigation.js
