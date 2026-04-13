@@ -5,10 +5,19 @@
   <!-- Homepage -->
   <url>
     <loc>https://noctura-studio.com/</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="es-419" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-SV" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-GT" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-HN" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-CR" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-PA" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-NI" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-MX" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="es-US" href="https://noctura-studio.com/" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://noctura-studio.com/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://noctura-studio.com/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://noctura-studio.com/" />
   </url>
@@ -16,10 +25,19 @@
   <!-- Proceso Creativo -->
   <url>
     <loc>https://noctura-studio.com/proceso.html</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="es-419" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-SV" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-GT" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-HN" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-CR" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-PA" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-NI" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-MX" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="es-US" href="https://noctura-studio.com/proceso.html" />
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://noctura-studio.com/proceso.html" />
     <xhtml:link rel="alternate" hreflang="es" href="https://noctura-studio.com/proceso.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://noctura-studio.com/proceso.html" />
   </url>
@@ -27,21 +45,21 @@
   <!-- Secciones clave (deep links) -->
   <url>
     <loc>https://noctura-studio.com/#services</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://noctura-studio.com/#portfolio</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://noctura-studio.com/#contact</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-04-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
