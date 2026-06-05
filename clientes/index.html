@@ -239,7 +239,7 @@ function shortP(k){ return {PROYECTOS:'PROY',AUTORIDAD:'AUTO',BIO:'BIO',MARCA:'M
 function keyOf(m,day){ return m.month+'-'+day; }
 function eff(p,m){ const pr=PROPS[keyOf(m,p.day)]||{};
   return {tema:(pr.tema??p.tema), gancho:(pr.gancho??p.gancho), cta:(pr.cta??p.cta),
-    fecha:(pr.fecha||null), obs:(pr.observacion||''), edited:!!pr.id}; }
+    fecha:(pr.fecha||null), obs:(pr.observacion||''), texto:(pr.texto||''), edited:!!pr.id}; }
 
 /* ---------- AUTH ---------- */
 async function init(){
@@ -415,6 +415,8 @@ function openModal(p, m){
     '<div class="field"><div class="lab">Tema / Contenido</div><input id="f_tema" value="'+esc(e.tema)+'"></div>'+
     '<div class="field"><div class="lab">Gancho</div><input id="f_gancho" value="'+esc(e.gancho)+'"></div>'+
     '<div class="field"><div class="lab">CTA</div><input id="f_cta" value="'+esc(e.cta)+'"></div>'+
+    '<div class="field"><div class="lab">Texto de la publicacion</div>'+
+    '<textarea id="f_texto" rows="6" placeholder="Escribe aqui el texto completo del caption / publicacion..." style="line-height:1.6">'+esc(e.texto)+'</textarea></div>'+
     '<div class="field"><div class="lab">Fecha sugerida (opcional)</div><input id="f_fecha" type="date" value="'+(e.fecha||'')+'"></div>'+
     promptHtml+
     '<div class="field"><div class="lab">Observaciones para NOCTURA</div>'+
@@ -448,12 +450,13 @@ async function saveProp(p, m){
   const tema = document.getElementById('f_tema').value.trim();
   const gancho = document.getElementById('f_gancho').value.trim();
   const cta = document.getElementById('f_cta').value.trim();
+  const texto = document.getElementById('f_texto').value.trim();
   const fecha = document.getElementById('f_fecha').value || null;
   const obs = document.getElementById('f_obs').value.trim();
   const row = {
     mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
     tema:(tema&&tema!==p.tema)?tema:null, gancho:(gancho&&gancho!==p.gancho)?gancho:null,
-    cta:(cta&&cta!==p.cta)?cta:null, fecha:fecha, observacion:obs||null,
+    cta:(cta&&cta!==p.cta)?cta:null, texto:texto||null, fecha:fecha, observacion:obs||null,
     autor:USER.id, autor_email:USER.email
   };
   const btn = document.getElementById('saveb'); btn.textContent = 'Guardando...';
@@ -487,6 +490,7 @@ async function openInbox(){
       if(r.gancho) chgs += '<div class="chg"><b>Gancho →</b> '+esc(r.gancho)+'</div>';
       if(r.cta) chgs += '<div class="chg"><b>CTA →</b> '+esc(r.cta)+'</div>';
       if(r.fecha) chgs += '<div class="chg"><b>Fecha →</b> '+esc(r.fecha)+'</div>';
+      if(r.texto) chgs += '<div class="chg"><b>Texto:</b> '+esc(r.texto).substring(0,120)+(r.texto.length>120?'...':'')+'</div>';
       if(r.observacion) chgs += '<div class="chg"><b>Obs:</b> '+esc(r.observacion)+'</div>';
       return '<div class="inbox-item"><div class="h">'+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
         '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
