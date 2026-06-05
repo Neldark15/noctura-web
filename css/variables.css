@@ -22,6 +22,11 @@
   --color-deep-purple:  #2D1B4E;
   --color-gold:         #B8B0A4;
 
+  /* --- RGB Variants (for rgba()) --- */
+  --color-ivory-rgb:    237, 234, 229;
+  --color-silver-rgb:   176, 179, 188;
+  --color-gold-rgb:     184, 176, 164;
+
   /* --- Functional --- */
   --color-overlay:      rgba(8, 8, 10, 0.88);
   --color-glass:        rgba(20, 20, 24, 0.65);

@@ -139,6 +139,32 @@
               background var(--duration-fast) var(--ease-out),
               transform 0.3s var(--ease-out),
               box-shadow 0.3s var(--ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.plans__service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(var(--color-silver-rgb, 176, 179, 188), 0.08),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.plans__service-card:hover::before {
+  opacity: 1;
+}
+
+.plans__service-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .plans__service-card:hover {

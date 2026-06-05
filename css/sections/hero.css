@@ -137,7 +137,7 @@
   transform: translateY(10px);
 }
 
-/* --- Tagline --- */
+/* --- Tagline with ShinyText effect --- */
 .hero__tagline {
   font-family: var(--font-body);
   font-size: var(--fs-md);
@@ -146,6 +146,35 @@
   color: var(--color-muted);
   opacity: 0;
   transform: translateY(15px);
+  background: linear-gradient(
+    120deg,
+    var(--color-muted) 0%,
+    var(--color-muted) 40%,
+    var(--color-ivory) 50%,
+    var(--color-muted) 60%,
+    var(--color-muted) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shinyText 4s ease-in-out infinite;
+  animation-delay: 3s;
+}
+
+@keyframes shinyText {
+  0%, 100% { background-position: 200% center; }
+  50% { background-position: -200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__tagline {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: var(--color-muted);
+    animation: none;
+  }
 }
 
 /* --- Scroll Indicator --- */
@@ -159,13 +188,25 @@
   align-items: center;
   gap: 0.5rem;
   opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.3s var(--ease-out);
+}
+
+.hero__scroll:hover .hero__scroll-text {
+  color: var(--color-ivory);
+}
+
+.hero__scroll:hover .hero__scroll-line {
+  background: linear-gradient(to bottom, var(--color-ivory), transparent);
 }
 
 .hero__scroll-text {
+  font-family: var(--font-body);
   font-size: var(--fs-xs);
   letter-spacing: var(--ls-ultra);
   text-transform: uppercase;
   color: var(--color-muted);
+  transition: color 0.3s var(--ease-out);
 }
 
 .hero__scroll-line {
@@ -173,6 +214,8 @@
   height: 40px;
   background: linear-gradient(to bottom, var(--color-silver), transparent);
   animation: scrollPulse 2s ease-in-out infinite;
+  transform-origin: top;
+  transition: background 0.3s var(--ease-out);
 }
 
 @keyframes scrollPulse {

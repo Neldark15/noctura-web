@@ -3,6 +3,7 @@
 
 User-agent: *
 Allow: /
+Disallow: /clientes/
 
 # Sitemap
 Sitemap: https://noctura-studio.com/sitemap.xml

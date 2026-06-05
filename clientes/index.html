@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>NOCTURA — Espacio de trabajo privado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --black:#08080A; --graphite:#141418; --anthra:#1c1c22; --charcoal:#33333b;
+ --bone:#D8D4CE; --ivory:#EDEAE5; --muted:#8A8B92; --silver:#B0B3BC; --gold:#B8B0A4;
+ --proy:#3f6f8c; --auto:#4d8aa8; --bio:#7fa890; --marca:#b09a6a; --cta:#c07a55; --rep:#6f7780;
+ --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter','Helvetica Neue',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--bone);font-family:var(--sans);font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ivory);letter-spacing:.5px;line-height:1.1}
+.kick{font-family:var(--sans);font-size:13px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+.kick::after{content:"";display:block;width:54px;height:2px;background:var(--gold);margin-top:10px}
+
+/* LOGIN */
+#login{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:24px;
+ background:radial-gradient(circle at 70% 18%, rgba(176,179,188,.10), transparent 45%), var(--black)}
+.login-card{max-width:420px;width:100%;background:linear-gradient(180deg,#141418,#0d0d10);
+ border:1px solid var(--charcoal);border-radius:12px;padding:38px 34px}
+.login-card .brand{font-size:22px;letter-spacing:7px;color:var(--silver);font-weight:500;text-align:center}
+.login-card .brand small{display:block;font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:3px}
+.login-card h2{font-size:30px;margin:28px 0 6px;text-align:center}
+.login-card p{font-size:13.5px;color:var(--muted);margin-bottom:22px;text-align:center}
+.field-l{margin-bottom:14px}
+.field-l label{display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+input,textarea,select{font-family:var(--sans);font-size:14px;color:var(--ivory);background:#0a0a0c;
+ border:1px solid var(--charcoal);border-radius:7px;padding:12px;width:100%}
+input:focus,textarea:focus{outline:1px solid var(--silver)}
+.btn{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--charcoal);padding:12px 22px;border-radius:6px;
+ font-size:13px;letter-spacing:1.5px;color:var(--bone);cursor:pointer;background:rgba(20,20,24,.4);
+ transition:border-color .3s, box-shadow .3s, transform .15s;font-family:var(--sans)}
+.btn:hover{border-color:var(--silver);box-shadow:0 0 26px rgba(176,179,188,.10)}
+.btn:active{transform:scale(.98)}
+.btn.solid{background:var(--ivory);color:#111;border-color:var(--ivory)}
+.btn.full{width:100%;justify-content:center;margin-top:8px}
+.err{color:#d98c6a;font-size:13px;margin-top:12px;min-height:16px}
+
+#app{display:none}
+nav{position:sticky;top:0;z-index:50;background:rgba(8,8,10,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--charcoal)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:14px}
+.brand{font-size:18px;letter-spacing:6px;color:var(--silver);font-weight:500}
+.brand small{display:block;font-size:9px;letter-spacing:3px;color:var(--muted)}
+.navright{display:flex;align-items:center;gap:14px}
+.navlinks{display:flex;gap:22px;font-size:13px;letter-spacing:1px;color:var(--muted)}
+.navlinks a{transition:color .2s}.navlinks a:hover{color:var(--ivory)}
+.uchip{font-size:12px;color:var(--muted)}
+.mini{font-size:11px;letter-spacing:1px;padding:7px 12px;border-radius:5px;border:1px solid var(--charcoal);cursor:pointer;color:var(--bone);background:none;font-family:var(--sans)}
+.mini:hover{border-color:var(--silver)}
+@media(max-width:860px){.navlinks{display:none}.uchip{display:none}}
+
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
+.moon{position:absolute;top:8%;right:-6%;width:520px;height:520px;border-radius:50%;
+ background:radial-gradient(circle at 50% 50%, rgba(237,234,229,.85) 0%, rgba(176,179,188,.28) 34%, rgba(176,179,188,.05) 66%, transparent 75%);filter:blur(2px)}
+.hero-c{position:relative;z-index:2;max-width:880px}
+.hero h1{font-size:clamp(44px,8vw,100px);line-height:.98}
+.hero .sub{margin-top:24px;font-size:15px;letter-spacing:2px;color:var(--muted)}
+.hero .client{margin-top:8px;font-family:var(--serif);font-size:clamp(24px,3.4vw,40px);color:var(--silver)}
+.gold-rule{width:120px;height:2px;background:var(--gold);margin:28px 0 20px}
+.dl{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+
+section{padding:80px 0;border-top:1px solid var(--graphite)}
+.sec-h{font-size:clamp(30px,4.4vw,52px);margin-bottom:28px}
+.lead{font-size:18px;color:var(--bone);max-width:780px}
+.lead b{color:var(--ivory);font-weight:500}
+.muted{color:var(--muted)}
+.grid{display:grid;gap:18px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.g2,.g3{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,#141418,#0f0f12);border:1px solid var(--charcoal);border-radius:8px;padding:24px}
+.card h3{font-size:24px;margin-bottom:8px}.card p{font-size:14.5px;color:var(--bone)}
+.card .num{font-family:var(--serif);font-size:40px;color:var(--charcoal);line-height:1}
+.rows{border-top:1px solid var(--charcoal)}
+.row{display:grid;grid-template-columns:1fr 1.4fr;gap:18px;padding:15px 4px;border-bottom:1px solid var(--graphite)}
+.row .k{color:var(--silver);font-size:14.5px}.row .v{color:var(--bone);font-size:14.5px}
+.row.head .k,.row.head .v{color:var(--ivory);font-size:12px;letter-spacing:2px;text-transform:uppercase}
+.pill{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--charcoal);border-radius:30px;padding:8px 15px;font-size:13px;color:var(--bone);cursor:pointer;transition:.2s;user-select:none}
+.pill .dot{width:13px;height:13px;border-radius:4px}.pill:hover{border-color:var(--silver)}.pill.off{opacity:.34}
+.cal-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{padding:9px 16px;border:1px solid var(--charcoal);border-radius:6px;font-size:13px;letter-spacing:1px;color:var(--muted);cursor:pointer;transition:.2s;font-family:var(--sans)}
+.tab:hover{color:var(--ivory)}.tab.active{background:var(--ivory);color:#111;border-color:var(--ivory)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 20px}
+.note{font-size:12px;color:var(--muted);margin-left:auto}
+.calhead{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+.calhead div{font-size:11px;letter-spacing:1px;color:var(--muted);text-align:center;padding:6px 0;text-transform:uppercase}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cell{min-height:118px;background:var(--graphite);border:1px solid #202027;border-radius:7px;padding:8px;position:relative}
+.cell.empty{background:#0c0c0e;border-color:#141416}
+.cell .dnum{font-size:13px;color:var(--muted);font-weight:500}
+.pub{margin-top:7px;border-radius:6px;padding:8px 9px;cursor:pointer;transition:transform .15s, box-shadow .2s;color:#fff}
+.pub:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.pub .ft{font-size:11px;font-weight:700;letter-spacing:1px;display:flex;justify-content:space-between;opacity:.95}
+.pub .tt{font-size:12.5px;margin-top:3px;line-height:1.25}
+.pub.dim{opacity:.18;filter:grayscale(.5)}
+.repost{margin-top:18px;text-align:center;color:var(--cta);font-style:italic;font-size:13px;opacity:.85}
+.hasobs{position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(184,176,164,.6)}
+@media(max-width:760px){.cell{min-height:auto}.calhead div{font-size:9px}.pub .tt{font-size:11px}}
+.ov{position:fixed;inset:0;background:rgba(4,4,6,.74);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+.ov.show{display:flex}
+.modal{max-width:640px;width:100%;background:linear-gradient(180deg,#16161b,#0e0e11);border:1px solid var(--charcoal);border-radius:10px;padding:30px;max-height:90vh;overflow:auto}
+.modal .mtag{display:inline-flex;gap:8px;align-items:center;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;padding:6px 12px;border-radius:5px}
+.modal h3{font-size:28px;margin:14px 0 4px}
+.modal .meta{color:var(--muted);font-size:13px;margin-bottom:16px}
+.field{margin-top:15px}
+.field .lab{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.field .val{font-size:15px;color:var(--bone)}
+.promptbox{background:#0a0a0c;border:1px solid var(--charcoal);border-radius:7px;padding:13px;font-size:13px;color:var(--bone);line-height:1.55;white-space:pre-wrap}
+.mrow{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.x{position:sticky;top:0;float:right;font-size:26px;color:var(--muted);cursor:pointer;line-height:1}
+.x:hover{color:var(--ivory)}
+.okp{color:var(--bio)!important;border-color:var(--bio)!important}
+.inbox-item{border:1px solid var(--charcoal);border-radius:8px;padding:16px;margin-bottom:12px;background:#0d0d10}
+.inbox-item .h{font-size:15px;color:var(--ivory)}
+.inbox-item .sub{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.chg{font-size:13px;color:var(--bone);margin-top:4px}
+.chg b{color:var(--gold);font-weight:500}
+footer{padding:54px 0 64px;border-top:1px solid var(--graphite);text-align:center}
+footer .t{font-family:var(--serif);font-size:28px;color:var(--silver);margin-bottom:12px}
+footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
+.editbadge{display:inline-block;font-size:10px;letter-spacing:1px;color:#111;background:var(--gold);border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="brand">NOCTURA<small>STUDIO &amp; CONSULTING</small></div>
+    <h2>Acceso privado</h2>
+    <p>Ingresa con tu usuario y contrasena proporcionados por NOCTURA.</p>
+    <div class="field-l"><label>Usuario</label><input id="le" type="text" autocomplete="username" placeholder="tu usuario"></div>
+    <div class="field-l"><label>Contrasena</label><input id="lp" type="password" autocomplete="current-password" placeholder="********"></div>
+    <button class="btn solid full" id="loginbtn">Entrar</button>
+    <div class="err" id="lerr"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<nav><div class="wrap">
+  <div class="brand">NOCTURA<small>STUDIO &amp; CONSULTING</small></div>
+  <div class="navright">
+    <div class="navlinks"><a href="#resumen">Resumen</a><a href="#pilares">Pilares</a><a href="#calendario">Calendario</a></div>
+    <span class="uchip" id="uchip"></span>
+    <button class="mini" id="inboxbtn" style="display:none">Propuestas</button>
+    <button class="mini" id="logout">Salir</button>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="moon"></div><div class="wrap hero-c">
+  <div class="kick">Informe de estrategia de marca</div>
+  <h1>Estrategia de Contenido &amp; Posicionamiento Digital</h1>
+  <div class="gold-rule"></div>
+  <div class="sub">Preparado para</div>
+  <div class="client" id="heroClient"></div>
+  <div class="sub" id="heroSub"></div>
+  <div class="dl"><a class="btn solid" href="#calendario">Ver calendario editable</a></div>
+</div></header>
+
+<section id="resumen"><div class="wrap">
+  <div class="kick">01 - Resumen ejecutivo</div>
+  <h2 class="sec-h">El problema y la oportunidad</h2>
+  <div id="resumenContent"></div>
+</div></section>
+
+<section id="pilares"><div class="wrap">
+  <div class="kick">02 - Sistema de contenido</div>
+  <h2 class="sec-h">Cinco pilares - diseno con proposito</h2>
+  <div id="pilcards" class="grid g3"></div>
+</div></section>
+
+<section id="calendario"><div class="wrap">
+  <div class="kick">03 - El calendario</div>
+  <h2 class="sec-h">Plan editorial editable</h2>
+  <p class="lead" style="margin-bottom:8px">Haz clic en cualquier publicacion para ver su contenido y el <b>prompt para ChatGPT</b>. Puedes <b>editar el texto y dejar observaciones</b>: se guardan automaticamente y NOCTURA las recibe. Filtra por pilar con las etiquetas.</p>
+  <div class="legend" id="legend"></div>
+  <div class="cal-controls"><div class="tabs" id="tabs"></div><span class="note" id="savestate"></span></div>
+  <div class="calhead"><div>Lun</div><div>Mar</div><div>Mie</div><div>Jue</div><div>Vie</div><div>Sab</div><div>Dom</div></div>
+  <div class="cal" id="cal"></div>
+  <p class="muted" style="margin-top:18px;font-size:13px">Dia de proyecto reservado: el 2do martes de cada mes.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="t" id="footerMsg"></div>
+  <div class="s">ESTRATEGIA - IDENTIDAD - PERCEPCION &mdash; somos@noctura-studio.com &middot; noctura-studio.com</div>
+</div></footer>
+</div>
+
+<div class="ov" id="ov"><div class="modal" id="modal"></div></div>
+<div class="ov" id="inboxov"><div class="modal" id="inbox"></div></div>
+
+<script>
+/* ============================================================
+   NOCTURA — Plataforma de clientes
+   Multi-empresa, login por username
+   ============================================================ */
+
+const SB_URL = "https://mlqpzxsrinjfroativsi.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1scXB6eHNyaW5qZnJvYXRpdnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3Nzk3MTIsImV4cCI6MjA4OTM1NTcxMn0.r2rUQzcjz-FOvy4tJo7_X00ov6U9UZprFsGC4fpPkmM";
+
+/* ---------- CLIENT DATA REGISTRY ---------- */
+const CLIENTS = {
+  ARQSA: {
+    name: "ARQSA",
+    fullName: "ARQSA - Arquitectos Sevillano Aguilar",
+    tagline: "Firma de Arquitectura y Construccion - El Salvador - @arqsa.sv - Junio-Diciembre 2026",
+    footerMsg: "NOCTURA trabaja la percepcion de ARQSA.",
+    resumen: '<p class="lead">ARQSA es una firma joven con un portafolio real y de buena factura — residencial, clinico, corporativo y multifamiliar. Hoy <b>el feed depende casi por completo de tener un proyecto que mostrar</b>; cuando no hay obra nueva, el contenido se reduce a efemerides genericas.</p><p class="lead" style="margin-top:18px"><b>La estrategia de NOCTURA resuelve ese problema de raiz</b>: un sistema de cinco pilares que produce piezas de valor incluso sin un proyecto activo. Ocho publicaciones al mes mas reposts, donde solo una depende de obra (el 2do martes) y las otras siete cambian cada mes.</p>',
+    pillars: {
+      PROYECTOS:{hex:'#3f6f8c',n:'Proyectos',d:'Te presentamos - solo 1/mes (2do martes)'},
+      AUTORIDAD:{hex:'#4d8aa8',n:'Autoridad / Educacion',d:'Tips, errores, fases, permisos'},
+      BIO:{hex:'#7fa890',n:'BIO',d:'Neuroarquitectura - luz, color, bienestar'},
+      MARCA:{hex:'#b09a6a',n:'Marca / Equipo',d:'Obra, supervision, equipo, proceso'},
+      CTA:{hex:'#c07a55',n:'Prueba social / CTA',d:'Testimonios - agenda tu consulta'}
+    },
+    plan: [{"name":"JUNIO","month":6,"year":2026,"proj":9,"pubs":[{"day":2,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Por donde empezar tu proyecto de construccion","gancho":"El primer paso que casi nadie da bien.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":4,"pilar":"BIO","fmt":"(P)","tema":"Neuroarquitectura: diseno que cuida tu bienestar","gancho":"Tu espacio influye en como te sientes.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":9,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":11,"pilar":"MARCA","fmt":"(R)","tema":"Quienes somos: bienvenido a ARQSA","gancho":"Disenamos tu vision, con forma y diseno.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":16,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Arquitecto, ingeniero o maestro de obra: quien hace que?","gancho":"No es lo mismo, y te conviene saberlo.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":18,"pilar":"CTA","fmt":"(P)","tema":"Tienes un terreno? Hablemos de tu proyecto","gancho":"Tu terreno tiene mas potencial del que crees.","cta":"Escribenos por DM","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":23,"pilar":"BIO","fmt":"(R)","tema":"La importancia de la luz en cada ambiente","gancho":"La luz correcta transforma un espacio.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":25,"pilar":"MARCA","fmt":"(P)","tema":"Dia del Medio Ambiente: arquitectura sostenible","gancho":"Disenar tambien es cuidar el planeta.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[7,14,21,28]},{"name":"JULIO","month":7,"year":2026,"proj":14,"pubs":[{"day":2,"pilar":"AUTORIDAD","fmt":"(R)","tema":"5 errores al construir tu casa en El Salvador","gancho":"El error #3 puede costarte miles.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":7,"pilar":"BIO","fmt":"(P)","tema":"Como la luz natural cambia tu estado de animo","gancho":"Un solo cambio mejora tu dia.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":9,"pilar":"MARCA","fmt":"(R)","tema":"Un dia de supervision en obra","gancho":"Asi cuidamos cada detalle de tu obra.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":14,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":16,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Las 4 fases de un proyecto arquitectonico","gancho":"Sabes en que fase esta tu proyecto?","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":21,"pilar":"CTA","fmt":"(P)","tema":"Testimonio + Listo para construir?","gancho":"Esto dijo un cliente al recibir su casa.","cta":"Agenda tu consulta","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":23,"pilar":"BIO","fmt":"(R)","tema":"Colores que calman y colores que activan","gancho":"El color de tu pared cambia como te sientes.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":28,"pilar":"MARCA","fmt":"(P)","tema":"Conoce al equipo ARQSA","gancho":"Las personas detras de cada plano.","cta":"Saludanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[5,12,19,26]},{"name":"AGOSTO","month":8,"year":2026,"proj":11,"pubs":[{"day":4,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Cuanto cuesta disenar tu casa?","gancho":"Lo que debes saber antes de empezar.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":6,"pilar":"BIO","fmt":"(P)","tema":"La distribucion vale mas que los metros","gancho":"No es tamano, es diseno.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":11,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":13,"pilar":"MARCA","fmt":"(R)","tema":"Fiestas Agostinas: saludo del equipo","gancho":"Felices fiestas, El Salvador.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":18,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Permisos que necesitas antes de construir","gancho":"No empieces tu obra sin esto.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":20,"pilar":"CTA","fmt":"(P)","tema":"Agenda tu consulta: asi trabajamos contigo","gancho":"Tu proyecto empieza con una charla.","cta":"Escribenos por DM","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":25,"pilar":"BIO","fmt":"(R)","tema":"Ventilacion y confort termico","gancho":"Una casa que respira se siente mejor.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":27,"pilar":"MARCA","fmt":"(P)","tema":"Detras de un render: nuestro proceso 3D","gancho":"Del modelo a tu sueno.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[2,9,16,23,30]},{"name":"SEPTIEMBRE","month":9,"year":2026,"proj":8,"pubs":[{"day":1,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Como leer un render sin sorpresas","gancho":"Lo que el render no te dice.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":3,"pilar":"BIO","fmt":"(P)","tema":"Espacios que reducen el estres","gancho":"Tu casa puede calmarte.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":8,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":10,"pilar":"MARCA","fmt":"(R)","tema":"Mes patrio: orgullo de construir en El Salvador","gancho":"Disenamos para los nuestros.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":15,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Construir vs. remodelar: que te conviene?","gancho":"La decision que ahorra dinero.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":17,"pilar":"CTA","fmt":"(P)","tema":"Testimonio de cliente + invitacion","gancho":"Resultados que hablan por si solos.","cta":"Agenda tu consulta","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":22,"pilar":"BIO","fmt":"(R)","tema":"Materiales locales: belleza y eficiencia","gancho":"Lo nuestro tambien es diseno.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":24,"pilar":"MARCA","fmt":"(P)","tema":"Una visita de obra en tiempo real","gancho":"Te llevamos dentro de la obra.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[6,13,20,27]},{"name":"OCTUBRE","month":10,"year":2026,"proj":13,"pubs":[{"day":1,"pilar":"MARCA","fmt":"(R)","tema":"Dia Mundial de la Arquitectura","gancho":"Por que hacemos lo que hacemos.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":6,"pilar":"BIO","fmt":"(P)","tema":"Luz calida vs. luz fria en tu hogar","gancho":"La luz correcta lo cambia todo.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":8,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Errores al elegir terreno para construir","gancho":"Antes de comprar, lee esto.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":13,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":15,"pilar":"MARCA","fmt":"(R)","tema":"Conoce al equipo: detras de cada plano","gancho":"Las personas detras del diseno.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":20,"pilar":"CTA","fmt":"(P)","tema":"Tu proyecto en 2027? Empieza ahora","gancho":"El mejor momento para empezar es hoy.","cta":"Agenda tu consulta","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":22,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Tendencias de diseno 2027 que si valen la pena","gancho":"No todo lo nuevo es mejor.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":27,"pilar":"BIO","fmt":"(P)","tema":"Espacios que respiran: luz y ventilacion","gancho":"Diseno que se siente.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[4,11,18,25]},{"name":"NOVIEMBRE","month":11,"year":2026,"proj":10,"pubs":[{"day":3,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Lo que nadie te dice del presupuesto de obra","gancho":"Evita el sobrecosto.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":5,"pilar":"BIO","fmt":"(P)","tema":"Biofilia: por que tu casa necesita naturaleza","gancho":"Vivir con verde te hace bien.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":10,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":12,"pilar":"MARCA","fmt":"(R)","tema":"Un recorrido por nuestro proceso de diseno","gancho":"De la idea al plano.","cta":"Siguenos","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":17,"pilar":"AUTORIDAD","fmt":"(P)","tema":"Checklist antes de firmar con un arquitecto","gancho":"10 preguntas clave.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":19,"pilar":"CTA","fmt":"(P)","tema":"Cierra el ano con tu proyecto en marcha","gancho":"2027 empieza hoy.","cta":"Agenda tu consulta","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":24,"pilar":"BIO","fmt":"(R)","tema":"Acustica en casa: el detalle que cambia todo","gancho":"El silencio tambien se disena.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":26,"pilar":"MARCA","fmt":"(P)","tema":"El equipo detras de tus planos","gancho":"Quienes somos.","cta":"Saludanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[1,8,15,22,29]},{"name":"DICIEMBRE","month":12,"year":2026,"proj":8,"pubs":[{"day":1,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Como planificar tu construccion para 2027","gancho":"Empieza el ano con un plan.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":3,"pilar":"BIO","fmt":"(P)","tema":"Espacios para reunir: diseno para las fiestas","gancho":"Tu casa, el mejor lugar para celebrar.","cta":"Guarda este post","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":8,"pilar":"PROYECTOS","fmt":"(P)","tema":"PROYECTO REAL - Te presentamos","gancho":"Pasa y recorre este espacio con nosotros.","cta":"Escribenos DISENO por DM","prompt":"","ht":"#DisenoArquitectonico #InteriorismoSV"},{"day":10,"pilar":"MARCA","fmt":"(R)","tema":"Lo que logramos en 2026","gancho":"Gracias por este ano.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":15,"pilar":"CTA","fmt":"(P)","tema":"Regala diseno: consulta para 2027","gancho":"El mejor regalo es tu proyecto.","cta":"Escribenos por DM","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":17,"pilar":"MARCA","fmt":"(P)","tema":"Feliz Navidad de ARQSA","gancho":"Te deseamos felices fiestas.","cta":"Comparte","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":22,"pilar":"AUTORIDAD","fmt":"(R)","tema":"Propositos de construccion para el nuevo ano","gancho":"Que 2027 sea el ano de tu casa.","cta":"Guardalo","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"},{"day":24,"pilar":"BIO","fmt":"(P)","tema":"Iluminacion calida para las fiestas","gancho":"La luz crea el ambiente.","cta":"Cuentanos en comentarios","prompt":"","ht":"#ArquitecturaElSalvador #ArquitectosSV #DisenoSV #ARQSA"}],"sundays":[6,13,20,27]}]
+  }
+};
+
+const sb = window.supabase.createClient(SB_URL, SB_KEY);
+const FMT = {'(R)':'Reel','(P)':'Post / Carrusel','(H)':'Historia'};
+let activeMonth = 0, filter = null, USER = null, ROLE = 'cliente', EMPRESA = null, PROPS = {}, CLIENT = null;
+
+function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function trim(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
+function shortP(k){ return {PROYECTOS:'PROY',AUTORIDAD:'AUTO',BIO:'BIO',MARCA:'MARCA',CTA:'CTA'}[k]||k; }
+function keyOf(m,day){ return m.month+'-'+day; }
+function eff(p,m){ const pr=PROPS[keyOf(m,p.day)]||{};
+  return {tema:(pr.tema??p.tema), gancho:(pr.gancho??p.gancho), cta:(pr.cta??p.cta),
+    fecha:(pr.fecha||null), obs:(pr.observacion||''), edited:!!pr.id}; }
+
+/* ---------- AUTH ---------- */
+async function init(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ await onAuthed(session.user); } else { showLogin(); }
+}
+
+function showLogin(){
+  document.getElementById('login').style.display='flex';
+  document.getElementById('app').style.display='none';
+}
+
+document.getElementById('loginbtn').onclick = doLogin;
+document.getElementById('lp').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('le').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('lp').focus(); });
+
+async function doLogin(){
+  const username = document.getElementById('le').value.trim().toLowerCase();
+  const pass = document.getElementById('lp').value;
+  const err = document.getElementById('lerr');
+  const btn = document.getElementById('loginbtn');
+  err.textContent = '';
+
+  if(!username || !pass){ err.textContent='Ingresa usuario y contrasena.'; return; }
+
+  btn.textContent = 'Buscando...';
+
+  // Lookup email by username via RPC
+  const {data: email, error: lookupErr} = await sb.rpc('noctura_lookup_email', {p_username: username});
+
+  if(lookupErr || !email){
+    err.textContent = 'Usuario no encontrado.';
+    btn.textContent = 'Entrar';
+    return;
+  }
+
+  btn.textContent = 'Entrando...';
+  const {data, error} = await sb.auth.signInWithPassword({email: email, password: pass});
+  btn.textContent = 'Entrar';
+
+  if(error){
+    err.textContent = 'Contrasena incorrecta.';
+    return;
+  }
+
+  await onAuthed(data.user);
+}
+
+async function onAuthed(user){
+  USER = user;
+  const {data:mem} = await sb.from('noctura_miembros').select('rol,nombre,empresa').eq('user_id',user.id).maybeSingle();
+  ROLE = (mem && mem.rol) || 'cliente';
+  EMPRESA = (mem && mem.empresa) || null;
+
+  // Admin sees all clients; client sees only their empresa
+  if(ROLE === 'admin'){
+    // For now default to first client or show all
+    CLIENT = CLIENTS['ARQSA']; // TODO: client selector for admin
+  } else {
+    CLIENT = CLIENTS[EMPRESA] || CLIENTS['ARQSA'];
+  }
+
+  await loadProps();
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('uchip').textContent = (mem&&mem.nombre?mem.nombre:user.email) + (ROLE==='admin'?' · NOCTURA':'');
+  if(ROLE === 'admin') document.getElementById('inboxbtn').style.display = 'inline-block';
+
+  renderClient();
+}
+
+document.getElementById('logout').onclick = async ()=>{ await sb.auth.signOut(); location.reload(); };
+
+async function loadProps(){
+  PROPS = {};
+  let q = sb.from('noctura_propuestas').select('*');
+  if(ROLE === 'admin') q = q.eq('autor', USER.id);
+  const {data} = await q;
+  (data||[]).forEach(r=>{ PROPS[r.month+'-'+r.day] = r; });
+}
+
+/* ---------- RENDER CLIENT DATA ---------- */
+function renderClient(){
+  if(!CLIENT) return;
+  document.getElementById('heroClient').textContent = CLIENT.fullName;
+  document.getElementById('heroSub').textContent = CLIENT.tagline;
+  document.getElementById('footerMsg').textContent = CLIENT.footerMsg;
+  document.getElementById('resumenContent').innerHTML = CLIENT.resumen;
+  buildStatic();
+  renderCal();
+}
+
+/* ---------- STATIC SECTIONS ---------- */
+function buildStatic(){
+  const pillars = CLIENT.pillars;
+  const order = Object.keys(pillars);
+  document.getElementById('pilcards').innerHTML = order.map((k,i)=>{
+    const p = pillars[k];
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+      '<div class="num">'+(i+1)+'</div><div style="width:18px;height:18px;border-radius:5px;background:'+p.hex+';margin-top:8px"></div></div>'+
+      '<h3>'+p.n+'</h3><p>'+p.d+'.'+(k==='PROYECTOS'?' <span class="muted">Requiere obra.</span>':' <span class="muted">No requiere proyecto.</span>')+'</p></div>';
+  }).join('');
+
+  document.getElementById('legend').innerHTML = order.map(k=>{
+    const p = pillars[k];
+    return '<span class="pill" data-k="'+k+'"><span class="dot" style="background:'+p.hex+'"></span>'+p.n+'</span>';
+  }).join('');
+  document.querySelectorAll('.pill').forEach(el=>el.addEventListener('click',()=>{
+    filter = (filter===el.dataset.k) ? null : el.dataset.k;
+    document.querySelectorAll('.pill').forEach(p=>p.classList.toggle('off', filter && p.dataset.k!==filter));
+    renderCal();
+  }));
+
+  const plan = CLIENT.plan;
+  document.getElementById('tabs').innerHTML = plan.map((m,i)=>
+    '<div class="tab'+(i===0?' active':'')+'" data-i="'+i+'">'+ m.name.charAt(0)+m.name.slice(1).toLowerCase()+'</div>'
+  ).join('');
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+    activeMonth = +t.dataset.i;
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x===t));
+    renderCal();
+  }));
+
+  document.getElementById('inboxbtn').onclick = openInbox;
+}
+
+/* ---------- CALENDAR ---------- */
+function renderCal(){
+  const plan = CLIENT.plan;
+  const m = plan[activeMonth];
+  const pillars = CLIENT.pillars;
+  const byday = {}; m.pubs.forEach(p=>byday[p.day]=p);
+  const reps = new Set(m.sundays);
+  const ndays = new Date(m.year, m.month, 0).getDate();
+  const lead = (new Date(m.year, m.month-1, 1).getDay()+6)%7;
+  let cells = '';
+  for(let i=0;i<lead;i++) cells += '<div class="cell empty"></div>';
+  for(let d=1;d<=ndays;d++){
+    let inner = '<div class="dnum">'+d+'</div>';
+    if(byday[d]){
+      const p = byday[d], pl = pillars[p.pilar], e = eff(p,m);
+      const dim = filter && p.pilar!==filter ? ' dim' : '';
+      const tt = p.pilar==='PROYECTOS' ? 'Proyecto del mes' : e.tema;
+      inner += '<div class="pub'+dim+'" style="background:'+pl.hex+'" data-day="'+d+'">'+
+        '<div class="ft"><span>'+p.fmt+'</span><span>'+shortP(p.pilar)+'</span></div>'+
+        '<div class="tt">'+esc(trim(tt,46))+'</div></div>';
+      if(e.edited) inner += '<div class="hasobs" title="Con cambios/observacion"></div>';
+    } else if(reps.has(d)){
+      inner += '<div class="repost">Repost</div>';
+    }
+    cells += '<div class="cell">'+inner+'</div>';
+  }
+  document.getElementById('cal').innerHTML = cells;
+  document.querySelectorAll('.pub[data-day]').forEach(el=>
+    el.addEventListener('click',()=>openModal(byday[+el.dataset.day], m))
+  );
+}
+
+/* ---------- EDIT MODAL ---------- */
+function openModal(p, m){
+  const pillars = CLIENT.pillars;
+  const pl = pillars[p.pilar], e = eff(p,m);
+  const date = String(p.day).padStart(2,'0')+'/'+String(m.month).padStart(2,'0')+'/'+m.year;
+  const wd = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'][new Date(m.year, m.month-1, p.day).getDay()];
+  const isAdmin = ROLE === 'admin';
+  const promptHtml = (isAdmin && p.prompt) ? '<div class="field"><div class="lab">Prompt para ChatGPT (imagen) - solo NOCTURA</div><div class="promptbox" id="pbox">'+esc(p.prompt)+'</div></div>' : '';
+  const copyBtn = (isAdmin && p.prompt) ? '<button class="btn" id="copyp">Copiar prompt</button>' : '';
+
+  document.getElementById('modal').innerHTML =
+    '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:'+pl.hex+'">'+p.fmt+' · '+pl.n+'</span>'+
+    '<h3>Editar publicacion</h3><div class="meta">'+wd+' '+date+' · '+(FMT[p.fmt]||'')+'</div>'+
+    '<div class="field"><div class="lab">Tema / Contenido</div><input id="f_tema" value="'+esc(e.tema)+'"></div>'+
+    '<div class="field"><div class="lab">Gancho</div><input id="f_gancho" value="'+esc(e.gancho)+'"></div>'+
+    '<div class="field"><div class="lab">CTA</div><input id="f_cta" value="'+esc(e.cta)+'"></div>'+
+    '<div class="field"><div class="lab">Fecha sugerida (opcional)</div><input id="f_fecha" type="date" value="'+(e.fecha||'')+'"></div>'+
+    promptHtml+
+    '<div class="field"><div class="lab">Observaciones para NOCTURA</div>'+
+    '<textarea id="f_obs" rows="3" placeholder="Cambiarias algo? Escribelo aqui...">'+esc(e.obs)+'</textarea></div>'+
+    '<div class="mrow">'+
+    '<button class="btn solid" id="saveb">Guardar cambios</button>'+
+    copyBtn+
+    '<button class="btn" id="resetb">Quitar mis cambios</button>'+
+    '<button class="btn" id="closeb">Cerrar</button></div>'+
+    '<div class="err" id="merr"></div>';
+
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick = closeModal;
+  document.getElementById('closeb').onclick = closeModal;
+  const _cp = document.getElementById('copyp');
+  if(_cp) _cp.onclick = function(){
+    navigator.clipboard.writeText(p.prompt).then(()=>{
+      this.textContent='¡Copiado!'; this.classList.add('okp');
+      setTimeout(()=>{ this.textContent='Copiar prompt'; this.classList.remove('okp'); },1500);
+    });
+  };
+  document.getElementById('saveb').onclick = ()=>saveProp(p, m);
+  document.getElementById('resetb').onclick = ()=>resetProp(p, m);
+}
+
+function closeModal(){ document.getElementById('ov').classList.remove('show'); }
+document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeModal(); document.getElementById('inboxov').classList.remove('show'); }});
+
+async function saveProp(p, m){
+  const tema = document.getElementById('f_tema').value.trim();
+  const gancho = document.getElementById('f_gancho').value.trim();
+  const cta = document.getElementById('f_cta').value.trim();
+  const fecha = document.getElementById('f_fecha').value || null;
+  const obs = document.getElementById('f_obs').value.trim();
+  const row = {
+    mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
+    tema:(tema&&tema!==p.tema)?tema:null, gancho:(gancho&&gancho!==p.gancho)?gancho:null,
+    cta:(cta&&cta!==p.cta)?cta:null, fecha:fecha, observacion:obs||null,
+    autor:USER.id, autor_email:USER.email
+  };
+  const btn = document.getElementById('saveb'); btn.textContent = 'Guardando...';
+  const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'mes,day,autor'}).select().maybeSingle();
+  if(error){
+    document.getElementById('merr').textContent = 'No se pudo guardar: '+error.message;
+    btn.textContent = 'Guardar cambios'; return;
+  }
+  PROPS[keyOf(m,p.day)] = data;
+  btn.textContent = '✓ Guardado'; btn.classList.add('okp');
+  renderCal(); setTimeout(closeModal, 650);
+}
+
+async function resetProp(p, m){
+  const pr = PROPS[keyOf(m,p.day)]; if(!pr||!pr.id){ closeModal(); return; }
+  await sb.from('noctura_propuestas').delete().eq('id', pr.id);
+  delete PROPS[keyOf(m,p.day)]; renderCal(); closeModal();
+}
+
+/* ---------- ADMIN INBOX ---------- */
+async function openInbox(){
+  const {data, error} = await sb.from('noctura_propuestas').select('*').order('updated_at',{ascending:false});
+  const box = document.getElementById('inbox');
+  let html = '<span class="x" id="xi">×</span><h3>Bandeja de propuestas</h3><div class="meta">Cambios y observaciones de los clientes</div>';
+  if(error){ html += '<p class="muted">'+esc(error.message)+'</p>'; }
+  else if(!data||!data.length){ html += '<p class="muted">Aun no hay propuestas registradas.</p>'; }
+  else {
+    html += data.map(r=>{
+      let chgs = '';
+      if(r.tema) chgs += '<div class="chg"><b>Tema →</b> '+esc(r.tema)+'</div>';
+      if(r.gancho) chgs += '<div class="chg"><b>Gancho →</b> '+esc(r.gancho)+'</div>';
+      if(r.cta) chgs += '<div class="chg"><b>CTA →</b> '+esc(r.cta)+'</div>';
+      if(r.fecha) chgs += '<div class="chg"><b>Fecha →</b> '+esc(r.fecha)+'</div>';
+      if(r.observacion) chgs += '<div class="chg"><b>Obs:</b> '+esc(r.observacion)+'</div>';
+      return '<div class="inbox-item"><div class="h">'+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
+        '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
+        (chgs||'<div class="chg muted">(sin cambios)</div>')+'</div>';
+    }).join('');
+  }
+  box.innerHTML = html;
+  document.getElementById('inboxov').classList.add('show');
+  document.getElementById('xi').onclick = ()=>document.getElementById('inboxov').classList.remove('show');
+}
+document.getElementById('inboxov').addEventListener('click', e=>{
+  if(e.target.id==='inboxov') e.currentTarget.classList.remove('show');
+});
+
+init();
+</script>
+</body>
+</html>

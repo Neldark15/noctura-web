@@ -87,6 +87,8 @@ const Animations = {
     this.orbitalParallax();
     this.textSplitReveals();
     this.parallaxLayers();
+    this.spotlightCards();
+    this.magnetButton();
 
     // Recalculate trigger positions after preloader is gone
     setTimeout(() => ScrollTrigger.refresh(), 100);
@@ -147,6 +149,30 @@ const Animations = {
       ease: 'power3.out'
     }, 1.3);
 
+    tl.to('.hero__scroll', {
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.out'
+    }, 2.0);
+
+    const heroScroll = document.getElementById('heroScroll');
+    if (heroScroll) {
+      heroScroll.addEventListener('click', () => {
+        const about = document.getElementById('about');
+        if (about) about.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      gsap.to(heroScroll, {
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'top top',
+          end: '30% top',
+          scrub: true
+        },
+        opacity: 0,
+        y: -20
+      });
+    }
   },
 
   scrollAnimations() {
@@ -803,6 +829,49 @@ const Animations = {
         shine.style.setProperty('--shine-x', px + '%');
         shine.style.setProperty('--shine-y', py + '%');
       }
+    });
+  },
+
+  spotlightCards() {
+    if (this.prefersReducedMotion || window.innerWidth <= 900) return;
+
+    document.querySelectorAll('.plans__service-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    });
+  },
+
+  magnetButton() {
+    if (this.prefersReducedMotion || window.innerWidth <= 900) return;
+
+    const btn = document.querySelector('.contact__submit');
+    if (!btn) return;
+
+    const strength = 0.3;
+
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      gsap.to(btn, {
+        x: x * strength,
+        y: y * strength,
+        duration: 0.3,
+        ease: 'power2.out',
+        overwrite: 'auto'
+      });
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.4)'
+      });
     });
   },
 

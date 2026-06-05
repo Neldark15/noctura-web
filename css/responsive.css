@@ -28,6 +28,14 @@
 
 /* --- Tablet (≤900px) --- */
 @media (max-width: 900px) {
+  .nav__links {
+    display: none;
+  }
+
+  .nav__hamburger {
+    display: flex;
+  }
+
   /* Panel viewport falls back to normal scroll layout */
   .panel-viewport {
     position: static;
@@ -105,14 +113,6 @@
   section {
     padding: var(--space-lg) 0;
     scroll-snap-align: none;
-  }
-
-  .nav__links {
-    display: none;
-  }
-
-  .nav__hamburger {
-    display: flex;
   }
 
   .hero__logo-letter {
