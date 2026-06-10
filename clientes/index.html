@@ -293,7 +293,7 @@ let activeMonth = 0, filter = null, USER = null, ROLE = 'cliente', EMPRESA = nul
 function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function trim(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
 function shortP(k){ return {PROYECTOS:'PROY',AUTORIDAD:'AUTO',BIO:'BIO',MARCA:'MARCA',CTA:'CTA',FESTIVO:'FEST'}[k]||k; }
-function keyOf(m,day){ return m.month+'-'+day; }
+function keyOf(m,day){ return (CLIENT?CLIENT.name:'')+'-'+m.month+'-'+day; }
 function eff(p,m){ const pr=PROPS[keyOf(m,p.day)]||{};
   return {tema:(pr.tema??p.tema), gancho:(pr.gancho??p.gancho), cta:(pr.cta??p.cta),
     fecha:(pr.fecha||null), obs:(pr.observacion||''), texto:(pr.texto||''), edited:!!pr.id}; }
@@ -373,7 +373,9 @@ async function loadProps(){
   let q = sb.from('noctura_propuestas').select('*');
   if(ROLE === 'admin') q = q.eq('autor', USER.id);
   const {data} = await q;
-  (data||[]).forEach(r=>{ PROPS[r.month+'-'+r.day] = r; });
+  // Scope every row by empresa so each company has its own calendar.
+  // Legacy rows without empresa default to ARQSA.
+  (data||[]).forEach(r=>{ PROPS[(r.empresa||'ARQSA')+'-'+r.month+'-'+r.day] = r; });
 }
 
 /* ---------- RENDER CLIENT DATA ---------- */
@@ -509,13 +511,13 @@ async function saveProp(p, m){
   const fecha = document.getElementById('f_fecha').value || null;
   const obs = document.getElementById('f_obs').value.trim();
   const row = {
-    mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
+    empresa:CLIENT.name, mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
     tema:(tema&&tema!==p.tema)?tema:null, gancho:(gancho&&gancho!==p.gancho)?gancho:null,
     cta:(cta&&cta!==p.cta)?cta:null, texto:texto||null, fecha:fecha, observacion:obs||null,
     autor:USER.id, autor_email:USER.email
   };
   const btn = document.getElementById('saveb'); btn.textContent = 'Guardando...';
-  const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'mes,day,autor'}).select().maybeSingle();
+  const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
   if(error){
     document.getElementById('merr').textContent = 'No se pudo guardar: '+error.message;
     btn.textContent = 'Guardar cambios'; return;
@@ -547,7 +549,8 @@ async function openInbox(){
       if(r.fecha) chgs += '<div class="chg"><b>Fecha →</b> '+esc(r.fecha)+'</div>';
       if(r.texto) chgs += '<div class="chg"><b>Texto:</b> '+esc(r.texto).substring(0,120)+(r.texto.length>120?'...':'')+'</div>';
       if(r.observacion) chgs += '<div class="chg"><b>Obs:</b> '+esc(r.observacion)+'</div>';
-      return '<div class="inbox-item"><div class="h">'+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
+      const empresa = r.empresa || 'ARQSA';
+      return '<div class="inbox-item"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
         '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
         (chgs||'<div class="chg muted">(sin cambios)</div>')+'</div>';
     }).join('');
