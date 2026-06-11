@@ -106,6 +106,9 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .cell{min-height:118px;background:var(--graphite);border:1px solid #202027;border-radius:7px;padding:8px;position:relative}
 .cell.empty{background:#0c0c0e;border-color:#141416}
 .cell .dnum{font-size:13px;color:var(--muted);font-weight:500}
+.cell.today{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold),0 0 16px rgba(184,176,164,.12)}
+.cell.today .dnum{color:var(--gold)}
+.today-badge{display:inline-block;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:#111;background:var(--gold);border-radius:3px;padding:1px 5px;margin-left:5px;vertical-align:middle;font-weight:600}
 .pub{margin-top:7px;border-radius:6px;padding:8px 9px;cursor:pointer;transition:transform .15s, box-shadow .2s;color:#fff}
 .pub:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
 .pub .ft{font-size:11px;font-weight:700;letter-spacing:1px;display:flex;justify-content:space-between;opacity:.95}
@@ -413,8 +416,9 @@ function buildStatic(){
   }));
 
   const plan = CLIENT.plan;
+  activeMonth = currentMonthIndex(plan);   // open on the current month
   document.getElementById('tabs').innerHTML = plan.map((m,i)=>
-    '<div class="tab'+(i===0?' active':'')+'" data-i="'+i+'">'+ m.name.charAt(0)+m.name.slice(1).toLowerCase()+'</div>'
+    '<div class="tab'+(i===activeMonth?' active':'')+'" data-i="'+i+'">'+ m.name.charAt(0)+m.name.slice(1).toLowerCase()+'</div>'
   ).join('');
   document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
     activeMonth = +t.dataset.i;
@@ -423,6 +427,22 @@ function buildStatic(){
   }));
 
   document.getElementById('inboxbtn').onclick = openInbox;
+}
+
+/* ---------- DATE HELPERS ---------- */
+// Real clock in production; overridable for testing via window.__NOW_OVERRIDE__.
+function getNow(){ return (window.__NOW_OVERRIDE__ instanceof Date) ? window.__NOW_OVERRIDE__ : new Date(); }
+
+// Index of the plan month that contains today; clamps to first/last if out of range.
+function currentMonthIndex(plan){
+  if(!plan || !plan.length) return 0;
+  const now = getNow();
+  const cur = now.getFullYear()*100 + (now.getMonth()+1);
+  const idx = plan.findIndex(m => (m.year*100 + m.month) === cur);
+  if(idx !== -1) return idx;
+  if(cur < (plan[0].year*100 + plan[0].month)) return 0;
+  if(cur > (plan[plan.length-1].year*100 + plan[plan.length-1].month)) return plan.length-1;
+  return 0;
 }
 
 /* ---------- CALENDAR ---------- */
@@ -434,10 +454,15 @@ function renderCal(){
   const reps = new Set(m.sundays);
   const ndays = new Date(m.year, m.month, 0).getDate();
   const lead = (new Date(m.year, m.month-1, 1).getDay()+6)%7;
+  // "Today" marker only when the visible month is the current month.
+  const now = getNow();
+  const isCurMonth = (m.year === now.getFullYear() && m.month === now.getMonth()+1);
+  const today = now.getDate();
   let cells = '';
   for(let i=0;i<lead;i++) cells += '<div class="cell empty"></div>';
   for(let d=1;d<=ndays;d++){
-    let inner = '<div class="dnum">'+d+'</div>';
+    const isToday = isCurMonth && d === today;
+    let inner = '<div class="dnum">'+d+(isToday?' <span class="today-badge">Hoy</span>':'')+'</div>';
     if(byday[d]){
       const p = byday[d], pl = pillars[p.pilar], e = eff(p,m);
       const dim = filter && p.pilar!==filter ? ' dim' : '';
@@ -449,7 +474,7 @@ function renderCal(){
     } else if(reps.has(d)){
       inner += '<div class="repost">Repost</div>';
     }
-    cells += '<div class="cell">'+inner+'</div>';
+    cells += '<div class="cell'+(isToday?' today':'')+'">'+inner+'</div>';
   }
   document.getElementById('cal').innerHTML = cells;
   document.querySelectorAll('.pub[data-day]').forEach(el=>
