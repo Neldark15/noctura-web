@@ -56,6 +56,13 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .navright{display:flex;align-items:center;gap:14px}
 .navlinks{display:flex;gap:22px;font-size:13px;letter-spacing:1px;color:var(--muted)}
 .navlinks a{transition:color .2s}.navlinks a:hover{color:var(--ivory)}
+.viewtab{background:none;border:none;font-family:var(--sans);font-size:13px;letter-spacing:1px;color:var(--muted);cursor:pointer;padding:6px 2px;position:relative;transition:color .2s}
+.viewtab:hover{color:var(--ivory)}
+.viewtab.active{color:var(--ivory)}
+.viewtab.active::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;background:var(--gold)}
+.workspace-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+#viewCalendario section{padding-top:48px}
+@media(max-width:860px){.viewtabs{display:flex!important;gap:18px}}
 .uchip{font-size:12px;color:var(--muted)}
 .mini{font-size:11px;letter-spacing:1px;padding:7px 12px;border-radius:5px;border:1px solid var(--charcoal);cursor:pointer;color:var(--bone);background:none;font-family:var(--sans)}
 .mini:hover{border-color:var(--silver)}
@@ -152,7 +159,10 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 <nav><div class="wrap">
   <div class="brand">NOCTURA<small>STUDIO &amp; CONSULTING</small></div>
   <div class="navright">
-    <div class="navlinks"><a href="#resumen">Resumen</a><a href="#pilares">Pilares</a><a href="#calendario">Calendario</a></div>
+    <div class="navlinks viewtabs" id="viewtabs">
+      <button class="viewtab active" data-view="calendario">Calendario</button>
+      <button class="viewtab" data-view="estrategia">Estrategia</button>
+    </div>
     <span class="uchip" id="uchip"></span>
     <button class="mini" id="inboxbtn" style="display:none">Propuestas</button>
     <button class="mini" id="logout">Salir</button>
@@ -167,43 +177,57 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
   </div>
 </div>
 
-<header class="hero"><div class="moon"></div><div class="wrap hero-c">
-  <div class="kick">Informe de estrategia de marca</div>
-  <h1>Estrategia de Contenido &amp; Posicionamiento Digital</h1>
-  <div class="gold-rule"></div>
-  <div class="sub">Preparado para</div>
-  <div class="client" id="heroClient"></div>
-  <div class="sub" id="heroSub"></div>
-  <div class="dl"><a class="btn solid" href="#calendario">Ver calendario editable</a></div>
-</div></header>
+<div id="workspace">
 
-<section id="resumen"><div class="wrap">
-  <div class="kick">01 - Resumen ejecutivo</div>
-  <h2 class="sec-h">El problema y la oportunidad</h2>
-  <div id="resumenContent"></div>
-</div></section>
+  <!-- ===== VISTA: CALENDARIO (area de trabajo, por defecto) ===== -->
+  <div id="viewCalendario" class="view">
+    <section id="calendario"><div class="wrap">
+      <div class="workspace-head">
+        <div>
+          <div class="kick">Calendario editorial</div>
+          <h2 class="sec-h" id="calTitle" style="margin-bottom:6px">Plan de publicaciones</h2>
+          <p class="muted" id="calClient" style="font-size:13px;letter-spacing:1px"></p>
+        </div>
+      </div>
+      <p class="lead" style="margin:14px 0 8px;font-size:15px">Haz clic en cualquier publicacion para ver su contenido, editar el texto y dejar observaciones — se guardan automaticamente y NOCTURA las recibe. Filtra por pilar con las etiquetas.</p>
+      <div class="legend" id="legend"></div>
+      <div class="cal-controls"><div class="tabs" id="tabs"></div><span class="note" id="savestate"></span></div>
+      <div class="calhead"><div>Lun</div><div>Mar</div><div>Mie</div><div>Jue</div><div>Vie</div><div>Sab</div><div>Dom</div></div>
+      <div class="cal" id="cal"></div>
+      <p class="muted" style="margin-top:18px;font-size:13px">Dia de proyecto reservado: el 2do martes de cada mes.</p>
+    </div></section>
+  </div>
 
-<section id="pilares"><div class="wrap">
-  <div class="kick">02 - Sistema de contenido</div>
-  <h2 class="sec-h">Cinco pilares - diseno con proposito</h2>
-  <div id="pilcards" class="grid g3"></div>
-</div></section>
+  <!-- ===== VISTA: ESTRATEGIA (el informe) ===== -->
+  <div id="viewEstrategia" class="view" style="display:none">
+    <header class="hero"><div class="moon"></div><div class="wrap hero-c">
+      <div class="kick">Informe de estrategia de marca</div>
+      <h1>Estrategia de Contenido &amp; Posicionamiento Digital</h1>
+      <div class="gold-rule"></div>
+      <div class="sub">Preparado para</div>
+      <div class="client" id="heroClient"></div>
+      <div class="sub" id="heroSub"></div>
+      <div class="dl"><button class="btn solid" onclick="switchView('calendario')">Ir al calendario</button></div>
+    </div></header>
 
-<section id="calendario"><div class="wrap">
-  <div class="kick">03 - El calendario</div>
-  <h2 class="sec-h">Plan editorial editable</h2>
-  <p class="lead" style="margin-bottom:8px">Haz clic en cualquier publicacion para ver su contenido y el <b>prompt para ChatGPT</b>. Puedes <b>editar el texto y dejar observaciones</b>: se guardan automaticamente y NOCTURA las recibe. Filtra por pilar con las etiquetas.</p>
-  <div class="legend" id="legend"></div>
-  <div class="cal-controls"><div class="tabs" id="tabs"></div><span class="note" id="savestate"></span></div>
-  <div class="calhead"><div>Lun</div><div>Mar</div><div>Mie</div><div>Jue</div><div>Vie</div><div>Sab</div><div>Dom</div></div>
-  <div class="cal" id="cal"></div>
-  <p class="muted" style="margin-top:18px;font-size:13px">Dia de proyecto reservado: el 2do martes de cada mes.</p>
-</div></section>
+    <section id="resumen"><div class="wrap">
+      <div class="kick">01 - Resumen ejecutivo</div>
+      <h2 class="sec-h">El problema y la oportunidad</h2>
+      <div id="resumenContent"></div>
+    </div></section>
 
-<footer><div class="wrap">
-  <div class="t" id="footerMsg"></div>
-  <div class="s">ESTRATEGIA - IDENTIDAD - PERCEPCION &mdash; somos@noctura-studio.com &middot; noctura-studio.com</div>
-</div></footer>
+    <section id="pilares"><div class="wrap">
+      <div class="kick">02 - Sistema de contenido</div>
+      <h2 class="sec-h">Cinco pilares - diseno con proposito</h2>
+      <div id="pilcards" class="grid g3"></div>
+    </div></section>
+  </div>
+
+  <footer><div class="wrap">
+    <div class="t" id="footerMsg"></div>
+    <div class="s">ESTRATEGIA - IDENTIDAD - PERCEPCION &mdash; somos@noctura-studio.com &middot; noctura-studio.com</div>
+  </div></footer>
+</div>
 </div>
 
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
@@ -345,10 +369,26 @@ function renderClient(){
   if(!CLIENT) return;
   document.getElementById('heroClient').textContent = CLIENT.fullName;
   document.getElementById('heroSub').textContent = CLIENT.tagline;
+  document.getElementById('calClient').textContent = CLIENT.fullName;
   document.getElementById('footerMsg').textContent = CLIENT.footerMsg;
   document.getElementById('resumenContent').innerHTML = CLIENT.resumen;
   buildStatic();
   renderCal();
+  // Land on the work area, not the report.
+  document.getElementById('workspace').style.display = 'block';
+  document.getElementById('viewtabs').style.display = '';
+  switchView('calendario');
+}
+
+/* ---------- VIEW SWITCHING (workspace) ---------- */
+function switchView(view){
+  const isCal = view !== 'estrategia';
+  document.getElementById('viewCalendario').style.display = isCal ? 'block' : 'none';
+  document.getElementById('viewEstrategia').style.display = isCal ? 'none' : 'block';
+  document.querySelectorAll('.viewtab').forEach(t =>
+    t.classList.toggle('active', t.dataset.view === (isCal ? 'calendario' : 'estrategia'))
+  );
+  window.scrollTo(0, 0);
 }
 
 /* ---------- STATIC SECTIONS ---------- */
@@ -553,9 +593,8 @@ function showCompanySelector(){
       '</div>';
   }).join('');
   sel.style.display = 'block';
-  document.querySelector('.hero').style.display = 'none';
-  document.querySelectorAll('#app > section').forEach(s => s.style.display = 'none');
-  document.querySelector('footer').style.display = 'none';
+  document.getElementById('workspace').style.display = 'none';
+  document.getElementById('viewtabs').style.display = 'none';
 }
 
 function selectCompany(key){
@@ -563,11 +602,7 @@ function selectCompany(key){
   activeMonth = 0;
   filter = null;
   document.getElementById('companySelector').style.display = 'none';
-  document.querySelector('.hero').style.display = 'flex';
-  document.querySelectorAll('#app > section').forEach(s => s.style.display = 'block');
-  document.querySelector('footer').style.display = 'block';
-  renderClient();
-  window.scrollTo(0,0);
+  renderClient();   // shows workspace + tabs, lands on calendario
 }
 
 // Add "Cambiar empresa" button for admin nav
@@ -580,6 +615,11 @@ function addCompanySwitcher(){
   btn.onclick = showCompanySelector;
   nav.insertBefore(btn, nav.firstChild);
 }
+
+// Wire workspace view tabs
+document.querySelectorAll('.viewtab').forEach(t =>
+  t.addEventListener('click', () => switchView(t.dataset.view))
+);
 
 init();
 </script>
