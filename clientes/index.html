@@ -287,7 +287,9 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
           <button class="vmode-btn" data-mode="cal">Calendario</button>
           <button class="vmode-btn" data-mode="lista">Lista</button>
         </div>
-        <div class="tabs" id="tabs"></div><span class="note" id="savestate"></span>
+        <div class="tabs" id="tabs"></div>
+        <button class="mini" id="addPubBtn" style="display:none">+ Agregar publicacion</button>
+        <span class="note" id="savestate"></span>
       </div>
       <div class="calhead"><div>Lun</div><div>Mar</div><div>Mie</div><div>Jue</div><div>Vie</div><div>Sab</div><div>Dom</div></div>
       <div class="cal" id="cal"></div>
@@ -419,7 +421,11 @@ async function onAuthed(user){
   document.getElementById('login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('uchip').textContent = (mem&&mem.nombre?mem.nombre:user.email) + (ROLE==='admin'?' · NOCTURA':'');
-  if(ROLE === 'admin'){ document.getElementById('inboxbtn').style.display = 'inline-block'; refreshInboxBadge(); }
+  if(ROLE === 'admin'){
+    document.getElementById('inboxbtn').style.display = 'inline-block';
+    document.getElementById('addPubBtn').style.display = 'inline-block';
+    refreshInboxBadge();
+  }
 
   if(ROLE === 'admin'){
     addCompanySwitcher();
@@ -443,6 +449,7 @@ async function loadCompanies(){
   if(error){ console.error('loadCompanies', error); return; }
   (data||[]).forEach(c=>{
     CLIENTS[c.id] = {
+      id: c.id,
       name: c.name,
       fullName: c.full_name,
       tagline: c.tagline,
@@ -783,6 +790,7 @@ function openModal(p, m){
     '<div class="mrow">'+
     '<button class="btn solid" id="saveb">Guardar cambios</button>'+
     copyBtn+
+    (isAdmin ? '<button class="btn" id="editbase">Editar plan base</button>' : '')+
     '<button class="btn" id="resetb">Quitar mis cambios</button>'+
     '<button class="btn" id="closeb">Cerrar</button></div>'+
     '<div class="err" id="merr"></div>';
@@ -799,6 +807,8 @@ function openModal(p, m){
   };
   document.getElementById('saveb').onclick = ()=>saveProp(p, m);
   document.getElementById('resetb').onclick = ()=>resetProp(p, m);
+  const _eb = document.getElementById('editbase');
+  if(_eb) _eb.onclick = ()=>openPlanEditor(p, m, false);
   document.querySelectorAll('#statusCtrl .status-opt').forEach(btn=>{
     btn.onclick = async ()=>{
       const est = btn.dataset.estado;
@@ -858,6 +868,93 @@ async function setEstado(p, m, estado){
   if(error) return error;
   PROPS[key] = data;
   return null;
+}
+
+/* ---------- ADMIN PLAN EDITOR ---------- */
+// Persists CLIENT.plan into noctura_empresas (RLS: only admin can write).
+async function savePlanToDB(){
+  const { error } = await sb.from('noctura_empresas')
+    .update({ plan: CLIENT.plan, updated_at: new Date().toISOString() })
+    .eq('id', CLIENT.id || CLIENT.name);
+  return error || null;
+}
+
+// Edit/add/delete a base-plan publication. Changes affect what every user of this company sees.
+function openPlanEditor(p, m, isNew){
+  const pillars = CLIENT.pillars;
+  const pilKeys = Object.keys(pillars);
+  const base = p || { day:'', pilar:pilKeys[0], fmt:'(P)', tema:'', gancho:'', cta:'', prompt:'', ht:'' };
+  const fmtOpts = ['(R)','(P)','(H)'];
+
+  document.getElementById('modal').innerHTML =
+    '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:var(--charcoal)">ADMIN · Plan base</span>'+
+    '<h3>'+(isNew?'Agregar publicacion':'Editar plan base')+'</h3>'+
+    '<div class="meta">'+m.name+' '+m.year+' · Modifica el plan de '+esc(CLIENT.name)+' para todos los usuarios.</div>'+
+    '<div class="field"><div class="lab">Dia del mes</div><input id="pe_day" type="number" min="1" max="31" value="'+(base.day||'')+'"></div>'+
+    '<div class="field"><div class="lab">Pilar</div><select id="pe_pilar">'+
+      pilKeys.map(k=>'<option value="'+k+'"'+(k===base.pilar?' selected':'')+'>'+pillars[k].n+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Formato</div><select id="pe_fmt">'+
+      fmtOpts.map(f=>'<option value="'+f+'"'+(f===base.fmt?' selected':'')+'>'+f+' '+(FMT[f]||'')+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Tema</div><input id="pe_tema" value="'+esc(base.tema)+'"></div>'+
+    '<div class="field"><div class="lab">Gancho</div><input id="pe_gancho" value="'+esc(base.gancho)+'"></div>'+
+    '<div class="field"><div class="lab">CTA</div><input id="pe_cta" value="'+esc(base.cta)+'"></div>'+
+    '<div class="field"><div class="lab">Prompt para ChatGPT (imagen)</div><textarea id="pe_prompt" rows="3">'+esc(base.prompt||'')+'</textarea></div>'+
+    '<div class="field"><div class="lab">Hashtags</div><input id="pe_ht" value="'+esc(base.ht||'')+'"></div>'+
+    '<div class="mrow">'+
+    '<button class="btn solid" id="pe_save">Guardar en plan</button>'+
+    (!isNew ? '<button class="btn" id="pe_del">Eliminar del plan</button>' : '')+
+    '<button class="btn" id="pe_cancel">Cancelar</button></div>'+
+    '<div class="err" id="pe_err"></div>';
+
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick = closeModal;
+  document.getElementById('pe_cancel').onclick = closeModal;
+
+  document.getElementById('pe_save').onclick = async ()=>{
+    const err = document.getElementById('pe_err');
+    const day = parseInt(document.getElementById('pe_day').value, 10);
+    const ndays = new Date(m.year, m.month, 0).getDate();
+    if(!day || day < 1 || day > ndays){ err.textContent = 'Dia invalido (1-'+ndays+' para '+m.name.toLowerCase()+').'; return; }
+    const tema = document.getElementById('pe_tema').value.trim();
+    if(!tema){ err.textContent = 'El tema es obligatorio.'; return; }
+    const upd = {
+      day: day,
+      pilar: document.getElementById('pe_pilar').value,
+      fmt: document.getElementById('pe_fmt').value,
+      tema: tema,
+      gancho: document.getElementById('pe_gancho').value.trim(),
+      cta: document.getElementById('pe_cta').value.trim(),
+      prompt: document.getElementById('pe_prompt').value.trim(),
+      ht: document.getElementById('pe_ht').value.trim()
+    };
+    const btn = document.getElementById('pe_save'); btn.textContent = 'Guardando...';
+    if(isNew){ m.pubs.push(upd); } else { Object.assign(p, upd); }
+    m.pubs.sort((a,b)=>a.day-b.day);
+    const e2 = await savePlanToDB();
+    if(e2){
+      if(isNew) m.pubs.splice(m.pubs.indexOf(upd),1);
+      err.textContent = 'No se pudo guardar: '+e2.message;
+      btn.textContent = 'Guardar en plan'; return;
+    }
+    btn.textContent = '✓ Guardado'; btn.classList.add('okp');
+    renderCal(); setTimeout(closeModal, 600);
+  };
+
+  const delBtn = document.getElementById('pe_del');
+  if(delBtn) delBtn.onclick = async ()=>{
+    if(delBtn.dataset.arm !== '1'){
+      delBtn.dataset.arm = '1';
+      delBtn.textContent = 'Confirmar eliminacion';
+      delBtn.style.borderColor = '#d98c6a'; delBtn.style.color = '#d98c6a';
+      return;
+    }
+    const idx = m.pubs.indexOf(p);
+    if(idx > -1) m.pubs.splice(idx, 1);
+    const e2 = await savePlanToDB();
+    if(e2){ document.getElementById('pe_err').textContent = 'No se pudo eliminar: '+e2.message; return; }
+    renderCal(); closeModal();
+  };
 }
 
 /* ---------- ADMIN INBOX ---------- */
@@ -994,6 +1091,11 @@ document.querySelectorAll('.vmode-btn').forEach(b =>
 // Wire export actions
 document.getElementById('exportIcs').addEventListener('click', exportICS);
 document.getElementById('printMonth').addEventListener('click', printMonth);
+
+// Wire admin "add publication" (visible only for admin)
+document.getElementById('addPubBtn').addEventListener('click', ()=>{
+  if(CLIENT) openPlanEditor(null, CLIENT.plan[activeMonth], true);
+});
 
 init();
 </script>
