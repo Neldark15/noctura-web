@@ -132,6 +132,19 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .ldotobs{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px rgba(184,176,164,.5)}
 .ltodaysep{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:2px 0}
 .ltodaysep::before,.ltodaysep::after{content:"";flex:1;height:1px;background:var(--gold);opacity:.3}
+/* --- month stats bar --- */
+.stats{display:flex;flex-wrap:wrap;border:1px solid var(--charcoal);border-radius:8px;background:#0d0d10;margin:18px 0 4px;overflow:hidden}
+.stat{flex:1;min-width:118px;padding:13px 18px;border-right:1px solid var(--graphite)}
+.stat:last-of-type{border-right:none}
+.stat .sv{font-family:var(--serif);font-size:26px;color:var(--ivory);line-height:1}
+.stat .sv.ok{color:#7fc391}
+.stat .sv.rev{color:var(--gold)}
+.stat .sv.next-txt{font-family:var(--sans);font-size:13.5px;color:var(--bone);line-height:1.35;padding-top:3px}
+.stat .sl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.stat.wide{flex:1.7;min-width:170px}
+.statprog{flex-basis:100%;height:3px;background:var(--graphite)}
+.statprog span{display:block;height:100%;background:#3d7a4e;transition:width .4s ease}
+@media(max-width:760px){.stat{padding:11px 13px;min-width:96px}.stat .sv{font-size:21px}}
 @media(max-width:760px){.ltt{font-size:13px}.cal-controls{gap:8px}}
 .pub{margin-top:7px;border-radius:6px;padding:8px 9px;cursor:pointer;transition:transform .15s, box-shadow .2s;color:#fff}
 .pub:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
@@ -238,6 +251,7 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
           <p class="muted" id="calClient" style="font-size:13px;letter-spacing:1px"></p>
         </div>
       </div>
+      <div class="stats" id="calStats"></div>
       <p class="lead" style="margin:14px 0 8px;font-size:15px">Haz clic en cualquier publicacion para ver su contenido, editar el texto y dejar observaciones — se guardan automaticamente y NOCTURA las recibe. Filtra por pilar con las etiquetas.</p>
       <div class="legend" id="legend"></div>
       <div class="cal-controls">
@@ -541,7 +555,49 @@ function renderCal(){
     el.addEventListener('click',()=>openModal(byday[+el.dataset.day], m))
   );
   renderList();
+  renderStats();
   applyCalMode();
+}
+
+/* ---------- MONTH STATS BAR ---------- */
+function renderStats(){
+  const m = CLIENT.plan[activeMonth];
+  const now = getNow();
+  const cur = now.getFullYear()*100 + (now.getMonth()+1);
+  const mNum = m.year*100 + m.month;
+  const today = now.getDate();
+  const WD = ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+
+  let aprob=0, rev=0, obs=0;
+  m.pubs.forEach(p=>{
+    const e = eff(p,m);
+    if(e.estado==='aprobada') aprob++;
+    else if(e.estado==='revision') rev++;
+    if(e.edited) obs++;
+  });
+  const total = m.pubs.length;
+
+  // Next publication: from today in the current month; first of the month if future; none if past.
+  let next = null;
+  if(mNum === cur) next = m.pubs.filter(p=>p.day>=today).sort((a,b)=>a.day-b.day)[0] || null;
+  else if(mNum > cur) next = m.pubs.slice().sort((a,b)=>a.day-b.day)[0] || null;
+  let nextHtml;
+  if(next){
+    const e = eff(next,m);
+    const wd = WD[new Date(m.year, m.month-1, next.day).getDay()];
+    nextHtml = '<div class="sv next-txt">'+wd+' '+next.day+' · '+esc(trim(next.pilar==='PROYECTOS'?'Proyecto del mes':e.tema, 42))+'</div>';
+  } else {
+    nextHtml = '<div class="sv next-txt muted">'+(mNum < cur ? 'Mes finalizado' : 'Mes completado')+'</div>';
+  }
+
+  const pct = total ? Math.round(aprob/total*100) : 0;
+  document.getElementById('calStats').innerHTML =
+    '<div class="stat"><div class="sv">'+total+'</div><div class="sl">Publicaciones</div></div>'+
+    '<div class="stat"><div class="sv ok">'+aprob+'</div><div class="sl">Aprobadas</div></div>'+
+    '<div class="stat"><div class="sv rev">'+rev+'</div><div class="sl">En revision</div></div>'+
+    '<div class="stat"><div class="sv">'+obs+'</div><div class="sl">Con observaciones</div></div>'+
+    '<div class="stat wide">'+nextHtml+'<div class="sl">Proxima publicacion</div></div>'+
+    '<div class="statprog" title="'+pct+'% aprobado"><span style="width:'+pct+'%"></span></div>';
 }
 
 /* ---------- LIST VIEW ---------- */
