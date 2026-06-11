@@ -145,6 +145,29 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .statprog{flex-basis:100%;height:3px;background:var(--graphite)}
 .statprog span{display:block;height:100%;background:#3d7a4e;transition:width .4s ease}
 @media(max-width:760px){.stat{padding:11px 13px;min-width:96px}.stat .sv{font-size:21px}}
+.head-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* --- print / PDF --- */
+.printhead{display:none}
+@media print{
+  body{background:#fff!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  nav,.workspace-head,.stats,.lead,.legend,.cal-controls,footer,#companySelector,#viewEstrategia,.calhead,#cal{display:none!important}
+  #callist{display:flex!important;flex-direction:column;gap:5px}
+  section{padding:0!important;border:none!important}
+  .printhead{display:block;margin:0 0 16px;border-bottom:2px solid #000;padding-bottom:10px}
+  .printhead .ph-brand{font-size:11px;letter-spacing:3px;color:#555;text-transform:uppercase}
+  .printhead .ph-client{font-family:var(--serif);font-size:24px;color:#000;margin-top:4px}
+  .printhead .ph-month{font-size:13px;letter-spacing:1.5px;color:#333;text-transform:uppercase;margin-top:2px}
+  .lrow{background:#fff!important;border:1px solid #bbb!important;color:#000;break-inside:avoid;box-shadow:none!important;transform:none!important}
+  .lrow.dim{opacity:1}
+  .ltt{color:#000}.lsub{color:#555}
+  .ldate .ld{color:#000}.ldate .lwd{color:#555}
+  .lrow.repostrow{opacity:.6}
+  .lrow.repostrow .ltt{color:#555!important}
+  .stpill{border:1px solid #888;background:none!important;color:#000!important}
+  .ldotobs{background:#888!important;box-shadow:none}
+  .ltodaysep{color:#333}.ltodaysep::before,.ltodaysep::after{background:#999}
+  .lrow.today{border-color:#000!important;box-shadow:inset 0 0 0 1px #000!important}
+}
 @media(max-width:760px){.ltt{font-size:13px}.cal-controls{gap:8px}}
 .pub{margin-top:7px;border-radius:6px;padding:8px 9px;cursor:pointer;transition:transform .15s, box-shadow .2s;color:#fff}
 .pub:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
@@ -244,11 +267,16 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
   <!-- ===== VISTA: CALENDARIO (area de trabajo, por defecto) ===== -->
   <div id="viewCalendario" class="view">
     <section id="calendario"><div class="wrap">
+      <div class="printhead" id="printhead"></div>
       <div class="workspace-head">
         <div>
           <div class="kick">Calendario editorial</div>
           <h2 class="sec-h" id="calTitle" style="margin-bottom:6px">Plan de publicaciones</h2>
           <p class="muted" id="calClient" style="font-size:13px;letter-spacing:1px"></p>
+        </div>
+        <div class="head-actions">
+          <button class="mini" id="exportIcs" title="Descarga un archivo .ics para importar en Google Calendar o iPhone">Agregar a mi calendario</button>
+          <button class="mini" id="printMonth" title="Imprime o guarda el mes como PDF">Imprimir / PDF</button>
         </div>
       </div>
       <div class="stats" id="calStats"></div>
@@ -600,6 +628,59 @@ function renderStats(){
     '<div class="statprog" title="'+pct+'% aprobado"><span style="width:'+pct+'%"></span></div>';
 }
 
+/* ---------- EXPORT: .ics + PRINT ---------- */
+function icsEscape(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'); }
+
+// Builds the full-plan iCalendar (all months, all publications, all-day events).
+function buildICS(){
+  const stamp = getNow().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const lines = ['BEGIN:VCALENDAR','VERSION:2.0',
+    'PRODID:-//NOCTURA Studio//Plan Editorial//ES','CALSCALE:GREGORIAN',
+    'X-WR-CALNAME:'+icsEscape('Plan '+CLIENT.name+' · NOCTURA')];
+  CLIENT.plan.forEach(m=>{
+    m.pubs.forEach(p=>{
+      const e = eff(p,m);
+      const pl = CLIENT.pillars[p.pilar];
+      const d1 = ''+m.year+String(m.month).padStart(2,'0')+String(p.day).padStart(2,'0');
+      const nx = new Date(m.year, m.month-1, p.day+1);
+      const d2 = ''+nx.getFullYear()+String(nx.getMonth()+1).padStart(2,'0')+String(nx.getDate()).padStart(2,'0');
+      lines.push('BEGIN:VEVENT',
+        'UID:noctura-'+CLIENT.name+'-'+m.month+'-'+p.day+'-'+p.pilar+'@noctura-studio.com',
+        'DTSTAMP:'+stamp,
+        'DTSTART;VALUE=DATE:'+d1,
+        'DTEND;VALUE=DATE:'+d2,
+        'SUMMARY:'+icsEscape(p.fmt+' '+(p.pilar==='PROYECTOS'?'Proyecto del mes':e.tema)),
+        'DESCRIPTION:'+icsEscape('Pilar: '+(pl?pl.n:p.pilar)+'\nFormato: '+(FMT[p.fmt]||p.fmt)+'\nGancho: '+e.gancho+'\nCTA: '+e.cta+(e.texto?'\n\nTexto:\n'+e.texto:'')),
+        'CATEGORIES:'+icsEscape(p.pilar),
+        'END:VEVENT');
+    });
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function exportICS(){
+  if(!CLIENT) return;
+  const blob = new Blob([buildICS()], {type:'text/calendar;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'NOCTURA_'+CLIENT.name+'_plan.ics';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+
+// Prints the visible month as a clean list (browser dialog -> save as PDF).
+function printMonth(){
+  if(!CLIENT) return;
+  const m = CLIENT.plan[activeMonth];
+  document.getElementById('printhead').innerHTML =
+    '<div class="ph-brand">NOCTURA · Plan editorial</div>'+
+    '<div class="ph-client">'+esc(CLIENT.fullName)+'</div>'+
+    '<div class="ph-month">'+m.name+' '+m.year+'</div>';
+  switchView('calendario');
+  window.print();
+}
+
 /* ---------- LIST VIEW ---------- */
 // Grid for overview, list for daily work (and mobile). Default: list on small screens.
 let calMode = (function(){
@@ -909,6 +990,10 @@ document.querySelectorAll('.viewtab').forEach(t =>
 document.querySelectorAll('.vmode-btn').forEach(b =>
   b.addEventListener('click', () => setCalMode(b.dataset.mode))
 );
+
+// Wire export actions
+document.getElementById('exportIcs').addEventListener('click', exportICS);
+document.getElementById('printMonth').addEventListener('click', printMonth);
 
 init();
 </script>
