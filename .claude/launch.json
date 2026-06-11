@@ -4,8 +4,8 @@
     {
       "name": "noctura",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "3000", "--directory", "/Users/nelson/Claude/noctura-web"],
-      "port": 3000
+      "runtimeArgs": ["-m", "http.server", "3100", "--directory", "/Users/nelson/Claude/noctura-web"],
+      "port": 3100
     }
   ]
 }

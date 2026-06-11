@@ -116,6 +116,20 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .pub.dim{opacity:.18;filter:grayscale(.5)}
 .repost{margin-top:18px;text-align:center;color:var(--cta);font-style:italic;font-size:13px;opacity:.85}
 .hasobs{position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(184,176,164,.6)}
+.stbadge{position:absolute;top:6px;right:6px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;line-height:1}
+.st-aprobada{width:17px;height:17px;background:#3d7a4e;color:#fff;box-shadow:0 0 8px rgba(90,185,140,.55)}
+.st-revision{width:9px;height:9px;background:var(--gold);box-shadow:0 0 8px rgba(184,176,164,.6)}
+.pub.approved{box-shadow:inset 0 0 0 2px rgba(120,195,145,.75)}
+.status-ctrl{display:flex;gap:6px;flex-wrap:wrap}
+.status-opt{flex:1;min-width:92px;padding:9px 10px;border:1px solid var(--charcoal);border-radius:6px;font-size:12px;letter-spacing:.5px;color:var(--muted);background:none;cursor:pointer;font-family:var(--sans);transition:.2s}
+.status-opt:hover{color:var(--ivory);border-color:var(--silver)}
+.status-opt.active[data-estado="pendiente"]{color:var(--ivory);border-color:var(--silver);background:rgba(255,255,255,.05)}
+.status-opt.active[data-estado="revision"]{color:#111;background:var(--gold);border-color:var(--gold)}
+.status-opt.active[data-estado="aprobada"]{color:#fff;background:#3d7a4e;border-color:#3d7a4e}
+.stpill{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;border-radius:4px;padding:2px 7px;margin-left:4px;vertical-align:middle;font-weight:600}
+.stpill.st-pendiente{background:var(--charcoal);color:var(--bone)}
+.stpill.st-revision{background:var(--gold);color:#111;width:auto;height:auto;box-shadow:none}
+.stpill.st-aprobada{background:#3d7a4e;color:#fff;width:auto;height:auto;box-shadow:none}
 @media(max-width:760px){.cell{min-height:auto}.calhead div{font-size:9px}.pub .tt{font-size:11px}}
 .ov{position:fixed;inset:0;background:rgba(4,4,6,.74);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
 .ov.show{display:flex}
@@ -257,8 +271,11 @@ function trim(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
 function shortP(k){ return {PROYECTOS:'PROY',AUTORIDAD:'AUTO',BIO:'BIO',MARCA:'MARCA',CTA:'CTA',FESTIVO:'FEST'}[k]||k; }
 function keyOf(m,day){ return (CLIENT?CLIENT.name:'')+'-'+m.month+'-'+day; }
 function eff(p,m){ const pr=PROPS[keyOf(m,p.day)]||{};
+  const hasEdits = !!(pr.tema || pr.gancho || pr.cta || pr.fecha || pr.observacion || pr.texto);
   return {tema:(pr.tema??p.tema), gancho:(pr.gancho??p.gancho), cta:(pr.cta??p.cta),
-    fecha:(pr.fecha||null), obs:(pr.observacion||''), texto:(pr.texto||''), edited:!!pr.id}; }
+    fecha:(pr.fecha||null), obs:(pr.observacion||''), texto:(pr.texto||''),
+    estado:(pr.estado||'pendiente'), edited:hasEdits, hasRow:!!pr.id}; }
+const ESTADOS = { pendiente:'Pendiente', revision:'En revisión', aprobada:'Aprobada' };
 
 /* ---------- AUTH ---------- */
 async function init(){
@@ -467,10 +484,13 @@ function renderCal(){
       const p = byday[d], pl = pillars[p.pilar], e = eff(p,m);
       const dim = filter && p.pilar!==filter ? ' dim' : '';
       const tt = p.pilar==='PROYECTOS' ? 'Proyecto del mes' : e.tema;
-      inner += '<div class="pub'+dim+'" style="background:'+pl.hex+'" data-day="'+d+'">'+
+      inner += '<div class="pub'+dim+(e.estado==='aprobada'?' approved':'')+'" style="background:'+pl.hex+'" data-day="'+d+'">'+
         '<div class="ft"><span>'+p.fmt+'</span><span>'+shortP(p.pilar)+'</span></div>'+
         '<div class="tt">'+esc(trim(tt,46))+'</div></div>';
-      if(e.edited) inner += '<div class="hasobs" title="Con cambios/observacion"></div>';
+      // Status indicator (priority: aprobada > revision > tiene observaciones)
+      if(e.estado==='aprobada') inner += '<div class="stbadge st-aprobada" title="Aprobada">&#10003;</div>';
+      else if(e.estado==='revision') inner += '<div class="stbadge st-revision" title="En revision"></div>';
+      else if(e.edited) inner += '<div class="hasobs" title="Con cambios/observacion"></div>';
     } else if(reps.has(d)){
       inner += '<div class="repost">Repost</div>';
     }
@@ -496,6 +516,9 @@ function openModal(p, m){
     '<span class="x" id="xclose">×</span>'+
     '<span class="mtag" style="background:'+pl.hex+'">'+p.fmt+' · '+pl.n+'</span>'+
     '<h3>Editar publicacion</h3><div class="meta">'+wd+' '+date+' · '+(FMT[p.fmt]||'')+'</div>'+
+    '<div class="field"><div class="lab">Estado</div><div class="status-ctrl" id="statusCtrl">'+
+      Object.keys(ESTADOS).map(k=>'<button class="status-opt'+(e.estado===k?' active':'')+'" data-estado="'+k+'">'+ESTADOS[k]+'</button>').join('')+
+    '</div></div>'+
     '<div class="field"><div class="lab">Tema / Contenido</div><input id="f_tema" value="'+esc(e.tema)+'"></div>'+
     '<div class="field"><div class="lab">Gancho</div><input id="f_gancho" value="'+esc(e.gancho)+'"></div>'+
     '<div class="field"><div class="lab">CTA</div><input id="f_cta" value="'+esc(e.cta)+'"></div>'+
@@ -524,6 +547,15 @@ function openModal(p, m){
   };
   document.getElementById('saveb').onclick = ()=>saveProp(p, m);
   document.getElementById('resetb').onclick = ()=>resetProp(p, m);
+  document.querySelectorAll('#statusCtrl .status-opt').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const est = btn.dataset.estado;
+      document.querySelectorAll('#statusCtrl .status-opt').forEach(b=>b.classList.toggle('active', b===btn));
+      const err = await setEstado(p, m, est);
+      if(err){ document.getElementById('merr').textContent = 'No se pudo actualizar el estado: '+err.message; return; }
+      renderCal();
+    };
+  });
 }
 
 function closeModal(){ document.getElementById('ov').classList.remove('show'); }
@@ -537,11 +569,12 @@ async function saveProp(p, m){
   const texto = document.getElementById('f_texto').value.trim();
   const fecha = document.getElementById('f_fecha').value || null;
   const obs = document.getElementById('f_obs').value.trim();
+  const curEstado = (PROPS[keyOf(m,p.day)]||{}).estado || 'pendiente';
   const row = {
     empresa:CLIENT.name, mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
     tema:(tema&&tema!==p.tema)?tema:null, gancho:(gancho&&gancho!==p.gancho)?gancho:null,
     cta:(cta&&cta!==p.cta)?cta:null, texto:texto||null, fecha:fecha, observacion:obs||null,
-    autor:USER.id, autor_email:USER.email
+    estado:curEstado, autor:USER.id, autor_email:USER.email
   };
   const btn = document.getElementById('saveb'); btn.textContent = 'Guardando...';
   const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
@@ -558,6 +591,21 @@ async function resetProp(p, m){
   const pr = PROPS[keyOf(m,p.day)]; if(!pr||!pr.id){ closeModal(); return; }
   await sb.from('noctura_propuestas').delete().eq('id', pr.id);
   delete PROPS[keyOf(m,p.day)]; renderCal(); closeModal();
+}
+
+// Set the approval state on a publication (preserves any existing edits/observations).
+async function setEstado(p, m, estado){
+  const key = keyOf(m,p.day);
+  const cur = PROPS[key] || {};
+  const row = {
+    empresa:CLIENT.name, mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
+    estado: estado, autor:USER.id, autor_email:USER.email
+  };
+  ['tema','gancho','cta','fecha','observacion','texto'].forEach(f=>{ if(cur[f]!=null) row[f]=cur[f]; });
+  const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
+  if(error) return error;
+  PROPS[key] = data;
+  return null;
 }
 
 /* ---------- ADMIN INBOX ---------- */
@@ -577,7 +625,9 @@ async function openInbox(){
       if(r.texto) chgs += '<div class="chg"><b>Texto:</b> '+esc(r.texto).substring(0,120)+(r.texto.length>120?'...':'')+'</div>';
       if(r.observacion) chgs += '<div class="chg"><b>Obs:</b> '+esc(r.observacion)+'</div>';
       const empresa = r.empresa || 'ARQSA';
-      return '<div class="inbox-item"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
+      const est = r.estado || 'pendiente';
+      const estPill = '<span class="stpill st-'+est+'">'+(ESTADOS[est]||est)+'</span>';
+      return '<div class="inbox-item"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+estPill+' '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
         '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
         (chgs||'<div class="chg muted">(sin cambios)</div>')+'</div>';
     }).join('');
