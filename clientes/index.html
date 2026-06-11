@@ -150,6 +150,14 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .inbox-item .sub{font-size:12px;color:var(--muted);margin:2px 0 8px}
 .chg{font-size:13px;color:var(--bone);margin-top:4px}
 .chg b{color:var(--gold);font-weight:500}
+.inbox-item.done{opacity:.55}
+.reply-wrap{margin-top:12px;padding-top:12px;border-top:1px solid var(--graphite)}
+.inbox-reply{width:100%;min-height:48px;background:#0a0a0c;border:1px solid var(--charcoal);border-radius:7px;padding:9px;font-family:var(--sans);font-size:13px;color:var(--ivory);line-height:1.5;resize:vertical}
+.inbox-reply:focus{outline:1px solid var(--silver)}
+.reply-actions{display:flex;gap:8px;margin-top:8px}
+.reply-send{border-color:var(--silver)!important;color:var(--ivory)!important}
+.reply-box{background:rgba(176,179,188,.06);border:1px solid var(--charcoal);border-left:2px solid var(--silver);border-radius:7px;padding:12px;font-size:14px;color:var(--bone);line-height:1.55;white-space:pre-wrap}
+.has-pending{border-color:var(--gold)!important;color:var(--gold)!important;box-shadow:0 0 12px rgba(184,176,164,.15)}
 footer{padding:54px 0 64px;border-top:1px solid var(--graphite);text-align:center}
 footer .t{font-family:var(--serif);font-size:28px;color:var(--silver);margin-bottom:12px}
 footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
@@ -274,7 +282,8 @@ function eff(p,m){ const pr=PROPS[keyOf(m,p.day)]||{};
   const hasEdits = !!(pr.tema || pr.gancho || pr.cta || pr.fecha || pr.observacion || pr.texto);
   return {tema:(pr.tema??p.tema), gancho:(pr.gancho??p.gancho), cta:(pr.cta??p.cta),
     fecha:(pr.fecha||null), obs:(pr.observacion||''), texto:(pr.texto||''),
-    estado:(pr.estado||'pendiente'), edited:hasEdits, hasRow:!!pr.id}; }
+    estado:(pr.estado||'pendiente'), respuesta:(pr.respuesta||''),
+    edited:hasEdits, hasRow:!!pr.id}; }
 const ESTADOS = { pendiente:'Pendiente', revision:'En revisión', aprobada:'Aprobada' };
 
 /* ---------- AUTH ---------- */
@@ -337,7 +346,7 @@ async function onAuthed(user){
   document.getElementById('login').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   document.getElementById('uchip').textContent = (mem&&mem.nombre?mem.nombre:user.email) + (ROLE==='admin'?' · NOCTURA':'');
-  if(ROLE === 'admin') document.getElementById('inboxbtn').style.display = 'inline-block';
+  if(ROLE === 'admin'){ document.getElementById('inboxbtn').style.display = 'inline-block'; refreshInboxBadge(); }
 
   if(ROLE === 'admin'){
     addCompanySwitcher();
@@ -528,6 +537,7 @@ function openModal(p, m){
     promptHtml+
     '<div class="field"><div class="lab">Observaciones para NOCTURA</div>'+
     '<textarea id="f_obs" rows="3" placeholder="Cambiarias algo? Escribelo aqui...">'+esc(e.obs)+'</textarea></div>'+
+    (e.respuesta ? '<div class="field"><div class="lab" style="color:var(--silver)">Respuesta de NOCTURA</div><div class="reply-box">'+esc(e.respuesta)+'</div></div>' : '')+
     '<div class="mrow">'+
     '<button class="btn solid" id="saveb">Guardar cambios</button>'+
     copyBtn+
@@ -574,7 +584,7 @@ async function saveProp(p, m){
     empresa:CLIENT.name, mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
     tema:(tema&&tema!==p.tema)?tema:null, gancho:(gancho&&gancho!==p.gancho)?gancho:null,
     cta:(cta&&cta!==p.cta)?cta:null, texto:texto||null, fecha:fecha, observacion:obs||null,
-    estado:curEstado, autor:USER.id, autor_email:USER.email
+    estado:curEstado, atendida:(ROLE==='admin'), autor:USER.id, autor_email:USER.email
   };
   const btn = document.getElementById('saveb'); btn.textContent = 'Guardando...';
   const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
@@ -599,7 +609,7 @@ async function setEstado(p, m, estado){
   const cur = PROPS[key] || {};
   const row = {
     empresa:CLIENT.name, mes:m.name, month:m.month, day:p.day, tema_base:p.tema,
-    estado: estado, autor:USER.id, autor_email:USER.email
+    estado: estado, atendida:(ROLE==='admin'), autor:USER.id, autor_email:USER.email
   };
   ['tema','gancho','cta','fecha','observacion','texto'].forEach(f=>{ if(cur[f]!=null) row[f]=cur[f]; });
   const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
@@ -609,13 +619,26 @@ async function setEstado(p, m, estado){
 }
 
 /* ---------- ADMIN INBOX ---------- */
+// Count of unattended client feedback; shown as a badge on the "Propuestas" button.
+async function refreshInboxBadge(){
+  if(ROLE !== 'admin') return;
+  const { count } = await sb.from('noctura_propuestas')
+    .select('id', { count:'exact', head:true })
+    .eq('atendida', false).neq('autor', USER.id);
+  const btn = document.getElementById('inboxbtn');
+  btn.textContent = (count>0) ? ('Propuestas · '+count) : 'Propuestas';
+  btn.classList.toggle('has-pending', count>0);
+}
+
 async function openInbox(){
-  const {data, error} = await sb.from('noctura_propuestas').select('*').order('updated_at',{ascending:false});
+  // Only client feedback (exclude NOCTURA's own rows); unattended first.
+  const {data, error} = await sb.from('noctura_propuestas').select('*').neq('autor', USER.id);
   const box = document.getElementById('inbox');
   let html = '<span class="x" id="xi">×</span><h3>Bandeja de propuestas</h3><div class="meta">Cambios y observaciones de los clientes</div>';
   if(error){ html += '<p class="muted">'+esc(error.message)+'</p>'; }
   else if(!data||!data.length){ html += '<p class="muted">Aun no hay propuestas registradas.</p>'; }
   else {
+    data.sort((a,b)=> (a.atendida?1:0)-(b.atendida?1:0) || (new Date(b.updated_at)-new Date(a.updated_at)) );
     html += data.map(r=>{
       let chgs = '';
       if(r.tema) chgs += '<div class="chg"><b>Tema →</b> '+esc(r.tema)+'</div>';
@@ -627,14 +650,39 @@ async function openInbox(){
       const empresa = r.empresa || 'ARQSA';
       const est = r.estado || 'pendiente';
       const estPill = '<span class="stpill st-'+est+'">'+(ESTADOS[est]||est)+'</span>';
-      return '<div class="inbox-item"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+estPill+' '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
+      const doneBadge = r.atendida ? '<span class="stpill st-aprobada">Atendida</span>' : '';
+      return '<div class="inbox-item'+(r.atendida?' done':'')+'"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+estPill+' '+doneBadge+' '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
         '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
-        (chgs||'<div class="chg muted">(sin cambios)</div>')+'</div>';
+        (chgs||'<div class="chg muted">(sin cambios)</div>')+
+        '<div class="reply-wrap">'+
+          '<textarea class="inbox-reply" id="rep_'+r.id+'" rows="2" placeholder="Responder al cliente...">'+esc(r.respuesta||'')+'</textarea>'+
+          '<div class="reply-actions">'+
+            '<button class="mini reply-send" data-id="'+r.id+'">Responder</button>'+
+            '<button class="mini reply-toggle" data-id="'+r.id+'" data-now="'+(r.atendida?'1':'0')+'">'+(r.atendida?'Reabrir':'Marcar atendida')+'</button>'+
+          '</div>'+
+        '</div>'+
+        '</div>';
     }).join('');
   }
   box.innerHTML = html;
   document.getElementById('inboxov').classList.add('show');
   document.getElementById('xi').onclick = ()=>document.getElementById('inboxov').classList.remove('show');
+  // Wire reply + attended controls
+  box.querySelectorAll('.reply-send').forEach(btn=>btn.onclick = async ()=>{
+    const id = btn.dataset.id;
+    const txt = document.getElementById('rep_'+id).value.trim();
+    btn.textContent = 'Guardando...';
+    const upd = { respuesta: txt||null, atendida: true, respondido_at: new Date().toISOString() };
+    const { error } = await sb.from('noctura_propuestas').update(upd).eq('id', id);
+    if(error){ btn.textContent = 'Error'; return; }
+    await refreshInboxBadge(); openInbox();
+  });
+  box.querySelectorAll('.reply-toggle').forEach(btn=>btn.onclick = async ()=>{
+    const id = btn.dataset.id, next = btn.dataset.now !== '1';
+    const { error } = await sb.from('noctura_propuestas').update({ atendida: next }).eq('id', id);
+    if(error){ btn.textContent = 'Error'; return; }
+    await refreshInboxBadge(); openInbox();
+  });
 }
 document.getElementById('inboxov').addEventListener('click', e=>{
   if(e.target.id==='inboxov') e.currentTarget.classList.remove('show');
