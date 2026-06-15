@@ -222,6 +222,22 @@ footer{padding:54px 0 64px;border-top:1px solid var(--graphite);text-align:cente
 footer .t{font-family:var(--serif);font-size:28px;color:var(--silver);margin-bottom:12px}
 footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 .editbadge{display:inline-block;font-size:10px;letter-spacing:1px;color:#111;background:var(--gold);border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+/* --- notification bell + panel --- */
+.bell{position:relative;background:none;border:1px solid var(--charcoal);border-radius:6px;width:34px;height:32px;display:inline-flex;align-items:center;justify-content:center;color:var(--bone);cursor:pointer;transition:border-color .2s,color .2s}
+.bell:hover{border-color:var(--silver);color:var(--ivory)}
+.bell-dot{position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;padding:0 4px;border-radius:9px;background:var(--gold);color:#111;font-size:10px;font-weight:700;font-family:var(--sans);display:flex;align-items:center;justify-content:center;line-height:1;box-shadow:0 0 8px rgba(184,176,164,.5)}
+.notif-item{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--charcoal);border-radius:8px;padding:13px 14px;margin-bottom:9px;background:#0d0d10;cursor:pointer;transition:border-color .2s,transform .15s}
+.notif-item:hover{border-color:var(--silver);transform:translateX(2px)}
+.notif-item.unread{border-left:3px solid var(--gold);background:#121016}
+.notif-ic{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+.ni-respuesta{background:#3f6f8c}.ni-observacion{background:var(--gold);color:#111}.ni-aprobacion{background:#3d7a4e}.ni-contenido{background:#5b4c8a}.ni-anuncio{background:var(--charcoal)}
+.notif-tt{font-size:14px;color:var(--ivory);line-height:1.35}
+.notif-bd{font-size:12.5px;color:var(--bone);margin-top:2px;line-height:1.4}
+.notif-tm{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:.5px}
+.notif-empty{color:var(--muted);font-size:14px;text-align:center;padding:30px 0}
+.notif-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.notif-mark{font-size:12px;letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:var(--sans)}
+.notif-mark:hover{color:var(--ivory)}
 </style>
 </head>
 <body>
@@ -250,6 +266,10 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
     </div>
     <span class="uchip" id="uchip"></span>
     <button class="mini" id="inboxbtn" style="display:none">Propuestas</button>
+    <button class="bell" id="bellbtn" title="Notificaciones" aria-label="Notificaciones">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <span class="bell-dot" id="bellDot" style="display:none"></span>
+    </button>
     <button class="mini" id="logout">Salir</button>
   </div>
 </div></nav>
@@ -332,6 +352,7 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 
 <div class="ov" id="ov"><div class="modal" id="modal"></div></div>
 <div class="ov" id="inboxov"><div class="modal" id="inbox"></div></div>
+<div class="ov" id="notifov"><div class="modal" id="notifpanel"></div></div>
 
 <script>
 /* ============================================================
@@ -426,6 +447,8 @@ async function onAuthed(user){
     document.getElementById('addPubBtn').style.display = 'inline-block';
     refreshInboxBadge();
   }
+  loadNotifs();
+  subscribeNotifs();
 
   if(ROLE === 'admin'){
     addCompanySwitcher();
@@ -845,6 +868,11 @@ async function saveProp(p, m){
     btn.textContent = 'Guardar cambios'; return;
   }
   PROPS[keyOf(m,p.day)] = data;
+  // Notify NOCTURA when a client leaves feedback.
+  if(ROLE !== 'admin' && (obs || row.tema || row.gancho || row.cta || row.texto)){
+    notifyAdmins('observacion', CLIENT.name+' dejo una observacion',
+      (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema)+(obs?' — '+obs:''), m, p.day);
+  }
   btn.textContent = '✓ Guardado'; btn.classList.add('okp');
   renderCal(); setTimeout(closeModal, 650);
 }
@@ -867,6 +895,12 @@ async function setEstado(p, m, estado){
   const {data, error} = await sb.from('noctura_propuestas').upsert(row, {onConflict:'empresa,mes,day,autor'}).select().maybeSingle();
   if(error) return error;
   PROPS[key] = data;
+  // Notify NOCTURA when a client approves / moves a publication's state.
+  if(ROLE !== 'admin' && (estado==='aprobada' || estado==='revision')){
+    notifyAdmins(estado==='aprobada'?'aprobacion':'observacion',
+      CLIENT.name+' marco "'+ESTADOS[estado]+'"',
+      (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema), m, p.day);
+  }
   return null;
 }
 
@@ -937,6 +971,8 @@ function openPlanEditor(p, m, isNew){
       err.textContent = 'No se pudo guardar: '+e2.message;
       btn.textContent = 'Guardar en plan'; return;
     }
+    // Notify the company's clients that new content is available.
+    if(isNew) notifyEmpresa('contenido', 'Nuevo contenido en '+m.name, upd.tema, m, upd.day);
     btn.textContent = '✓ Guardado'; btn.classList.add('okp');
     renderCal(); setTimeout(closeModal, 600);
   };
@@ -996,7 +1032,7 @@ async function openInbox(){
         '<div class="reply-wrap">'+
           '<textarea class="inbox-reply" id="rep_'+r.id+'" rows="2" placeholder="Responder al cliente...">'+esc(r.respuesta||'')+'</textarea>'+
           '<div class="reply-actions">'+
-            '<button class="mini reply-send" data-id="'+r.id+'">Responder</button>'+
+            '<button class="mini reply-send" data-id="'+r.id+'" data-autor="'+(r.autor||'')+'" data-empresa="'+esc(empresa)+'" data-month="'+r.month+'" data-day="'+r.day+'" data-base="'+esc(r.tema_base||'')+'">Responder</button>'+
             '<button class="mini reply-toggle" data-id="'+r.id+'" data-now="'+(r.atendida?'1':'0')+'">'+(r.atendida?'Reabrir':'Marcar atendida')+'</button>'+
           '</div>'+
         '</div>'+
@@ -1014,6 +1050,14 @@ async function openInbox(){
     const upd = { respuesta: txt||null, atendida: true, respondido_at: new Date().toISOString() };
     const { error } = await sb.from('noctura_propuestas').update(upd).eq('id', id);
     if(error){ btn.textContent = 'Error'; return; }
+    // Notify the client that NOCTURA replied.
+    if(txt && btn.dataset.autor){
+      await sb.from('noctura_notificaciones').insert({
+        destinatario: btn.dataset.autor, empresa: btn.dataset.empresa, tipo:'respuesta',
+        titulo:'NOCTURA respondio tu observacion', cuerpo: txt.slice(0,160),
+        ref_month: +btn.dataset.month, ref_day: +btn.dataset.day
+      });
+    }
     await refreshInboxBadge(); openInbox();
   });
   box.querySelectorAll('.reply-toggle').forEach(btn=>btn.onclick = async ()=>{
@@ -1026,6 +1070,128 @@ async function openInbox(){
 document.getElementById('inboxov').addEventListener('click', e=>{
   if(e.target.id==='inboxov') e.currentTarget.classList.remove('show');
 });
+
+/* ---------- NOTIFICATIONS ---------- */
+let NOTIFS = [], notifChannel = null;
+const NOTIF_IC = { respuesta:'✉', observacion:'✎', aprobacion:'✓', contenido:'✨', anuncio:'•' };
+
+function timeAgo(iso){
+  const s = Math.floor((getNow() - new Date(iso))/1000);
+  if(s < 60) return 'hace un momento';
+  if(s < 3600) return 'hace '+Math.floor(s/60)+' min';
+  if(s < 86400) return 'hace '+Math.floor(s/3600)+' h';
+  if(s < 604800) return 'hace '+Math.floor(s/86400)+' d';
+  return new Date(iso).toLocaleDateString('es');
+}
+
+async function loadNotifs(){
+  if(!USER) return;
+  const { data } = await sb.from('noctura_notificaciones')
+    .select('*').eq('destinatario', USER.id)
+    .order('created_at', { ascending:false }).limit(40);
+  NOTIFS = data || [];
+  updateBell();
+}
+
+function updateBell(){
+  const n = NOTIFS.filter(x=>!x.leida).length;
+  const dot = document.getElementById('bellDot');
+  if(n > 0){ dot.textContent = n > 9 ? '9+' : n; dot.style.display = 'flex'; }
+  else { dot.style.display = 'none'; }
+}
+
+function openNotifs(){
+  const box = document.getElementById('notifpanel');
+  const unread = NOTIFS.filter(n=>!n.leida).length;
+  let html = '<span class="x" id="xnotif">×</span>'+
+    '<div class="notif-head"><h3 style="margin:0">Notificaciones</h3>'+
+    (unread>0 ? '<button class="notif-mark" id="markAll">Marcar todas leidas</button>' : '')+'</div>';
+  if(!NOTIFS.length){
+    html += '<div class="notif-empty">Aun no tienes notificaciones.</div>';
+  } else {
+    html += NOTIFS.map((n,i)=>{
+      const ic = NOTIF_IC[n.tipo] || '•';
+      return '<div class="notif-item'+(n.leida?'':' unread')+'" data-i="'+i+'">'+
+        '<div class="notif-ic ni-'+n.tipo+'">'+ic+'</div>'+
+        '<div style="flex:1;min-width:0"><div class="notif-tt">'+esc(n.titulo)+'</div>'+
+        (n.cuerpo?'<div class="notif-bd">'+esc(n.cuerpo)+'</div>':'')+
+        '<div class="notif-tm">'+timeAgo(n.created_at)+(n.ref_day?' · dia '+n.ref_day:'')+'</div></div></div>';
+    }).join('');
+  }
+  box.innerHTML = html;
+  document.getElementById('notifov').classList.add('show');
+  document.getElementById('xnotif').onclick = ()=>document.getElementById('notifov').classList.remove('show');
+  const ma = document.getElementById('markAll');
+  if(ma) ma.onclick = markAllNotifs;
+  box.querySelectorAll('.notif-item').forEach(el=>el.onclick = ()=>notifClick(NOTIFS[+el.dataset.i]));
+}
+
+async function markAllNotifs(){
+  const ids = NOTIFS.filter(n=>!n.leida).map(n=>n.id);
+  if(!ids.length) return;
+  await sb.from('noctura_notificaciones').update({leida:true}).in('id', ids);
+  NOTIFS.forEach(n=>n.leida=true);
+  updateBell(); openNotifs();
+}
+
+async function notifClick(n){
+  if(!n.leida){
+    await sb.from('noctura_notificaciones').update({leida:true}).eq('id', n.id);
+    n.leida = true; updateBell();
+  }
+  document.getElementById('notifov').classList.remove('show');
+  if(n.ref_month && n.ref_day){
+    if(ROLE==='admin' && n.empresa && CLIENTS[n.empresa]){
+      selectCompany(n.empresa);
+      setTimeout(()=>goToPub(n.ref_month, n.ref_day), 200);
+    } else {
+      goToPub(n.ref_month, n.ref_day);
+    }
+  }
+}
+
+// Jump to a specific publication's month + open its modal.
+function goToPub(month, day){
+  if(!CLIENT) return;
+  const idx = CLIENT.plan.findIndex(m=>m.month===month);
+  if(idx < 0) return;
+  activeMonth = idx;
+  document.querySelectorAll('#tabs .tab').forEach((t,i)=>t.classList.toggle('active', i===idx));
+  renderCal();
+  switchView('calendario');
+  if(calMode!=='cal') setCalMode('cal');
+  const m = CLIENT.plan[idx];
+  const p = m.pubs.find(pp=>pp.day===day);
+  if(p) setTimeout(()=>openModal(p, m), 120);
+}
+
+// Realtime (best-effort) + focus fallback keep the bell fresh.
+function subscribeNotifs(){
+  if(!USER) return;
+  try {
+    if(notifChannel) sb.removeChannel(notifChannel);
+    notifChannel = sb.channel('notif_'+USER.id)
+      .on('postgres_changes',
+        { event:'INSERT', schema:'public', table:'noctura_notificaciones', filter:'destinatario=eq.'+USER.id },
+        ()=>loadNotifs())
+      .subscribe();
+  } catch(e){ /* realtime optional */ }
+}
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && USER) loadNotifs(); });
+document.getElementById('bellbtn').addEventListener('click', openNotifs);
+document.getElementById('notifov').addEventListener('click', e=>{
+  if(e.target.id==='notifov') e.currentTarget.classList.remove('show');
+});
+
+// --- notification emitters ---
+function notifyAdmins(tipo, titulo, cuerpo, m, day){
+  if(ROLE === 'admin' || !CLIENT) return;
+  sb.rpc('noctura_notify_admins', { p_empresa:CLIENT.name, p_tipo:tipo, p_titulo:titulo, p_cuerpo:(cuerpo||'').slice(0,160), p_month:m.month, p_day:day }).then(()=>{});
+}
+function notifyEmpresa(tipo, titulo, cuerpo, m, day){
+  if(ROLE !== 'admin' || !CLIENT) return;
+  sb.rpc('noctura_notify_empresa', { p_empresa:CLIENT.name, p_tipo:tipo, p_titulo:titulo, p_cuerpo:(cuerpo||'').slice(0,160), p_month:m.month, p_day:day }).then(()=>{});
+}
 
 
 /* ---------- COMPANY SELECTOR (Admin) ---------- */
