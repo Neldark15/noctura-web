@@ -312,6 +312,24 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 .res-note{border-left:2px solid var(--silver);background:rgba(176,179,188,.05);border-radius:7px;padding:14px 16px;font-size:14px;color:var(--bone);line-height:1.55;margin-top:6px}
 .res-empty{border:1px dashed var(--charcoal);border-radius:10px;padding:44px;text-align:center;color:var(--muted)}
 @media(max-width:600px){.res-hero-num{font-size:42px}.kpi-v{font-size:25px}}
+/* --- onboarding questionnaire --- */
+#cuestBanner{margin:0 0 4px}
+.cb-prompt{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border:1px solid var(--gold);border-radius:10px;background:linear-gradient(160deg,rgba(184,176,164,.10),rgba(184,176,164,.03));padding:16px 20px;margin:20px 0 0}
+.cb-prompt .cb-tx{font-size:14.5px;color:var(--ivory)}
+.cb-prompt .cb-tx small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.cb-done{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted);margin:18px 0 0}
+.cb-done a{color:var(--silver);cursor:pointer;border-bottom:1px solid var(--charcoal)}
+.cb-done a:hover{color:var(--ivory)}
+.cb-check{color:#7fc391}
+.cq-sec{font-family:var(--serif);font-size:18px;color:var(--ivory);margin:22px 0 4px;padding-top:14px;border-top:1px solid var(--graphite)}
+.cq-sec:first-of-type{border-top:none;padding-top:0;margin-top:8px}
+.cq-multi{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.cq-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--charcoal);border-radius:30px;padding:8px 14px;font-size:13px;color:var(--bone);cursor:pointer;user-select:none;transition:.2s}
+.cq-chip:hover{border-color:var(--silver)}
+.cq-chip.on{background:var(--ivory);color:#111;border-color:var(--ivory)}
+.cq-ro{font-size:14.5px;color:var(--bone);background:#0a0a0c;border:1px solid var(--charcoal);border-radius:7px;padding:11px 13px;line-height:1.5;white-space:pre-wrap;min-height:18px}
+.cq-ro.empty{color:var(--muted);font-style:italic}
+.cq-prog{font-size:12px;color:var(--muted);margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -342,6 +360,7 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
     </div>
     <span class="uchip" id="uchip"></span>
     <button class="mini" id="inboxbtn" style="display:none">Propuestas</button>
+    <button class="mini" id="cuestAdminBtn" style="display:none">Cuestionario</button>
     <button class="bell" id="bellbtn" title="Notificaciones" aria-label="Notificaciones">
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
       <span class="bell-dot" id="bellDot" style="display:none"></span>
@@ -359,6 +378,9 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 </div>
 
 <div id="workspace">
+
+  <!-- Onboarding questionnaire banner (clients) -->
+  <div id="cuestBanner" style="display:none"></div>
 
   <!-- ===== VISTA: CALENDARIO (area de trabajo, por defecto) ===== -->
   <div id="viewCalendario" class="view">
@@ -562,6 +584,7 @@ async function onAuthed(user){
     document.getElementById('addEntregBtn').style.display = 'inline-block';
     document.getElementById('addMetricaBtn').style.display = 'inline-block';
     document.getElementById('editMetasBtn').style.display = 'inline-block';
+    document.getElementById('cuestAdminBtn').style.display = 'inline-block';
     refreshInboxBadge();
   }
   loadNotifs();
@@ -628,6 +651,9 @@ function renderClient(){
   document.getElementById('workspace').style.display = 'block';
   document.getElementById('viewtabs').style.display = '';
   switchView('calendario');
+  // Onboarding banner (clients only).
+  document.getElementById('cuestBanner').style.display = 'none';
+  if(ROLE !== 'admin') loadCuestionario();
 }
 
 /* ---------- VIEW SWITCHING (workspace) ---------- */
@@ -1726,6 +1752,140 @@ function openMetasEditor(){
 }
 
 
+/* ---------- ONBOARDING QUESTIONNAIRE ---------- */
+const CUEST = [
+  { sec:'Tu negocio', qs:[
+    {k:'rubro', t:'¿A que se dedica tu negocio?', type:'ta'},
+    {k:'antiguedad', t:'¿Hace cuanto operan?', type:'tx'},
+    {k:'diferencia', t:'¿Que los hace diferentes?', type:'ta'}
+  ]},
+  { sec:'Tu publico', qs:[
+    {k:'cliente_ideal', t:'¿Quien es tu cliente ideal?', type:'ta'},
+    {k:'zona', t:'¿Donde estan? (ciudad / zona)', type:'tx'}
+  ]},
+  { sec:'Objetivos', qs:[
+    {k:'objetivos', t:'¿Que quieres lograr en los proximos 6-12 meses?', type:'ta'},
+    {k:'prioridad', t:'Prioridad principal', type:'sel', opts:['Mas clientes','Reconocimiento de marca','Ventas en linea','Fidelizar clientes','Otro']}
+  ]},
+  { sec:'Marca', qs:[
+    {k:'identidad', t:'¿Tienes logo / identidad visual?', type:'sel', opts:['Si, completa','Parcial','No, aun no']},
+    {k:'tono', t:'¿Como describirias el tono de tu marca?', type:'tx'},
+    {k:'referencias', t:'Marcas o cuentas que te gustan (referencias)', type:'ta'}
+  ]},
+  { sec:'Redes y comunicacion', qs:[
+    {k:'redes', t:'¿Que redes usas hoy?', type:'multi', opts:['Instagram','Facebook','TikTok','WhatsApp','LinkedIn','Ninguna']},
+    {k:'comunicar', t:'¿Que te gustaria comunicar?', type:'ta'}
+  ]},
+  { sec:'Soluciones digitales', qs:[
+    {k:'soluciones', t:'¿Que necesitas o te interesa?', type:'multi', opts:['Pagina web','App movil','CRM','Automatizacion','Tienda en linea','Ninguno por ahora']},
+    {k:'soluciones_detalle', t:'Cuentanos lo que imaginas', type:'ta'}
+  ]},
+  { sec:'Recursos', qs:[
+    {k:'material', t:'¿Que material tienes listo?', type:'multi', opts:['Fotos','Logos','Textos','Videos','Nada aun']},
+    {k:'plazo', t:'Plazo ideal', type:'sel', opts:['Lo antes posible','1-3 meses','3-6 meses','Sin prisa']},
+    {k:'presupuesto', t:'Presupuesto aproximado (opcional)', type:'tx'}
+  ]},
+  { sec:'Algo mas', qs:[
+    {k:'extra', t:'¿Algo que quieras agregar?', type:'ta'}
+  ]}
+];
+let CUEST_DATA = null;
+
+async function loadCuestionario(){
+  if(!CLIENT){ CUEST_DATA = null; return; }
+  const { data } = await sb.from('noctura_cuestionario').select('*').eq('empresa', CLIENT.name).maybeSingle();
+  CUEST_DATA = data || null;
+  renderCuestBanner();
+}
+
+function renderCuestBanner(){
+  const b = document.getElementById('cuestBanner');
+  if(ROLE === 'admin'){ b.style.display = 'none'; return; }
+  const done = CUEST_DATA && CUEST_DATA.completado;
+  if(done){
+    b.innerHTML = '<div class="cb-done"><span class="cb-check">&#10003;</span> Tu perfil de negocio esta completo. <a id="cbEdit">Editar mi informacion</a></div>';
+    document.getElementById('cbEdit').onclick = ()=>openCuestionario(false);
+  } else {
+    b.innerHTML = '<div class="cb-prompt"><div class="cb-tx">Cuentanos sobre tu negocio'+
+      '<small>Unos minutos para que NOCTURA personalice tu estrategia y descubra lo que quieres desarrollar.</small></div>'+
+      '<button class="btn solid" id="cbStart">Completar perfil</button></div>';
+    document.getElementById('cbStart').onclick = ()=>openCuestionario(false);
+  }
+  b.style.display = 'block';
+}
+
+function openCuestionario(readonly){
+  const r = (CUEST_DATA && CUEST_DATA.respuestas) || {};
+  let html = '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:'+(readonly?'var(--charcoal)':'var(--gold)')+';color:'+(readonly?'#fff':'#111')+'">'+(readonly?'NOCTURA · Cuestionario':'Tu perfil de negocio')+'</span>'+
+    '<h3>'+(readonly? esc(CLIENT.fullName) : 'Cuentanos sobre tu negocio')+'</h3>'+
+    '<div class="meta">'+(readonly?'Respuestas del cliente — descubre lo que quiere desarrollar.':'Tus respuestas nos ayudan a personalizar tu estrategia. Puedes editarlas cuando quieras.')+'</div>';
+  CUEST.forEach(sec=>{
+    html += '<div class="cq-sec">'+sec.sec+'</div>';
+    sec.qs.forEach(q=>{
+      const val = r[q.k];
+      if(readonly){
+        let disp = (q.type==='multi') ? ((Array.isArray(val)&&val.length)?val.join(', '):'') : (val||'');
+        html += '<div class="field"><div class="lab">'+q.t+'</div><div class="cq-ro'+(disp?'':' empty')+'">'+(disp?esc(disp):'Sin responder')+'</div></div>';
+      } else if(q.type==='ta'){
+        html += '<div class="field"><div class="lab">'+q.t+'</div><textarea id="cq_'+q.k+'" rows="2">'+esc(val||'')+'</textarea></div>';
+      } else if(q.type==='tx'){
+        html += '<div class="field"><div class="lab">'+q.t+'</div><input id="cq_'+q.k+'" value="'+esc(val||'')+'"></div>';
+      } else if(q.type==='sel'){
+        html += '<div class="field"><div class="lab">'+q.t+'</div><select id="cq_'+q.k+'"><option value="">— Selecciona —</option>'+
+          q.opts.map(o=>'<option'+(o===val?' selected':'')+'>'+o+'</option>').join('')+'</select></div>';
+      } else if(q.type==='multi'){
+        const sel = Array.isArray(val)?val:[];
+        html += '<div class="field"><div class="lab">'+q.t+'</div><div class="cq-multi" data-k="'+q.k+'">'+
+          q.opts.map(o=>'<span class="cq-chip'+(sel.includes(o)?' on':'')+'" data-v="'+esc(o)+'">'+o+'</span>').join('')+'</div></div>';
+      }
+    });
+  });
+  html += readonly
+    ? '<div class="mrow"><button class="btn" id="cqCancel">Cerrar</button></div>'
+    : '<div class="mrow"><button class="btn solid" id="cqSave">Guardar mi perfil</button><button class="btn" id="cqCancel">Cerrar</button></div><div class="err" id="cqErr"></div>';
+  document.getElementById('modal').innerHTML = html;
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick = closeModal;
+  document.getElementById('cqCancel').onclick = closeModal;
+  if(!readonly){
+    document.querySelectorAll('.cq-multi .cq-chip').forEach(ch=>ch.onclick=()=>ch.classList.toggle('on'));
+    document.getElementById('cqSave').onclick = saveCuestionario;
+  }
+}
+
+async function saveCuestionario(){
+  const resp = {};
+  CUEST.forEach(sec=>sec.qs.forEach(q=>{
+    if(q.type==='multi'){
+      const cont = document.querySelector('.cq-multi[data-k="'+q.k+'"]');
+      resp[q.k] = cont ? Array.from(cont.querySelectorAll('.cq-chip.on')).map(c=>c.dataset.v) : [];
+    } else {
+      const el = document.getElementById('cq_'+q.k);
+      resp[q.k] = el ? el.value.trim() : '';
+    }
+  }));
+  const row = { empresa: CLIENT.name, user_id: USER.id, respuestas: resp, completado: true, updated_at: new Date().toISOString() };
+  const btn = document.getElementById('cqSave'); btn.textContent = 'Guardando...';
+  const { data, error } = await sb.from('noctura_cuestionario').upsert(row, { onConflict:'empresa' }).select().maybeSingle();
+  if(error){ document.getElementById('cqErr').textContent = 'No se pudo guardar: '+error.message; btn.textContent='Guardar mi perfil'; return; }
+  CUEST_DATA = data;
+  if(ROLE !== 'admin'){
+    sb.rpc('noctura_notify_admins', { p_empresa:CLIENT.name, p_tipo:'anuncio',
+      p_titulo:CLIENT.name+' completo su cuestionario de negocio',
+      p_cuerpo:'Revisa sus respuestas para descubrir lo que quiere desarrollar.', p_month:null, p_day:null }).then(()=>{});
+  }
+  renderCuestBanner(); closeModal();
+}
+
+// Admin: view the selected company's questionnaire (read-only).
+async function openCuestionarioAdmin(){
+  if(!CLIENT) return;
+  await loadCuestionario();
+  openCuestionario(true);
+}
+
+
 /* ---------- COMPANY SELECTOR (Admin) ---------- */
 function showCompanySelector(){
   const sel = document.getElementById('companySelector');
@@ -1802,6 +1962,9 @@ document.getElementById('addEntregBtn').addEventListener('click', ()=>{ if(CLIEN
 // Wire admin metrics / goals editors
 document.getElementById('addMetricaBtn').addEventListener('click', ()=>{ if(CLIENT) openMetricaEditor(null); });
 document.getElementById('editMetasBtn').addEventListener('click', ()=>{ if(CLIENT) openMetasEditor(); });
+
+// Wire admin questionnaire viewer
+document.getElementById('cuestAdminBtn').addEventListener('click', openCuestionarioAdmin);
 
 init();
 </script>
