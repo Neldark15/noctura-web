@@ -697,6 +697,15 @@ function currentMonthIndex(plan){
 /* ---------- CALENDAR ---------- */
 function renderCal(){
   const plan = CLIENT.plan;
+  // Robust against a company without a plan loaded yet.
+  if(!plan || !plan.length){
+    document.getElementById('cal').innerHTML = '';
+    document.getElementById('callist').innerHTML = '<div class="proy-empty" style="margin-top:18px">El calendario de esta empresa aun no tiene contenido.</div>';
+    document.getElementById('tabs').innerHTML = '';
+    document.getElementById('calStats').innerHTML = '';
+    return;
+  }
+  if(activeMonth >= plan.length) activeMonth = 0;
   const m = plan[activeMonth];
   const pillars = CLIENT.pillars;
   const byday = {}; m.pubs.forEach(p=>byday[p.day]=p);
