@@ -238,6 +238,44 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 .notif-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .notif-mark{font-size:12px;letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:var(--sans)}
 .notif-mark:hover{color:var(--ivory)}
+/* --- digital-solutions projects --- */
+.proy-card{border:1px solid var(--charcoal);border-radius:10px;background:linear-gradient(180deg,#141418,#0f0f12);padding:22px;margin-bottom:16px;box-shadow:var(--shadow-surface-1)}
+.proy-card.adminedit{cursor:pointer;transition:border-color .2s,transform .15s}
+.proy-card.adminedit:hover{border-color:var(--silver);transform:translateY(-2px)}
+.proy-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.proy-name{font-family:var(--serif);font-size:23px;color:var(--ivory);line-height:1.1}
+.proy-tipo{display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--charcoal);border-radius:20px;padding:3px 10px;margin-top:8px}
+.proy-desc{font-size:14px;color:var(--bone);line-height:1.5;margin-top:10px;max-width:680px}
+.proy-estado{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-radius:5px;padding:4px 10px;font-weight:600;white-space:nowrap}
+.pe-propuesta{background:var(--charcoal);color:var(--bone)}
+.pe-en_proceso{background:#3f6f8c;color:#fff}
+.pe-en_revision{background:var(--gold);color:#111}
+.pe-entregado{background:#3d7a4e;color:#fff}
+.pe-pausado{background:#5a4a4a;color:var(--bone)}
+.proy-progwrap{margin-top:18px}
+.proy-progbar{height:6px;border-radius:4px;background:var(--graphite);overflow:hidden}
+.proy-progbar span{display:block;height:100%;background:linear-gradient(90deg,#3f6f8c,#7fa890);transition:width .5s ease}
+.proy-progmeta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:7px}
+.proy-fases{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.proy-fase{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);border:1px solid var(--charcoal);border-radius:20px;padding:5px 12px}
+.proy-fase .fdot{width:9px;height:9px;border-radius:50%;background:var(--charcoal);flex-shrink:0}
+.proy-fase.completado{color:var(--bone)}.proy-fase.completado .fdot{background:#3d7a4e}
+.proy-fase.en_proceso{color:var(--ivory);border-color:var(--silver)}.proy-fase.en_proceso .fdot{background:var(--gold);box-shadow:0 0 7px rgba(184,176,164,.6)}
+.proy-dates{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:.3px}
+.proy-demo{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--silver);border:1px solid var(--charcoal);border-radius:6px;padding:7px 12px;margin-top:14px;transition:.2s}
+.proy-demo:hover{border-color:var(--silver);color:var(--ivory)}
+.proy-empty{border:1px dashed var(--charcoal);border-radius:10px;padding:40px;text-align:center;color:var(--muted)}
+.entreg-h{font-family:var(--serif);font-size:21px;color:var(--ivory);margin-bottom:16px}
+.entreg-row{display:flex;align-items:center;gap:14px;border:1px solid var(--charcoal);border-radius:8px;background:var(--graphite);padding:13px 15px;margin-bottom:9px;transition:border-color .2s,transform .15s}
+.entreg-row:hover{border-color:var(--silver);transform:translateX(2px)}
+.entreg-ic{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--anthra);color:var(--silver)}
+.entreg-main{flex:1;min-width:0}
+.entreg-tt{font-size:14.5px;color:var(--ivory)}
+.entreg-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.entreg-open{font-size:12px;letter-spacing:1px;color:var(--silver);border:1px solid var(--charcoal);border-radius:6px;padding:8px 14px;white-space:nowrap;transition:.2s}
+.entreg-open:hover{border-color:var(--silver);color:var(--ivory)}
+.entreg-del{font-size:16px;color:var(--muted);background:none;border:none;cursor:pointer;padding:4px 8px}
+.entreg-del:hover{color:#d98c6a}
 </style>
 </head>
 <body>
@@ -262,6 +300,7 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
   <div class="navright">
     <div class="navlinks viewtabs" id="viewtabs">
       <button class="viewtab active" data-view="calendario">Calendario</button>
+      <button class="viewtab" data-view="proyectos">Proyectos</button>
       <button class="viewtab" data-view="estrategia">Estrategia</button>
     </div>
     <span class="uchip" id="uchip"></span>
@@ -340,6 +379,25 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
       <div class="kick">02 - Sistema de contenido</div>
       <h2 class="sec-h">Cinco pilares - diseno con proposito</h2>
       <div id="pilcards" class="grid g3"></div>
+    </div></section>
+  </div>
+
+  <!-- ===== VISTA: PROYECTOS (soluciones digitales) ===== -->
+  <div id="viewProyectos" class="view" style="display:none">
+    <section><div class="wrap">
+      <div class="workspace-head" style="padding-top:48px">
+        <div>
+          <div class="kick">Soluciones digitales</div>
+          <h2 class="sec-h" id="proyTitle" style="margin-bottom:6px">Tus proyectos</h2>
+          <p class="muted" style="font-size:13px;letter-spacing:1px">Web, app, CRM y mas — seguimiento y entregables</p>
+        </div>
+        <div class="head-actions">
+          <button class="mini" id="addProyBtn" style="display:none">+ Nuevo proyecto</button>
+          <button class="mini" id="addEntregBtn" style="display:none">+ Entregable</button>
+        </div>
+      </div>
+      <div id="proyList" style="margin-top:22px"></div>
+      <div id="entregSection" style="margin-top:40px"></div>
     </div></section>
   </div>
 
@@ -445,6 +503,8 @@ async function onAuthed(user){
   if(ROLE === 'admin'){
     document.getElementById('inboxbtn').style.display = 'inline-block';
     document.getElementById('addPubBtn').style.display = 'inline-block';
+    document.getElementById('addProyBtn').style.display = 'inline-block';
+    document.getElementById('addEntregBtn').style.display = 'inline-block';
     refreshInboxBadge();
   }
   loadNotifs();
@@ -514,12 +574,13 @@ function renderClient(){
 
 /* ---------- VIEW SWITCHING (workspace) ---------- */
 function switchView(view){
-  const isCal = view !== 'estrategia';
-  document.getElementById('viewCalendario').style.display = isCal ? 'block' : 'none';
-  document.getElementById('viewEstrategia').style.display = isCal ? 'none' : 'block';
-  document.querySelectorAll('.viewtab').forEach(t =>
-    t.classList.toggle('active', t.dataset.view === (isCal ? 'calendario' : 'estrategia'))
+  const views = { calendario:'viewCalendario', estrategia:'viewEstrategia', proyectos:'viewProyectos' };
+  if(!views[view]) view = 'calendario';
+  Object.keys(views).forEach(k =>
+    document.getElementById(views[k]).style.display = (k===view) ? 'block' : 'none'
   );
+  document.querySelectorAll('.viewtab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  if(view === 'proyectos') loadProyectos();
   window.scrollTo(0, 0);
 }
 
@@ -1194,6 +1255,191 @@ function notifyEmpresa(tipo, titulo, cuerpo, m, day){
 }
 
 
+/* ---------- DIGITAL SOLUTIONS: PROJECTS + DELIVERABLES ---------- */
+let PROYECTOS = [], ENTREGABLES = [];
+const ESTADOS_PROY = { propuesta:'Propuesta', en_proceso:'En proceso', en_revision:'En revision', entregado:'Entregado', pausado:'En pausa' };
+const TIPOS_PROY = { web:'Sitio web', app:'Aplicacion', crm:'CRM', branding:'Branding', ia:'Asesoria IA', otro:'Otro' };
+const ENTREG_IC = { imagen:'⬚', documento:'≡', enlace:'↗', brandbook:'◈', acceso:'⚿', video:'▶' };
+const ENTREG_TIPOS = { imagen:'Imagen', documento:'Documento', enlace:'Enlace', brandbook:'Brandbook', acceso:'Acceso', video:'Video' };
+
+async function loadProyectos(){
+  if(!CLIENT) return;
+  const [pr, en] = await Promise.all([
+    sb.from('noctura_proyectos').select('*').eq('empresa', CLIENT.name).order('orden',{ascending:true}).order('created_at',{ascending:true}),
+    sb.from('noctura_entregables').select('*').eq('empresa', CLIENT.name).order('orden',{ascending:true}).order('created_at',{ascending:false})
+  ]);
+  PROYECTOS = pr.data || [];
+  ENTREGABLES = en.data || [];
+  renderProyectos();
+}
+
+function renderProyectos(){
+  const isAdmin = ROLE === 'admin';
+  // Projects
+  const list = document.getElementById('proyList');
+  if(!PROYECTOS.length){
+    list.innerHTML = '<div class="proy-empty">'+(isAdmin
+      ? 'Aun no hay proyectos. Usa "+ Nuevo proyecto" para crear el primero.'
+      : 'Aun no hay proyectos digitales activos. NOCTURA los publicara aqui.')+'</div>';
+  } else {
+    list.innerHTML = PROYECTOS.map((p,i)=>{
+      const fases = Array.isArray(p.fases) ? p.fases : [];
+      const fasesHtml = fases.length ? '<div class="proy-fases">'+fases.map(f=>
+        '<span class="proy-fase '+(f.estado||'pendiente')+'"><span class="fdot"></span>'+esc(f.nombre)+'</span>').join('')+'</div>' : '';
+      const dates = [p.fecha_inicio?'Inicio: '+p.fecha_inicio:'', p.fecha_entrega?'Entrega estimada: '+p.fecha_entrega:''].filter(Boolean).join(' &middot; ');
+      const demo = p.url_demo ? '<a class="proy-demo" href="'+esc(p.url_demo)+'" target="_blank" rel="noopener">Ver avance &#8599;</a>' : '';
+      return '<div class="proy-card'+(isAdmin?' adminedit':'')+'" data-i="'+i+'">'+
+        '<div class="proy-top"><div><div class="proy-name">'+esc(p.nombre)+'</div>'+
+        '<span class="proy-tipo">'+(TIPOS_PROY[p.tipo]||p.tipo)+'</span></div>'+
+        '<span class="proy-estado pe-'+p.estado+'">'+(ESTADOS_PROY[p.estado]||p.estado)+'</span></div>'+
+        (p.descripcion?'<div class="proy-desc">'+esc(p.descripcion)+'</div>':'')+
+        '<div class="proy-progwrap"><div class="proy-progbar"><span style="width:'+(p.progreso||0)+'%"></span></div>'+
+        '<div class="proy-progmeta"><span>'+(p.fase_actual?esc(p.fase_actual):'Avance')+'</span><span>'+(p.progreso||0)+'%</span></div></div>'+
+        fasesHtml+
+        (dates?'<div class="proy-dates">'+dates+'</div>':'')+
+        demo+
+        '</div>';
+    }).join('');
+    if(isAdmin) list.querySelectorAll('.proy-card.adminedit').forEach(el=>
+      el.addEventListener('click', e=>{ if(e.target.closest('.proy-demo')) return; openProyectoEditor(PROYECTOS[+el.dataset.i]); }));
+  }
+  // Deliverables
+  const sec = document.getElementById('entregSection');
+  if(!ENTREGABLES.length && !isAdmin){ sec.innerHTML = ''; }
+  else {
+    sec.innerHTML = '<div class="entreg-h">Entregables</div>'+
+      (ENTREGABLES.length ? ENTREGABLES.map((en,i)=>{
+        const ic = ENTREG_IC[en.tipo] || '↗';
+        return '<div class="entreg-row" data-i="'+i+'">'+
+          '<div class="entreg-ic">'+ic+'</div>'+
+          '<div class="entreg-main"><div class="entreg-tt">'+esc(en.titulo)+'</div>'+
+          '<div class="entreg-sub">'+(ENTREG_TIPOS[en.tipo]||en.tipo)+(en.descripcion?' &middot; '+esc(en.descripcion):'')+'</div></div>'+
+          '<a class="entreg-open" href="'+esc(en.url)+'" target="_blank" rel="noopener">Abrir</a>'+
+          (isAdmin?'<button class="entreg-del" data-i="'+i+'" title="Eliminar">&times;</button>':'')+
+          '</div>';
+      }).join('') : '<div class="proy-empty" style="padding:24px">Aun no hay entregables.</div>');
+    if(isAdmin){
+      sec.querySelectorAll('.entreg-row').forEach(el=>el.addEventListener('click', e=>{
+        if(e.target.closest('.entreg-open') || e.target.closest('.entreg-del')) return;
+        openEntregableEditor(ENTREGABLES[+el.dataset.i]);
+      }));
+      sec.querySelectorAll('.entreg-del').forEach(b=>b.addEventListener('click', async e=>{
+        e.stopPropagation();
+        if(b.dataset.arm!=='1'){ b.dataset.arm='1'; b.textContent='✓?'; b.style.color='#d98c6a'; return; }
+        await sb.from('noctura_entregables').delete().eq('id', ENTREGABLES[+b.dataset.i].id);
+        loadProyectos();
+      }));
+    }
+  }
+}
+
+/* --- admin: project editor --- */
+function openProyectoEditor(p){
+  const isNew = !p;
+  const base = p || { nombre:'', tipo:'web', estado:'en_proceso', progreso:0, fase_actual:'', descripcion:'', fecha_inicio:'', fecha_entrega:'', url_demo:'', fases:[] };
+  const fasesTxt = (Array.isArray(base.fases)?base.fases:[]).map(f=>
+    (f.estado==='completado'?'[x] ':f.estado==='en_proceso'?'[>] ':'')+f.nombre).join('\n');
+  document.getElementById('modal').innerHTML =
+    '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:var(--charcoal)">ADMIN · Proyecto</span>'+
+    '<h3>'+(isNew?'Nuevo proyecto':'Editar proyecto')+'</h3>'+
+    '<div class="meta">Soluciones digitales de '+esc(CLIENT.name)+'</div>'+
+    '<div class="field"><div class="lab">Nombre</div><input id="px_nombre" value="'+esc(base.nombre)+'"></div>'+
+    '<div class="field"><div class="lab">Tipo</div><select id="px_tipo">'+Object.keys(TIPOS_PROY).map(k=>'<option value="'+k+'"'+(k===base.tipo?' selected':'')+'>'+TIPOS_PROY[k]+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Estado</div><select id="px_estado">'+Object.keys(ESTADOS_PROY).map(k=>'<option value="'+k+'"'+(k===base.estado?' selected':'')+'>'+ESTADOS_PROY[k]+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Progreso (%)</div><input id="px_prog" type="number" min="0" max="100" value="'+(base.progreso||0)+'"></div>'+
+    '<div class="field"><div class="lab">Fase actual</div><input id="px_fase" value="'+esc(base.fase_actual||'')+'" placeholder="Ej. Diseno UI"></div>'+
+    '<div class="field"><div class="lab">Descripcion</div><textarea id="px_desc" rows="3">'+esc(base.descripcion||'')+'</textarea></div>'+
+    '<div class="field"><div class="lab">Fases (una por linea · [x]=completada · [&gt;]=en curso)</div><textarea id="px_fases" rows="5" placeholder="[x] Descubrimiento&#10;[x] Diseno&#10;[&gt;] Desarrollo&#10;Pruebas&#10;Entrega">'+esc(fasesTxt)+'</textarea></div>'+
+    '<div class="field"><div class="lab">Fecha inicio</div><input id="px_ini" type="date" value="'+(base.fecha_inicio||'')+'"></div>'+
+    '<div class="field"><div class="lab">Entrega estimada</div><input id="px_ent" type="date" value="'+(base.fecha_entrega||'')+'"></div>'+
+    '<div class="field"><div class="lab">Enlace de avance (opcional)</div><input id="px_demo" value="'+esc(base.url_demo||'')+'" placeholder="https://..."></div>'+
+    '<div class="mrow"><button class="btn solid" id="px_save">Guardar proyecto</button>'+
+    (!isNew?'<button class="btn" id="px_del">Eliminar</button>':'')+
+    '<button class="btn" id="px_cancel">Cancelar</button></div><div class="err" id="px_err"></div>';
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick = closeModal;
+  document.getElementById('px_cancel').onclick = closeModal;
+  document.getElementById('px_save').onclick = async ()=>{
+    const nombre = document.getElementById('px_nombre').value.trim();
+    if(!nombre){ document.getElementById('px_err').textContent = 'El nombre es obligatorio.'; return; }
+    const fases = document.getElementById('px_fases').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+      if(l.startsWith('[x]')) return { nombre:l.slice(3).trim(), estado:'completado' };
+      if(l.startsWith('[>]')) return { nombre:l.slice(3).trim(), estado:'en_proceso' };
+      return { nombre:l, estado:'pendiente' };
+    });
+    const row = {
+      empresa: CLIENT.name, nombre, tipo: document.getElementById('px_tipo').value,
+      estado: document.getElementById('px_estado').value,
+      progreso: Math.max(0, Math.min(100, parseInt(document.getElementById('px_prog').value,10)||0)),
+      fase_actual: document.getElementById('px_fase').value.trim() || null,
+      descripcion: document.getElementById('px_desc').value.trim() || null,
+      fases: fases,
+      fecha_inicio: document.getElementById('px_ini').value || null,
+      fecha_entrega: document.getElementById('px_ent').value || null,
+      url_demo: document.getElementById('px_demo').value.trim() || null,
+      updated_at: new Date().toISOString()
+    };
+    const btn = document.getElementById('px_save'); btn.textContent = 'Guardando...';
+    const q = isNew
+      ? await sb.from('noctura_proyectos').insert(row)
+      : await sb.from('noctura_proyectos').update(row).eq('id', p.id);
+    if(q.error){ document.getElementById('px_err').textContent = 'No se pudo guardar: '+q.error.message; btn.textContent='Guardar proyecto'; return; }
+    closeModal(); loadProyectos();
+  };
+  const del = document.getElementById('px_del');
+  if(del) del.onclick = async ()=>{
+    if(del.dataset.arm!=='1'){ del.dataset.arm='1'; del.textContent='Confirmar eliminacion'; del.style.borderColor='#d98c6a'; del.style.color='#d98c6a'; return; }
+    await sb.from('noctura_proyectos').delete().eq('id', p.id);
+    closeModal(); loadProyectos();
+  };
+}
+
+/* --- admin: deliverable editor --- */
+function openEntregableEditor(en){
+  const isNew = !en;
+  const base = en || { titulo:'', tipo:'documento', url:'', descripcion:'', proyecto_id:null };
+  document.getElementById('modal').innerHTML =
+    '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:var(--charcoal)">ADMIN · Entregable</span>'+
+    '<h3>'+(isNew?'Nuevo entregable':'Editar entregable')+'</h3>'+
+    '<div class="meta">Un enlace que el cliente podra abrir/descargar (Drive, archivo, staging, accesos).</div>'+
+    '<div class="field"><div class="lab">Titulo</div><input id="ex_tit" value="'+esc(base.titulo)+'" placeholder="Ej. Logo principal (PNG)"></div>'+
+    '<div class="field"><div class="lab">Tipo</div><select id="ex_tipo">'+Object.keys(ENTREG_TIPOS).map(k=>'<option value="'+k+'"'+(k===base.tipo?' selected':'')+'>'+ENTREG_TIPOS[k]+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Enlace (URL)</div><input id="ex_url" value="'+esc(base.url||'')+'" placeholder="https://drive.google.com/..."></div>'+
+    '<div class="field"><div class="lab">Proyecto (opcional)</div><select id="ex_proy"><option value="">— General —</option>'+
+      PROYECTOS.map(p=>'<option value="'+p.id+'"'+(p.id===base.proyecto_id?' selected':'')+'>'+esc(p.nombre)+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Descripcion (opcional)</div><input id="ex_desc" value="'+esc(base.descripcion||'')+'"></div>'+
+    '<div class="mrow"><button class="btn solid" id="ex_save">Guardar entregable</button>'+
+    (!isNew?'<button class="btn" id="ex_del">Eliminar</button>':'')+
+    '<button class="btn" id="ex_cancel">Cancelar</button></div><div class="err" id="ex_err"></div>';
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick = closeModal;
+  document.getElementById('ex_cancel').onclick = closeModal;
+  document.getElementById('ex_save').onclick = async ()=>{
+    const titulo = document.getElementById('ex_tit').value.trim();
+    const url = document.getElementById('ex_url').value.trim();
+    if(!titulo || !url){ document.getElementById('ex_err').textContent = 'Titulo y enlace son obligatorios.'; return; }
+    const row = {
+      empresa: CLIENT.name, titulo, url, tipo: document.getElementById('ex_tipo').value,
+      proyecto_id: document.getElementById('ex_proy').value || null,
+      descripcion: document.getElementById('ex_desc').value.trim() || null
+    };
+    const btn = document.getElementById('ex_save'); btn.textContent = 'Guardando...';
+    const q = isNew
+      ? await sb.from('noctura_entregables').insert(row)
+      : await sb.from('noctura_entregables').update(row).eq('id', en.id);
+    if(q.error){ document.getElementById('ex_err').textContent = 'No se pudo guardar: '+q.error.message; btn.textContent='Guardar entregable'; return; }
+    closeModal(); loadProyectos();
+  };
+  const del = document.getElementById('ex_del');
+  if(del) del.onclick = async ()=>{
+    await sb.from('noctura_entregables').delete().eq('id', en.id);
+    closeModal(); loadProyectos();
+  };
+}
+
+
 /* ---------- COMPANY SELECTOR (Admin) ---------- */
 function showCompanySelector(){
   const sel = document.getElementById('companySelector');
@@ -1262,6 +1508,10 @@ document.getElementById('printMonth').addEventListener('click', printMonth);
 document.getElementById('addPubBtn').addEventListener('click', ()=>{
   if(CLIENT) openPlanEditor(null, CLIENT.plan[activeMonth], true);
 });
+
+// Wire admin project / deliverable creation
+document.getElementById('addProyBtn').addEventListener('click', ()=>{ if(CLIENT) openProyectoEditor(null); });
+document.getElementById('addEntregBtn').addEventListener('click', ()=>{ if(CLIENT) openEntregableEditor(null); });
 
 init();
 </script>
