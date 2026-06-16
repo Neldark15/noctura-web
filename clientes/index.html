@@ -446,25 +446,25 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
 
 /* ============ GLASSMORPHISM SKIN (Capa 1: chrome + superficies) ============ */
 :root{
-  --glass-bg:rgba(18,21,32,.55);
-  --glass-soft:rgba(255,255,255,.06);
-  --glass-bd:rgba(255,255,255,.11);
-  --glass-hi:inset 0 1px 0 rgba(255,255,255,.14);
-  --glass-blur:22px;
-  --card-bg:rgba(21,24,34,.5);
+  --glass-bg:rgba(17,20,30,.38);
+  --glass-soft:rgba(255,255,255,.07);
+  --glass-bd:rgba(255,255,255,.16);
+  --glass-hi:inset 0 1px 0 rgba(255,255,255,.20);
+  --glass-blur:30px;
+  --card-bg:rgba(20,23,33,.34);
 }
 /* fondo con blooms de color (se tiñe con el acento) */
 body{
   background:
-    radial-gradient(900px 620px at 86% -8%, rgba(229,168,96,.12), transparent 60%),
-    radial-gradient(820px 720px at 4% 106%, rgba(74,120,216,.14), transparent 60%),
-    radial-gradient(760px 760px at 60% 48%, rgba(150,108,202,.07), transparent 60%),
+    radial-gradient(900px 620px at 86% -8%, rgba(229,168,96,.20), transparent 60%),
+    radial-gradient(820px 720px at 4% 106%, rgba(74,120,216,.22), transparent 60%),
+    radial-gradient(760px 760px at 60% 48%, rgba(150,108,202,.13), transparent 60%),
     var(--black);
   background-attachment:fixed;
 }
 /* chrome esmerilado */
 .sidebar{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.1);backdrop-filter:blur(var(--glass-blur)) saturate(1.1);border-right:1px solid var(--glass-bd)!important}
-.topbar{background:rgba(12,14,22,.45)!important;border-bottom:1px solid var(--glass-bd)!important;-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.1);backdrop-filter:blur(var(--glass-blur)) saturate(1.1)}
+.topbar{background:rgba(14,16,24,.30)!important;border-bottom:1px solid var(--glass-bd)!important;-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.1);backdrop-filter:blur(var(--glass-blur)) saturate(1.1)}
 .viewtab.active{background:rgba(255,255,255,.10)!important}
 .iconbtn,.bell{background:var(--glass-soft)!important;border:1px solid var(--glass-bd)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 /* modales y popovers de vidrio */
@@ -523,16 +523,16 @@ input,textarea,select,.promptbox,.revcomment,.inbox-reply,.cq-ro{background:rgba
 body.light{
   --bone:#3b332b; --ivory:#211c17; --silver:#6a5f55; --muted:#9c9089; --gold:#b07a2e;
   --black:#fbf1e6; --graphite:#fbf4ec; --anthra:#f3e8da; --charcoal:#e7dccd;
-  --glass-bg:rgba(255,251,245,.66); --glass-soft:rgba(255,255,255,.55);
-  --glass-bd:rgba(120,90,55,.16); --glass-hi:inset 0 1px 0 rgba(255,255,255,.7);
-  --card-bg:rgba(255,251,245,.62);
+  --glass-bg:rgba(255,250,242,.44); --glass-soft:rgba(255,255,255,.42);
+  --glass-bd:rgba(120,90,55,.18); --glass-hi:inset 0 1px 0 rgba(255,255,255,.75);
+  --card-bg:rgba(255,251,244,.42);
   background:
-    radial-gradient(120% 100% at 0% 0%, #f4c49a, transparent 42%),
-    radial-gradient(120% 120% at 100% 100%, #f1be94, transparent 46%),
-    linear-gradient(135deg,#fbf1e6,#faebdc) !important;
+    radial-gradient(120% 100% at 0% 0%, #f3c094, transparent 44%),
+    radial-gradient(120% 120% at 100% 100%, #efb98c, transparent 48%),
+    linear-gradient(135deg,#fbf0e4,#f8e6d6) !important;
   background-attachment:fixed !important;
 }
-body.light .topbar{background:rgba(255,251,245,.55)!important}
+body.light .topbar{background:rgba(255,250,242,.38)!important}
 body.light .ov{background:rgba(90,60,40,.30)!important}
 body.light .modal,body.light .theme-pop,body.light .login-card{box-shadow:0 24px 70px rgba(180,120,70,.22),var(--glass-hi)!important}
 body.light .cell{background:rgba(255,255,255,.5)!important;border-color:var(--glass-bd)!important}
