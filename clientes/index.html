@@ -733,6 +733,8 @@ let activeMonth = 0, filter = null, USER = null, ROLE = 'cliente', EMPRESA = nul
 let REV = {}, revChannel = null;
 
 function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+// Show only the username, never the synthetic login email.
+function unameOf(email){ return (email==null?'':String(email)).split('@')[0]; }
 function trim(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
 function shortP(k){ return {PROYECTOS:'PROY',AUTORIDAD:'AUTO',BIO:'BIO',MARCA:'MARCA',CTA:'CTA',FESTIVO:'FEST'}[k]||k; }
 function keyOf(m,day){ return (CLIENT?CLIENT.name:'')+'-'+m.month+'-'+day; }
@@ -803,7 +805,7 @@ async function onAuthed(user){
   await loadProps();
   document.getElementById('login').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
-  document.getElementById('uchip').textContent = (mem&&mem.nombre?mem.nombre:user.email) + (ROLE==='admin'?' · NOCTURA':'');
+  document.getElementById('uchip').textContent = ((mem&&(mem.nombre||mem.username)) || unameOf(user.email)) + (ROLE==='admin'?' · NOCTURA':'');
   if(ROLE === 'admin'){
     document.getElementById('adminLabel').style.display = '';
     document.getElementById('panelBtn').style.display = 'flex';
@@ -1602,7 +1604,7 @@ async function openInbox(){
       const estPill = '<span class="stpill st-'+est+'">'+(ESTADOS[est]||est)+'</span>';
       const doneBadge = r.atendida ? '<span class="stpill st-aprobada">Atendida</span>' : '';
       return '<div class="inbox-item'+(r.atendida?' done':'')+'"><div class="h"><span class="editbadge">'+esc(empresa)+'</span> '+estPill+' '+doneBadge+' '+esc(r.mes)+' · dia '+r.day+' — '+esc(r.tema_base||'')+'</div>'+
-        '<div class="sub">'+esc(r.autor_email||'')+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
+        '<div class="sub">'+esc(unameOf(r.autor_email))+' · '+new Date(r.updated_at).toLocaleString('es')+'</div>'+
         (chgs||'<div class="chg muted">(sin cambios)</div>')+
         '<div class="reply-wrap">'+
           '<textarea class="inbox-reply" id="rep_'+r.id+'" rows="2" placeholder="Responder al cliente...">'+esc(r.respuesta||'')+'</textarea>'+
@@ -2375,7 +2377,7 @@ async function renderPanel(){
     weekPubs.slice(0,8).map(r=>({ dot:pilHex(r.emp,r.pilar), emp:r.emp, tt:trim(r.tema,38), sb:WDl[r.d.getDay()]+' '+r.day+' · '+(FMT[r.fmt]||r.fmt), onClick:()=>panelGoCompany(r.emp,'calendario') })),
     'Sin publicaciones en los proximos 7 dias.'));
   grid.appendChild(pnlCard('Propuestas sin responder', unanswered.length,
-    unanswered.slice(0,6).map(r=>({ dot:'var(--gold)', emp:fullName(r.empresa||'ARQSA'), tt:trim(r.tema_base||('Dia '+r.day),38), sb:(r.mes||'')+(r.autor_email?' · '+r.autor_email:''), badge:'responder', onClick:()=>openInbox() })),
+    unanswered.slice(0,6).map(r=>({ dot:'var(--gold)', emp:fullName(r.empresa||'ARQSA'), tt:trim(r.tema_base||('Dia '+r.day),38), sb:(r.mes||'')+(r.autor_email?' · '+unameOf(r.autor_email):''), badge:'responder', onClick:()=>openInbox() })),
     'Todo respondido.'));
   grid.appendChild(pnlCard('Proyectos por vencer', projDue.length,
     projDue.slice(0,6).map(r=>{ const days=Math.ceil((r.d-t0)/864e5); return { dot:'#3f6f8c', emp:fullName(r.empresa), tt:trim(r.nombre,38), sb:'Entrega '+r.fecha_entrega, badge:days<0?'vencido':(days===0?'hoy':'en '+days+'d'), badgeColor:days<0?'#c0654a':'var(--accent)', onClick:()=>panelGoCompany(r.empresa,'proyectos') }; }),
