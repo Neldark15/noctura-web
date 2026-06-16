@@ -239,27 +239,45 @@ table.hist td{padding:9px 10px;border-bottom:1px solid #1a1a1f;color:var(--bone)
   .footcta .alt{margin-left:0;margin-top:10px}
 }
 /* ===== glassmorphism skin (igual que el portal) ===== */
-:root{--glass-bg:rgba(18,21,32,.55);--glass-soft:rgba(255,255,255,.06);--glass-bd:rgba(255,255,255,.11);--glass-hi:inset 0 1px 0 rgba(255,255,255,.14)}
+:root{--glass-bg:rgba(17,20,30,.38);--glass-soft:rgba(255,255,255,.07);--glass-bd:rgba(255,255,255,.16);--glass-hi:inset 0 1px 0 rgba(255,255,255,.20);--card-bg:rgba(20,23,33,.34)}
 body{background:
-  radial-gradient(900px 620px at 86% -8%, rgba(229,168,96,.12), transparent 60%),
-  radial-gradient(820px 720px at 4% 106%, rgba(74,120,216,.14), transparent 60%),
-  radial-gradient(760px 760px at 60% 48%, rgba(150,108,202,.07), transparent 60%),
+  radial-gradient(900px 620px at 86% -8%, rgba(229,168,96,.20), transparent 60%),
+  radial-gradient(820px 720px at 4% 106%, rgba(74,120,216,.22), transparent 60%),
+  radial-gradient(760px 760px at 60% 48%, rgba(150,108,202,.13), transparent 60%),
   var(--black);background-attachment:fixed}
-.sidebar{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(22px) saturate(1.1);backdrop-filter:blur(22px) saturate(1.1);border-right:1px solid var(--glass-bd)!important}
-.topbar{background:rgba(12,14,22,.45)!important;border-bottom:1px solid var(--glass-bd)!important;-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.sidebar{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(30px) saturate(1.1);backdrop-filter:blur(30px) saturate(1.1);border-right:1px solid var(--glass-bd)!important}
+.topbar{background:rgba(14,16,24,.30)!important;border-bottom:1px solid var(--glass-bd)!important;-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px)}
 .navtab.active{background:rgba(255,255,255,.10)!important}
-.iconbtn{background:var(--glass-soft)!important;border-color:var(--glass-bd)!important;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.pop{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-color:var(--glass-bd)!important;box-shadow:0 18px 50px rgba(0,0,0,.5),var(--glass-hi)!important}
+.iconbtn{background:var(--glass-soft)!important;border-color:var(--glass-bd)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.pop{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);border-color:var(--glass-bd)!important;box-shadow:0 18px 50px rgba(0,0,0,.5),var(--glass-hi)!important}
 .ov{background:rgba(6,7,12,.5)!important}
-.modal{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(28px) saturate(1.15);backdrop-filter:blur(28px) saturate(1.15);border-color:var(--glass-bd)!important;border-radius:22px!important;box-shadow:0 24px 70px rgba(0,0,0,.5),var(--glass-hi)!important}
-.introbar,.stat,.res-hero,.kpi,.chartbox,.histbox,.notebox,.proy-card,.pilcard,.revwrap,.revcomment-demo,.revapprove{background:rgba(21,24,34,.5)!important;border-color:var(--glass-bd)!important;box-shadow:var(--glass-hi)!important}
-.lrow{background:rgba(21,24,34,.5)!important;border-color:var(--glass-bd)!important}
-.cell{background:rgba(255,255,255,.035)!important;border-color:rgba(255,255,255,.08)!important}
-.cell.empty{background:rgba(255,255,255,.012)!important}
+.modal{background:var(--glass-bg)!important;-webkit-backdrop-filter:blur(32px) saturate(1.15);backdrop-filter:blur(32px) saturate(1.15);border-color:var(--glass-bd)!important;border-radius:22px!important;box-shadow:0 24px 70px rgba(0,0,0,.5),var(--glass-hi)!important}
+.introbar,.stat,.res-hero,.kpi,.chartbox,.histbox,.notebox,.proy-card,.pilcard,.revwrap,.revcomment-demo,.revapprove{background:var(--card-bg)!important;border-color:var(--glass-bd)!important;box-shadow:var(--glass-hi)!important}
+.lrow{background:var(--card-bg)!important;border-color:var(--glass-bd)!important}
+.cell{background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.10)!important}
+.cell.empty{background:rgba(255,255,255,.015)!important}
 .lchip,.mtab,.vmode,.proy-fase{background:var(--glass-soft)!important;border-color:var(--glass-bd)!important}
 .revthumb{border-color:var(--glass-bd)!important}
 .sec-h,.modal h3,.tb-page,.introbar h1{text-shadow:0 1px 18px rgba(0,0,0,.35)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.sidebar,.topbar,.modal,.pop{background:rgba(14,16,24,.92)!important}}
+/* tema toggle */
+.tp-mode{display:flex;gap:6px;background:var(--glass-soft);border:1px solid var(--glass-bd);border-radius:9px;padding:3px;margin-bottom:6px}
+.tp-mode button{flex:1;font-size:12px;letter-spacing:.5px;color:var(--muted);background:none;border:none;padding:7px;border-radius:6px;cursor:pointer;font-family:var(--sans)}
+.tp-mode button.on{background:var(--accent);color:#fff}
+/* TEMA CLARO (opcional) */
+body.light{--bone:#3b332b;--ivory:#211c17;--silver:#6a5f55;--muted:#9c9089;--gold:#b07a2e;--black:#fbf1e6;--graphite:#fbf4ec;--charcoal:#e7dccd;--anthra:#f3e8da;
+  --glass-bg:rgba(255,250,242,.44);--glass-soft:rgba(255,255,255,.42);--glass-bd:rgba(120,90,55,.18);--glass-hi:inset 0 1px 0 rgba(255,255,255,.75);--card-bg:rgba(255,251,244,.42);
+  background:radial-gradient(120% 100% at 0% 0%, #f3c094, transparent 44%),radial-gradient(120% 120% at 100% 100%, #efb98c, transparent 48%),linear-gradient(135deg,#fbf0e4,#f8e6d6)!important;background-attachment:fixed!important}
+body.light .topbar{background:rgba(255,250,242,.38)!important}
+body.light .ov{background:rgba(90,60,40,.30)!important}
+body.light .modal,body.light .pop{box-shadow:0 24px 70px rgba(180,120,70,.22),var(--glass-hi)!important}
+body.light .cell{background:rgba(255,255,255,.5)!important;border-color:var(--glass-bd)!important}
+body.light .cell.empty{background:rgba(255,255,255,.22)!important}
+body.light .navtab.active{background:rgba(0,0,0,.05)!important}
+body.light .revcomment-demo,body.light .revapprove,body.light .revwrap{background:rgba(255,255,255,.5)!important}
+body.light .ribbon a.cta,body.light .footcta .btn,body.light .vmode button.active,body.light .mtab.active{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+body.light .footcta .alt{color:var(--bone)!important;border-color:var(--glass-bd)!important}
+body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .introbar h1{text-shadow:none!important}
 </style>
 </head>
 <body>
@@ -300,7 +318,9 @@ body{background:
           <div class="notif-item"><span class="nic" style="background:#b09a6a;color:#111">+</span><div><div class="ntt">Nuevo contenido cargado para julio</div><div class="ntm">hace 3 días</div></div></div>
         </div>
         <div class="pop" id="themePop" style="display:none">
-          <div class="ph">Color de acento</div>
+          <div class="ph">Tema</div>
+          <div class="tp-mode" id="tpMode"><button data-mode="dark" class="on">Oscuro</button><button data-mode="light">Claro</button></div>
+          <div class="ph" style="margin-top:14px">Color de acento</div>
           <div class="tp-swatches" id="tpSwatches"></div>
           <label class="tp-custom">Personalizado <input type="color" id="tpCustom" value="#B8B0A4"></label>
         </div>
@@ -595,6 +615,11 @@ document.querySelectorAll('#vmode button').forEach(b=>b.onclick=()=>{ calMode=b.
   sw.querySelectorAll('.tp-sw').forEach(s=>s.onclick=()=>apply(s.dataset.c));
   cust.oninput=()=>apply(cust.value);
   apply('#B8B0A4');
+  // tema claro/oscuro (oscuro por defecto)
+  function applyTheme(mode){ document.body.classList.toggle('light', mode==='light'); try{localStorage.setItem('noctura_demo_theme',mode);}catch(e){} document.querySelectorAll('#tpMode button').forEach(b=>b.classList.toggle('on',b.dataset.mode===mode)); }
+  document.querySelectorAll('#tpMode button').forEach(b=>b.addEventListener('click',()=>applyTheme(b.dataset.mode)));
+  let th='dark'; try{ th=localStorage.getItem('noctura_demo_theme')||'dark'; }catch(e){}
+  applyTheme(th);
 })();
 renderLegend(); renderMonths(); renderCal();
 </script>
