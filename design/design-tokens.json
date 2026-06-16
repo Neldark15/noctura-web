@@ -1,0 +1,44 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "canvas-from": { "$value": "#F2C29A", "$type": "color", "$description": "Fondo, esquinas calidas del degradado" },
+    "canvas-to":   { "$value": "#FBF1E6", "$type": "color", "$description": "Fondo, centro crema del degradado" },
+    "surface":     { "$value": "#FCF6EE", "$type": "color", "$description": "Superficie solida equivalente (fallback opaco)" },
+    "surface-translucent": { "$value": "rgba(255,251,245,0.62)", "$type": "color", "$description": "Vidrio calido de las tarjetas" },
+    "surface-2":   { "$value": "rgba(255,255,255,0.50)", "$type": "color", "$description": "Vidrio mas claro (inputs, item activo)" },
+    "text-primary":{ "$value": "#211C17", "$type": "color" },
+    "text-muted":  { "$value": "#9C9089", "$type": "color" },
+    "border":      { "$value": "#ECE1D4", "$type": "color", "$description": "Hairline calido" },
+    "accent":      { "$value": "#F2890F", "$type": "color", "$description": "Acento de marca, personalizable via --accent" },
+    "success":     { "$value": "#33C36A", "$type": "color" },
+    "danger":      { "$value": "#F2473B", "$type": "color" },
+    "info":        { "$value": "#4B86F0", "$type": "color" },
+    "purple":      { "$value": "#8B5CF6", "$type": "color" }
+  },
+  "typography": {
+    "display":  { "$value": { "fontFamily": "Inter, 'Plus Jakarta Sans', system-ui, sans-serif", "fontSize": "34px", "fontWeight": 700, "lineHeight": "1.05" }, "$type": "typography" },
+    "heading":  { "$value": { "fontFamily": "Inter, 'Plus Jakarta Sans', system-ui, sans-serif", "fontSize": "20px", "fontWeight": 700 }, "$type": "typography" },
+    "label":    { "$value": { "fontFamily": "Inter, system-ui, sans-serif", "fontSize": "11px", "fontWeight": 600, "letterSpacing": "0.06em" }, "$type": "typography" },
+    "body":     { "$value": { "fontFamily": "Inter, system-ui, sans-serif", "fontSize": "14px", "fontWeight": 400, "lineHeight": "1.5" }, "$type": "typography" },
+    "meta":     { "$value": { "fontFamily": "Inter, system-ui, sans-serif", "fontSize": "12px", "fontWeight": 400 }, "$type": "typography" }
+  },
+  "radius": {
+    "sm":   { "$value": "10px", "$type": "dimension" },
+    "md":   { "$value": "14px", "$type": "dimension" },
+    "lg":   { "$value": "22px", "$type": "dimension" },
+    "pill": { "$value": "9999px", "$type": "dimension" }
+  },
+  "space": {
+    "1": { "$value": "4px", "$type": "dimension" },
+    "2": { "$value": "8px", "$type": "dimension" },
+    "3": { "$value": "12px", "$type": "dimension" },
+    "4": { "$value": "16px", "$type": "dimension" },
+    "5": { "$value": "20px", "$type": "dimension" },
+    "6": { "$value": "24px", "$type": "dimension" },
+    "7": { "$value": "32px", "$type": "dimension" }
+  },
+  "shadow": {
+    "soft": { "$value": "0 10px 30px rgba(180,120,70,0.10)", "$type": "shadow" },
+    "lift": { "$value": "0 16px 40px rgba(180,120,70,0.16)", "$type": "shadow" }
+  }
+}

@@ -515,6 +515,33 @@ input,textarea,select,.promptbox,.revcomment,.inbox-reply,.cq-ro{background:rgba
 .csel-pil i{width:7px;height:7px;border-radius:2px;flex-shrink:0}
 .csel-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--glass-bd);padding-top:13px;font-size:12px;color:var(--muted)}
 .csel-foot .go{color:var(--ivory);font-size:12.5px;white-space:nowrap}
+/* ===== toggle de tema (en el popover Personalizar) ===== */
+.tp-mode{display:flex;gap:6px;background:var(--glass-soft);border:1px solid var(--glass-bd);border-radius:9px;padding:3px;margin-bottom:6px}
+.tp-mode button{flex:1;font-size:12px;letter-spacing:.5px;color:var(--muted);background:none;border:none;padding:7px;border-radius:6px;cursor:pointer;font-family:var(--sans);transition:.15s}
+.tp-mode button.on{background:var(--accent);color:#fff}
+/* ===== TEMA CLARO (opcional; el oscuro es el principal) ===== */
+body.light{
+  --bone:#3b332b; --ivory:#211c17; --silver:#6a5f55; --muted:#9c9089; --gold:#b07a2e;
+  --black:#fbf1e6; --graphite:#fbf4ec; --anthra:#f3e8da; --charcoal:#e7dccd;
+  --glass-bg:rgba(255,251,245,.66); --glass-soft:rgba(255,255,255,.55);
+  --glass-bd:rgba(120,90,55,.16); --glass-hi:inset 0 1px 0 rgba(255,255,255,.7);
+  --card-bg:rgba(255,251,245,.62);
+  background:
+    radial-gradient(120% 100% at 0% 0%, #f4c49a, transparent 42%),
+    radial-gradient(120% 120% at 100% 100%, #f1be94, transparent 46%),
+    linear-gradient(135deg,#fbf1e6,#faebdc) !important;
+  background-attachment:fixed !important;
+}
+body.light .topbar{background:rgba(255,251,245,.55)!important}
+body.light .ov{background:rgba(90,60,40,.30)!important}
+body.light .modal,body.light .theme-pop,body.light .login-card{box-shadow:0 24px 70px rgba(180,120,70,.22),var(--glass-hi)!important}
+body.light .cell{background:rgba(255,255,255,.5)!important;border-color:var(--glass-bd)!important}
+body.light .cell.empty{background:rgba(255,255,255,.22)!important}
+body.light .viewtab.active,body.light .sb-item.sb-active{background:rgba(0,0,0,.05)!important}
+body.light input,body.light textarea,body.light select,body.light .promptbox,body.light .revcomment,body.light .inbox-reply,body.light .cq-ro,body.light .revwrap,body.light .revcomment-demo,body.light .revapprove,body.light .csel-st,body.light .csel-next,body.light .csel-alert,body.light .revtag{background:rgba(255,255,255,.5)!important;border-color:var(--glass-bd)!important}
+body.light .btn{background:var(--glass-soft)!important;border-color:var(--glass-bd)!important;color:var(--bone)!important}
+body.light .btn.solid,body.light .tab.active,body.light .vmode-btn.active,body.light .cq-chip.on{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .pnl-card .h .t{text-shadow:none!important}
 </style>
 </head>
 <body>
@@ -706,7 +733,12 @@ input,textarea,select,.promptbox,.revcomment,.inbox-reply,.cq-ro{background:rgba
 </div>
 
 <div class="theme-pop" id="themePop" style="display:none">
-  <div class="tp-h">Color de acento</div>
+  <div class="tp-h">Tema</div>
+  <div class="tp-mode" id="tpMode">
+    <button data-mode="dark" class="on">Oscuro</button>
+    <button data-mode="light">Claro</button>
+  </div>
+  <div class="tp-h" style="margin-top:14px">Color de acento</div>
   <div class="tp-swatches" id="tpSwatches"></div>
   <label class="tp-custom">Personalizado <input type="color" id="tpCustom" value="#B8B0A4"></label>
 </div>
@@ -2514,6 +2546,15 @@ document.querySelectorAll('.viewtab').forEach(t =>
   let saved = '#B8B0A4';
   try{ saved = localStorage.getItem('noctura_accent') || '#B8B0A4'; }catch(e){}
   applyAccent(saved);
+  // light/dark theme toggle (dark is the default/main theme)
+  function applyTheme(mode){
+    document.body.classList.toggle('light', mode==='light');
+    try{ localStorage.setItem('noctura_theme', mode); }catch(e){}
+    document.querySelectorAll('#tpMode button').forEach(b=>b.classList.toggle('on', b.dataset.mode===mode));
+  }
+  document.querySelectorAll('#tpMode button').forEach(b=>b.addEventListener('click', ()=>applyTheme(b.dataset.mode)));
+  let theme='dark'; try{ theme=localStorage.getItem('noctura_theme')||'dark'; }catch(e){}
+  applyTheme(theme);
 })();
 
 // Wire calendar/list mode toggle
