@@ -205,6 +205,53 @@ section{padding:80px 0;border-top:1px solid var(--graphite)}
 .x{position:sticky;top:0;float:right;font-size:26px;color:var(--muted);cursor:pointer;line-height:1}
 .x:hover{color:var(--ivory)}
 .okp{color:var(--bio)!important;border-color:var(--bio)!important}
+/* --- art review module --- */
+.revwrap{border:1px solid var(--charcoal);border-radius:9px;padding:16px;background:#0c0c0f;margin-top:18px}
+.revwrap .lab2{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.revgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:9px;margin-bottom:12px}
+.revloading,.revempty{grid-column:1/-1;color:var(--muted);font-size:13px;padding:16px 0;text-align:center;border:1px dashed var(--charcoal);border-radius:7px}
+.revthumb{position:relative;aspect-ratio:1;border-radius:7px;overflow:hidden;border:1px solid var(--charcoal);background:#000;cursor:zoom-in}
+.revthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.revthumb .rmimg{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.revthumb .rmimg:hover{background:#b5443a}
+.revupload{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ivory);border:1px dashed var(--silver);border-radius:7px;padding:11px 15px;cursor:pointer;transition:.2s;font-family:var(--sans)}
+.revupload:hover{border-color:var(--ivory);background:rgba(255,255,255,.04)}
+.revupload.busy{opacity:.55;pointer-events:none}
+.revcomment{width:100%;margin-top:13px;min-height:66px;background:#0a0a0c;border:1px solid var(--charcoal);border-radius:7px;padding:10px;font-family:var(--sans);font-size:14px;color:var(--ivory);line-height:1.55;resize:vertical}
+.revcomment:focus{outline:1px solid var(--silver)}
+.revapprove{display:flex;align-items:center;gap:13px;margin-top:14px;cursor:pointer;user-select:none;padding:12px 14px;border:1px solid var(--charcoal);border-radius:8px;background:#0a0a0c;transition:.2s;position:relative}
+.revapprove:hover{border-color:var(--bio)}
+.revapprove input{position:absolute;opacity:0;width:0;height:0}
+.revcheck{width:27px;height:27px;border-radius:6px;border:2px solid var(--silver);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;font-size:0;color:#fff}
+.revapprove input:checked + .revcheck{background:#3d7a4e;border-color:#3d7a4e;font-size:17px}
+.revapprove input:checked + .revcheck::after{content:'\2713'}
+.revapprove.on{border-color:#3d7a4e;background:rgba(61,122,78,.10)}
+.revapprove-txt{display:flex;flex-direction:column;min-width:0}
+.revapprove-tx{display:block;font-size:15px;color:var(--ivory);line-height:1.25}
+.revapprove-sub{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.3}
+.revactions{display:flex;align-items:center;gap:14px;margin-top:15px;flex-wrap:wrap}
+.revstatus{font-size:12.5px;color:var(--muted)}
+.revstatus.ok{color:var(--bio)}.revstatus.err{color:#d2766a}
+/* calendar review badges */
+.revtag{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--bone);background:rgba(255,255,255,.05);border:1px solid var(--charcoal);border-radius:10px;padding:1px 7px}
+.revtag.appr{color:#9fd6ab;border-color:#3d7a4e;background:rgba(61,122,78,.12)}
+.revcorner{position:absolute;bottom:5px;right:5px;display:flex;gap:3px;z-index:2}
+.revdot{min-width:15px;height:15px;padding:0 3px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;line-height:1}
+.revdot.appr{background:#3d7a4e}
+/* lightbox */
+.revlb{position:fixed;inset:0;z-index:200;background:rgba(3,3,5,.93);display:flex;align-items:center;justify-content:center;padding:24px}
+.revlb img{max-width:96vw;max-height:90vh;border-radius:6px}
+.revlb .lbx{position:absolute;top:16px;right:22px;font-size:34px;color:#fff;cursor:pointer;line-height:1}
+.revlb .lbnav{position:absolute;top:50%;transform:translateY(-50%);font-size:42px;color:#fff;cursor:pointer;padding:8px 12px;user-select:none;opacity:.85}
+.revlb .lbprev{left:8px}.revlb .lbnext{right:8px}
+@media(max-width:600px){
+  .ov{padding:0}
+  .modal{max-width:100%;border-radius:0;min-height:100vh;max-height:100vh;padding:20px 16px 44px}
+  .modal h3{font-size:23px}
+  .revgrid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+  .revapprove-tx{font-size:16px}
+  .revactions .btn{flex:1;justify-content:center}
+}
 .inbox-item{border:1px solid var(--charcoal);border-radius:8px;padding:16px;margin-bottom:12px;background:#0d0d10}
 .inbox-item .h{font-size:15px;color:var(--ivory)}
 .inbox-item .sub{font-size:12px;color:var(--muted);margin:2px 0 8px}
@@ -504,6 +551,7 @@ let CLIENTS = {};
 const sb = window.supabase.createClient(SB_URL, SB_KEY);
 const FMT = {'(R)':'Reel','(P)':'Post / Carrusel','(H)':'Historia'};
 let activeMonth = 0, filter = null, USER = null, ROLE = 'cliente', EMPRESA = null, PROPS = {}, CLIENT = null;
+let REV = {}, revChannel = null;
 
 function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function trim(s,n){ return s.length>n ? s.slice(0,n-1)+'…' : s; }
@@ -654,6 +702,8 @@ function renderClient(){
   // Onboarding banner (clients only).
   document.getElementById('cuestBanner').style.display = 'none';
   if(ROLE !== 'admin') loadCuestionario();
+  loadRevs().then(()=>renderCal());
+  subscribeRevs();
 }
 
 /* ---------- VIEW SWITCHING (workspace) ---------- */
@@ -758,6 +808,8 @@ function renderCal(){
       if(e.estado==='aprobada') inner += '<div class="stbadge st-aprobada" title="Aprobada">&#10003;</div>';
       else if(e.estado==='revision') inner += '<div class="stbadge st-revision" title="En revision"></div>';
       else if(e.edited) inner += '<div class="hasobs" title="Con cambios/observacion"></div>';
+      const rv = revInfo(m, d);
+      if(rv && (rv.n||rv.appr)) inner += '<div class="revcorner">'+(rv.n?'<span class="revdot" title="'+rv.n+' imagen(es) de arte">'+rv.n+'</span>':'')+(rv.appr?'<span class="revdot appr" title="Arte aprobado">&#10003;</span>':'')+'</div>';
     } else if(reps.has(d)){
       inner += '<div class="repost">Repost</div>';
     }
@@ -923,8 +975,11 @@ function renderList(){
     const p = en.p, pl = pillars[p.pilar], e = eff(p,m);
     const dim = filter && p.pilar!==filter ? ' dim' : '';
     const tt = p.pilar==='PROYECTOS' ? 'Proyecto del mes' : e.tema;
+    const rv = revInfo(m, en.day);
+    const revTag = rv ? (rv.appr ? '<span class="revtag appr" title="Arte aprobado">&#10003; arte</span>' : (rv.n ? '<span class="revtag" title="'+rv.n+' imagen(es) de arte">'+rv.n+' img</span>' : '')) : '';
     const right =
       (e.estado!=='pendiente' ? '<span class="stpill st-'+e.estado+'">'+ESTADOS[e.estado]+'</span>' : '')+
+      revTag+
       (e.edited ? '<span class="ldotobs" title="Con cambios/observacion"></span>' : '');
     return '<div class="lrow'+dim+(isToday?' today':'')+'" data-day="'+en.day+'">'+dateCol+
       '<div class="ldot" style="background:'+pl.hex+'"></div>'+
@@ -960,6 +1015,7 @@ function openModal(p, m){
     '<div class="field"><div class="lab">CTA</div><input id="f_cta" value="'+esc(e.cta)+'"></div>'+
     '<div class="field"><div class="lab">Texto de la publicacion</div>'+
     '<textarea id="f_texto" rows="6" placeholder="Escribe aqui el texto completo del caption / publicacion..." style="line-height:1.6">'+esc(e.texto)+'</textarea></div>'+
+    revSectionHTML()+
     '<div class="field"><div class="lab">Fecha sugerida (opcional)</div><input id="f_fecha" type="date" value="'+(e.fecha||'')+'"></div>'+
     promptHtml+
     '<div class="field"><div class="lab">Observaciones para NOCTURA</div>'+
@@ -996,6 +1052,7 @@ function openModal(p, m){
       renderCal();
     };
   });
+  wireRev(p, m);
 }
 
 function closeModal(){ document.getElementById('ov').classList.remove('show'); }
@@ -1057,6 +1114,181 @@ async function setEstado(p, m, estado){
       (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema), m, p.day);
   }
   return null;
+}
+
+/* ---------- ART REVIEW MODULE (subir imagenes, comentar, aprobar) ---------- */
+function revSectionHTML(){
+  return '<div class="field revwrap" id="revWrap">'
+    +'<div class="lab2">Revision de arte</div>'
+    +'<div class="revgrid" id="revGallery"><div class="revloading">Cargando imagenes...</div></div>'
+    +'<label class="revupload" id="revUploadLbl"><input type="file" id="revFile" accept="image/*" multiple hidden><span style="font-size:18px;line-height:1">+</span> Subir imagen</label>'
+    +'<textarea id="revComment" class="revcomment" rows="3" placeholder="Escribe un comentario sobre el arte..."></textarea>'
+    +'<label class="revapprove" id="revApproveLbl"><input type="checkbox" id="revApprove"><span class="revcheck"></span><span class="revapprove-txt"><span class="revapprove-tx">Aprobar publicacion</span><span class="revapprove-sub">Marca cuando el arte este listo para publicar</span></span></label>'
+    +'<div class="revactions"><button class="btn solid" id="revSave" type="button">Guardar revision</button><span class="revstatus" id="revStatus"></span></div>'
+    +'</div>';
+}
+
+function revInfo(m, day){ const r=REV[keyOf(m,day)]; if(!r) return null; return { n:(r.images||[]).length, appr:!!r.aprobado }; }
+function setRevStatus(msg, cls){ const s=document.getElementById('revStatus'); if(s){ s.className='revstatus'+(cls?' '+cls:''); s.textContent=msg||''; } }
+
+async function loadRevs(){
+  REV={}; if(!CLIENT) return;
+  const {data} = await sb.from('noctura_revisiones').select('empresa,month,day,images,comentario,aprobado').eq('empresa', CLIENT.name);
+  (data||[]).forEach(r=>{ REV[CLIENT.name+'-'+r.month+'-'+r.day]=r; });
+}
+
+function subscribeRevs(){
+  if(revChannel){ sb.removeChannel(revChannel); revChannel=null; }
+  if(!CLIENT) return;
+  revChannel = sb.channel('rev_'+CLIENT.name)
+    .on('postgres_changes', {event:'*', schema:'public', table:'noctura_revisiones', filter:'empresa=eq.'+CLIENT.name}, payload=>{
+      const r=payload.new||payload.old; if(!r) return;
+      const k=CLIENT.name+'-'+r.month+'-'+r.day;
+      if(payload.eventType==='DELETE') delete REV[k]; else REV[k]=r;
+      const cv=document.getElementById('viewCalendario');
+      if(cv && cv.style.display!=='none') renderCal();
+    })
+    .subscribe();
+}
+
+async function getFreshRev(month, day){
+  const {data} = await sb.from('noctura_revisiones').select('*').eq('empresa', CLIENT.name).eq('month', month).eq('day', day).maybeSingle();
+  if(data) REV[CLIENT.name+'-'+month+'-'+day]=data;
+  return data;
+}
+
+// Re-read the latest row, apply only the changed fields, then upsert: image uploads and
+// client comment/approval never clobber each other.
+async function revSaveFields(p, m, fields, opts){
+  opts=opts||{};
+  const fresh = await getFreshRev(m.month, p.day);
+  const base = fresh || {images:[], comentario:'', aprobado:false, aprobado_by:null, aprobado_at:null};
+  const row = {
+    empresa: CLIENT.name, month: m.month, day: p.day,
+    images: ('images' in fields)? fields.images : (base.images||[]),
+    comentario: ('comentario' in fields)? fields.comentario : (base.comentario||''),
+    aprobado: ('aprobado' in fields)? fields.aprobado : (base.aprobado||false),
+    updated_by: USER.id
+  };
+  if('aprobado' in fields){
+    row.aprobado_by = fields.aprobado ? USER.id : null;
+    row.aprobado_at = fields.aprobado ? new Date().toISOString() : null;
+  } else { row.aprobado_by = base.aprobado_by||null; row.aprobado_at = base.aprobado_at||null; }
+  const {data, error} = await sb.from('noctura_revisiones').upsert(row, {onConflict:'empresa,month,day'}).select().maybeSingle();
+  if(error){ setRevStatus('No se pudo guardar: '+error.message, 'err'); return null; }
+  REV[keyOf(m,p.day)] = data;
+  if(!opts.silent) setRevStatus('Guardado', 'ok');
+  return data;
+}
+
+async function renderRevGallery(p, m, images){
+  const g=document.getElementById('revGallery'); if(!g) return;
+  images = images||[];
+  if(!images.length){ g.innerHTML='<div class="revempty">Aun no hay imagenes. Sube el arte para que el cliente lo revise.</div>'; g._urls=[]; return; }
+  let urls={};
+  try{
+    const {data:signed} = await sb.storage.from('revisiones').createSignedUrls(images.map(i=>i.path), 3600);
+    (signed||[]).forEach(s=>{ if(s.signedUrl) urls[s.path]=s.signedUrl; });
+  }catch(e){}
+  g._urls = images.map(im=>urls[im.path]||'');
+  g.innerHTML = images.map((im,idx)=>{
+    const u=urls[im.path]||'';
+    const canRm = (ROLE==='admin' || im.by===USER.id);
+    return '<div class="revthumb" data-idx="'+idx+'">'+(u?'<img src="'+u+'" alt="arte">':'<div class="revloading">...</div>')+(canRm?'<button class="rmimg" type="button" data-path="'+esc(im.path)+'" title="Quitar imagen">&times;</button>':'')+'</div>';
+  }).join('');
+  g.querySelectorAll('.revthumb').forEach(el=> el.addEventListener('click', ev=>{ if(ev.target.classList.contains('rmimg')) return; revLightbox(g._urls, +el.dataset.idx); }));
+  g.querySelectorAll('.rmimg').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); revRemove(b.dataset.path, p, m); }));
+}
+
+async function revUpload(files, p, m){
+  files=[].slice.call(files); if(!files.length) return;
+  const lbl=document.getElementById('revUploadLbl'); if(lbl) lbl.classList.add('busy');
+  setRevStatus('Subiendo...');
+  const fresh = await getFreshRev(m.month, p.day);
+  let images = (fresh && fresh.images) ? fresh.images.slice() : [];
+  let ok=0, err='';
+  for(const f of files){
+    if(!f.type || f.type.indexOf('image/')!==0){ err='Solo se permiten imagenes'; continue; }
+    if(f.size > 10*1024*1024){ err='La imagen supera 10MB'; continue; }
+    const ext=((f.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg').slice(0,5);
+    const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Date.now()+'-'+Math.random().toString(36).slice(2));
+    const path=CLIENT.name+'/'+m.month+'-'+p.day+'/'+id+'.'+ext;
+    const up=await sb.storage.from('revisiones').upload(path, f, {contentType:f.type, cacheControl:'3600'});
+    if(up.error){ err=up.error.message; continue; }
+    images.push({path:path, name:(f.name||'').slice(0,80), by:USER.id, at:new Date().toISOString()}); ok++;
+  }
+  if(lbl) lbl.classList.remove('busy');
+  const fi=document.getElementById('revFile'); if(fi) fi.value='';
+  if(ok){
+    await revSaveFields(p, m, {images:images}, {silent:true});
+    await renderRevGallery(p, m, images);
+    renderCal();
+    setRevStatus(ok>1?('Subidas '+ok+' imagenes'):'Subida 1 imagen', 'ok');
+    if(ROLE==='admin') notifyEmpresa('contenido','Nuevo arte para revisar', (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema), m, p.day);
+    else notifyAdmins('contenido', CLIENT.name+' subio una imagen', (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema), m, p.day);
+  }
+  if(err) setRevStatus('Error: '+err, 'err');
+}
+
+async function revRemove(path, p, m){
+  const fresh = await getFreshRev(m.month, p.day);
+  let images = (fresh && fresh.images ? fresh.images : []).filter(i=>i.path!==path);
+  await sb.storage.from('revisiones').remove([path]);
+  await revSaveFields(p, m, {images:images}, {silent:true});
+  await renderRevGallery(p, m, images);
+  renderCal();
+  setRevStatus('Imagen eliminada');
+}
+
+async function revFinish(p, m){
+  const ta=document.getElementById('revComment'), cb=document.getElementById('revApprove');
+  const btn=document.getElementById('revSave'); if(btn) btn.textContent='Guardando...';
+  const data = await revSaveFields(p, m, {comentario:(ta?ta.value.trim():''), aprobado:(cb?cb.checked:false)}, {});
+  if(btn) btn.textContent='Guardar revision';
+  if(!data) return;
+  setRevStatus('Revision guardada', 'ok');
+  if(ROLE!=='admin'){
+    notifyAdmins(cb&&cb.checked?'aprobacion':'observacion',
+      CLIENT.name+' '+(cb&&cb.checked?'aprobo':'reviso')+' el arte',
+      (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema)+((ta&&ta.value.trim())?' - '+ta.value.trim():''), m, p.day);
+  }
+  renderCal();
+}
+
+async function wireRev(p, m){
+  if(!document.getElementById('revWrap')) return;
+  const data = (await getFreshRev(m.month, p.day)) || {images:[], comentario:'', aprobado:false};
+  const ta=document.getElementById('revComment'); if(ta) ta.value=data.comentario||'';
+  const cb=document.getElementById('revApprove'); if(cb) cb.checked=!!data.aprobado;
+  const lbl=document.getElementById('revApproveLbl'); if(lbl) lbl.classList.toggle('on', !!data.aprobado);
+  renderRevGallery(p, m, data.images||[]);
+  const fi=document.getElementById('revFile'); if(fi) fi.addEventListener('change', e=>revUpload(e.target.files, p, m));
+  let t=null;
+  if(ta) ta.addEventListener('input', ()=>{ setRevStatus('Guardando...'); clearTimeout(t); t=setTimeout(()=>revSaveFields(p, m, {comentario:ta.value.trim()}, {silent:true}).then(()=>setRevStatus('Guardado','ok')), 1000); });
+  if(cb) cb.addEventListener('change', async ()=>{
+    if(lbl) lbl.classList.toggle('on', cb.checked);
+    await revSaveFields(p, m, {aprobado:cb.checked}, {});
+    if(ROLE!=='admin') notifyAdmins(cb.checked?'aprobacion':'observacion', CLIENT.name+(cb.checked?' aprobo el arte':' quito la aprobacion'), (p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema), m, p.day);
+    renderCal();
+  });
+  const saveBtn=document.getElementById('revSave'); if(saveBtn) saveBtn.addEventListener('click', ()=>revFinish(p, m));
+}
+
+function revLightbox(urls, idx){
+  urls=(urls||[]).filter(Boolean); if(!urls.length) return;
+  let i=Math.max(0, Math.min(idx, urls.length-1));
+  const lb=document.createElement('div'); lb.className='revlb';
+  lb.innerHTML='<span class="lbx">&times;</span>'+(urls.length>1?'<span class="lbnav lbprev">&#8249;</span><span class="lbnav lbnext">&#8250;</span>':'')+'<img src="'+urls[i]+'" alt="arte">';
+  document.body.appendChild(lb);
+  const img=lb.querySelector('img');
+  function close(){ lb.remove(); document.removeEventListener('keydown', onKey); }
+  function go(d){ i=(i+d+urls.length)%urls.length; img.src=urls[i]; }
+  function onKey(e){ if(e.key==='Escape') close(); else if(e.key==='ArrowLeft') go(-1); else if(e.key==='ArrowRight') go(1); }
+  lb.addEventListener('click', e=>{ if(e.target===lb||e.target.classList.contains('lbx')) close(); });
+  const pv=lb.querySelector('.lbprev'), nx=lb.querySelector('.lbnext');
+  if(pv) pv.addEventListener('click', e=>{ e.stopPropagation(); go(-1); });
+  if(nx) nx.addEventListener('click', e=>{ e.stopPropagation(); go(1); });
+  document.addEventListener('keydown', onKey);
 }
 
 /* ---------- ADMIN PLAN EDITOR ---------- */
