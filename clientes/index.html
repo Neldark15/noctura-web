@@ -105,6 +105,33 @@ input:focus,textarea:focus{outline:1px solid var(--silver)}
   .sb-toggle{display:inline-flex}
   #app.sb-open .sb-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:55}
 }
+/* ---- NOCTURA command center ---- */
+.sb-item svg{width:17px;height:17px;opacity:.8;flex-shrink:0}
+.sb-item.sb-active{background:rgba(255,255,255,.06);color:var(--ivory)}
+.sb-item.sb-active svg{opacity:1;color:var(--accent)}
+#panel{padding:0 26px}
+.pnl-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}
+.pnl-stat{border:1px solid var(--charcoal);border-radius:11px;padding:18px;background:linear-gradient(180deg,#121216,#0d0d10)}
+.pnl-stat .v{font-family:var(--serif);font-size:30px;color:var(--ivory);line-height:1}
+.pnl-stat .v.alert{color:var(--accent)}
+.pnl-stat .l{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.pnl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:18px;padding-bottom:50px}
+.pnl-card{border:1px solid var(--charcoal);border-radius:12px;background:#0d0d10;padding:20px}
+.pnl-card .h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.pnl-card .h .t{font-family:var(--serif);font-size:18px;color:var(--ivory);flex:1}
+.pnl-card .h .c{font-size:12px;font-weight:700;color:#111;background:var(--accent);border-radius:20px;padding:3px 10px;min-width:24px;text-align:center}
+.pnl-card .h .c.zero{background:var(--charcoal);color:var(--bone)}
+.pnl-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid #17171b;cursor:pointer;transition:padding-left .15s}
+.pnl-row:last-child{border-bottom:none}
+.pnl-row:hover{padding-left:4px}
+.pnl-row .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.pnl-row .m{flex:1;min-width:0}
+.pnl-row .m .tt{font-size:13.5px;color:var(--ivory);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnl-row .m .sb{font-size:11.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnl-row .badge{font-size:10px;letter-spacing:.5px;border-radius:5px;padding:3px 8px;color:#111;white-space:nowrap;flex-shrink:0}
+.pnl-emp{display:inline-block;font-size:9.5px;letter-spacing:1px;color:var(--bone);border:1px solid var(--charcoal);border-radius:4px;padding:1px 6px;text-transform:uppercase;margin-right:6px}
+.pnl-empty{color:var(--muted);font-size:13px;padding:16px 0;text-align:center}
+@media(max-width:980px){.pnl-summary{grid-template-columns:repeat(2,1fr)}.pnl-grid{grid-template-columns:1fr}}
 
 .hero{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
 .moon{position:absolute;top:8%;right:-6%;width:520px;height:520px;border-radius:50%;
@@ -449,6 +476,7 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
       <button class="viewtab" data-view="estrategia"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1z"></path></svg><span>Estrategia</span></button>
     </div>
     <div class="sb-label" id="adminLabel" style="display:none">Administración</div>
+    <button class="sb-item" id="panelBtn" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1"></rect><rect x="13" y="3" width="8" height="6" rx="1"></rect><rect x="13" y="11" width="8" height="10" rx="1"></rect><rect x="3" y="15" width="8" height="6" rx="1"></rect></svg><span>Panel</span></button>
     <div id="adminItems">
       <button class="sb-item" id="inboxbtn" style="display:none">Propuestas</button>
       <button class="sb-item" id="cuestAdminBtn" style="display:none">Cuestionario</button>
@@ -482,6 +510,17 @@ footer .s{font-size:13px;color:var(--muted);letter-spacing:1px}
     <h2 class="sec-h" style="margin-bottom:24px">Tus clientes</h2>
     <div class="grid g2" id="companyCards"></div>
   </div>
+</div>
+
+<!-- NOCTURA command center (admin) -->
+<div id="panel" style="display:none">
+  <div style="padding:30px 0 8px">
+    <div class="kick">Centro de operaciones</div>
+    <h2 class="sec-h" style="margin-bottom:6px">Panel de NOCTURA</h2>
+    <p class="muted" style="font-size:13px">Todo lo que necesita tu atencion, en todas las empresas.</p>
+  </div>
+  <div class="pnl-summary" id="pnlSummary"></div>
+  <div class="pnl-grid" id="pnlGrid"></div>
 </div>
 
 <div id="workspace">
@@ -695,6 +734,7 @@ async function onAuthed(user){
   document.getElementById('uchip').textContent = (mem&&mem.nombre?mem.nombre:user.email) + (ROLE==='admin'?' · NOCTURA':'');
   if(ROLE === 'admin'){
     document.getElementById('adminLabel').style.display = '';
+    document.getElementById('panelBtn').style.display = 'flex';
     document.getElementById('inboxbtn').style.display = 'flex';
     document.getElementById('addPubBtn').style.display = 'inline-block';
     document.getElementById('addProyBtn').style.display = 'inline-block';
@@ -709,7 +749,7 @@ async function onAuthed(user){
 
   if(ROLE === 'admin'){
     addCompanySwitcher();
-    showCompanySelector();
+    showPanel();
   } else {
     CLIENT = CLIENTS[EMPRESA] || Object.values(CLIENTS)[0] || null;
     if(!CLIENT){
@@ -767,6 +807,8 @@ function renderClient(){
   renderCal();
   // Land on the work area, not the report.
   document.getElementById('workspace').style.display = 'block';
+  { const pn=document.getElementById('panel'); if(pn) pn.style.display='none'; }
+  { const pb=document.getElementById('panelBtn'); if(pb) pb.classList.remove('sb-active'); }
   document.getElementById('viewtabs').style.display = '';
   { const ml=document.getElementById('menuLabel'); if(ml) ml.style.display=''; }
   switchView('calendario');
@@ -2193,6 +2235,87 @@ async function openCuestionarioAdmin(){
 
 
 /* ---------- COMPANY SELECTOR (Admin) ---------- */
+/* ---------- NOCTURA COMMAND CENTER (admin panel) ---------- */
+function _empKey(empresa){ if(CLIENTS[empresa]) return empresa; return Object.keys(CLIENTS).find(k=>CLIENTS[k].name===empresa) || null; }
+function panelGoCompany(empresa, view){ const k=_empKey(empresa); if(!k) return; selectCompany(k); if(view) setTimeout(()=>switchView(view), 70); }
+function panelGoPost(empresa, month, day){ const k=_empKey(empresa); if(!k) return; selectCompany(k);
+  setTimeout(()=>{ if(!CLIENT) return; const mi=CLIENT.plan.findIndex(m=>m.month===Number(month)); if(mi<0) return; activeMonth=mi; switchView('calendario'); renderCal(); const m=CLIENT.plan[mi]; const p=(m.pubs||[]).find(x=>x.day===Number(day)); if(p) openModal(p,m); }, 100); }
+
+function showPanel(){
+  if(ROLE!=='admin') return;
+  document.getElementById('companySelector').style.display='none';
+  document.getElementById('workspace').style.display='none';
+  document.getElementById('panel').style.display='block';
+  document.getElementById('viewtabs').style.display='none';
+  { const ml=document.getElementById('menuLabel'); if(ml) ml.style.display='none'; }
+  document.querySelectorAll('.viewtab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panelBtn').classList.add('sb-active');
+  { const tp=document.getElementById('tbPage'); if(tp) tp.textContent='Panel'; }
+  { const tc=document.getElementById('tbCompany'); if(tc) tc.textContent='NOCTURA · Todas las empresas'; }
+  document.getElementById('app').classList.remove('sb-open');
+  renderPanel();
+}
+function pnlStat(v,l,alert){ return '<div class="pnl-stat"><div class="v'+(alert&&v>0?' alert':'')+'">'+v+'</div><div class="l">'+l+'</div></div>'; }
+function pnlCard(title, count, rows, emptyMsg){
+  const card=document.createElement('div'); card.className='pnl-card';
+  card.innerHTML='<div class="h"><span class="t">'+title+'</span><span class="c'+(count===0?' zero':'')+'">'+count+'</span></div>';
+  if(!rows.length){ const e=document.createElement('div'); e.className='pnl-empty'; e.textContent=emptyMsg; card.appendChild(e); return card; }
+  rows.forEach(r=>{ const row=document.createElement('div'); row.className='pnl-row';
+    row.innerHTML=(r.dot?'<span class="dot" style="background:'+r.dot+'"></span>':'')+
+      '<div class="m"><div class="tt">'+(r.emp?'<span class="pnl-emp">'+esc(r.emp)+'</span>':'')+esc(r.tt)+'</div>'+(r.sb?'<div class="sb">'+esc(r.sb)+'</div>':'')+'</div>'+
+      (r.badge?'<span class="badge" style="background:'+(r.badgeColor||'var(--accent)')+'">'+esc(r.badge)+'</span>':'');
+    if(r.onClick) row.onclick=r.onClick; card.appendChild(row);
+  });
+  return card;
+}
+async function renderPanel(){
+  const sum=document.getElementById('pnlSummary'), grid=document.getElementById('pnlGrid');
+  sum.innerHTML=''; grid.innerHTML='<div class="pnl-empty" style="grid-column:1/-1">Cargando panel...</div>';
+  const fullName=(empresa)=>{ const k=_empKey(empresa); return k?CLIENTS[k].name:empresa; };
+  const pilHex=(empresa,pilar)=>{ const k=_empKey(empresa); const c=k&&CLIENTS[k]; return (c&&c.pillars&&c.pillars[pilar]&&c.pillars[pilar].hex)||'#888'; };
+  const now=getNow();
+  let revR,propR,proyR,cuestR;
+  try{
+    [revR,propR,proyR,cuestR]=await Promise.all([
+      sb.from('noctura_revisiones').select('empresa,month,day,images,aprobado,comentario').eq('aprobado',false),
+      sb.from('noctura_propuestas').select('empresa,mes,month,day,tema_base,autor_email,atendida,autor').eq('atendida',false).neq('autor',USER.id),
+      sb.from('noctura_proyectos').select('empresa,nombre,fecha_entrega,estado'),
+      sb.from('noctura_cuestionario').select('empresa,completado')
+    ]);
+  }catch(e){ grid.innerHTML='<div class="pnl-empty" style="grid-column:1/-1">No se pudo cargar el panel.</div>'; return; }
+  const pendingArt=(revR.data||[]).filter(r=>(r.images||[]).length>0);
+  const unanswered=(propR.data||[]);
+  const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate()), t7=new Date(t0); t7.setDate(t7.getDate()+7);
+  const projDue=(proyR.data||[]).filter(p=>p.estado!=='entregado'&&p.fecha_entrega).map(p=>{ const o={}; o.empresa=p.empresa;o.nombre=p.nombre;o.fecha_entrega=p.fecha_entrega; o.d=new Date(p.fecha_entrega+'T00:00:00'); return o; }).filter(p=>(p.d-now)<21*864e5).sort((a,b)=>a.d-b.d);
+  const doneSet=new Set((cuestR.data||[]).filter(c=>c.completado).map(c=>c.empresa));
+  const pendingCuest=Object.keys(CLIENTS).filter(k=>!doneSet.has(CLIENTS[k].name)&&!doneSet.has(k));
+  const weekPubs=[]; Object.keys(CLIENTS).forEach(k=>{ const c=CLIENTS[k]; (c.plan||[]).forEach(m=>{ (m.pubs||[]).forEach(p=>{ const d=new Date(m.year,m.month-1,p.day); if(d>=t0&&d<t7){ weekPubs.push({emp:c.name,d:d,day:p.day,month:m.month,tema:(p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema),pilar:p.pilar,fmt:p.fmt}); } }); }); });
+  weekPubs.sort((a,b)=>a.d-b.d);
+  const curY=now.getFullYear(), curM=now.getMonth()+1; let pubsMonth=0;
+  Object.keys(CLIENTS).forEach(k=>{ const m=(CLIENTS[k].plan||[]).find(x=>x.year===curY&&x.month===curM); if(m) pubsMonth+=(m.pubs||[]).filter(p=>p.pilar!=='FESTIVO').length; });
+  sum.innerHTML=pnlStat(Object.keys(CLIENTS).length,'Clientes activos')+pnlStat(pubsMonth,'Publicaciones este mes')+pnlStat(pendingArt.length,'Arte por aprobar',true)+pnlStat(unanswered.length,'Propuestas sin responder',true);
+  grid.innerHTML='';
+  const WDl=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+  grid.appendChild(pnlCard('Arte por aprobar', pendingArt.length,
+    pendingArt.slice(0,6).map(r=>({ dot:'#3d7a4e', emp:fullName(r.empresa), tt:'Dia '+r.day+'/'+r.month+(r.comentario?' · '+trim(r.comentario,34):''), sb:(r.images.length)+' imagen(es) para revisar', badge:'revisar', onClick:()=>panelGoPost(r.empresa,r.month,r.day) })),
+    'Nada pendiente de aprobacion.'));
+  grid.appendChild(pnlCard('Se publica esta semana', weekPubs.length,
+    weekPubs.slice(0,8).map(r=>({ dot:pilHex(r.emp,r.pilar), emp:r.emp, tt:trim(r.tema,38), sb:WDl[r.d.getDay()]+' '+r.day+' · '+(FMT[r.fmt]||r.fmt), onClick:()=>panelGoCompany(r.emp,'calendario') })),
+    'Sin publicaciones en los proximos 7 dias.'));
+  grid.appendChild(pnlCard('Propuestas sin responder', unanswered.length,
+    unanswered.slice(0,6).map(r=>({ dot:'var(--gold)', emp:fullName(r.empresa||'ARQSA'), tt:trim(r.tema_base||('Dia '+r.day),38), sb:(r.mes||'')+(r.autor_email?' · '+r.autor_email:''), badge:'responder', onClick:()=>openInbox() })),
+    'Todo respondido.'));
+  grid.appendChild(pnlCard('Proyectos por vencer', projDue.length,
+    projDue.slice(0,6).map(r=>{ const days=Math.ceil((r.d-t0)/864e5); return { dot:'#3f6f8c', emp:fullName(r.empresa), tt:trim(r.nombre,38), sb:'Entrega '+r.fecha_entrega, badge:days<0?'vencido':(days===0?'hoy':'en '+days+'d'), badgeColor:days<0?'#c0654a':'var(--accent)', onClick:()=>panelGoCompany(r.empresa,'proyectos') }; }),
+    'Sin entregas proximas.'));
+  grid.appendChild(pnlCard('Cuestionarios pendientes', pendingCuest.length,
+    pendingCuest.slice(0,6).map(k=>({ dot:'#9b6b9e', tt:CLIENTS[k].fullName||CLIENTS[k].name, sb:'Aun no completa su perfil', onClick:()=>panelGoCompany(k,'calendario') })),
+    'Todos completaron su perfil.'));
+  grid.appendChild(pnlCard('Tus clientes', Object.keys(CLIENTS).length,
+    Object.keys(CLIENTS).map(k=>{ const c=CLIENTS[k]; return { tt:c.fullName||c.name, sb:((c.plan||[]).length)+' meses de plan', badge:'abrir', badgeColor:'var(--silver)', onClick:()=>selectCompany(k) }; }),
+    'Sin empresas.'));
+}
+
 function showCompanySelector(){
   const sel = document.getElementById('companySelector');
   const cards = document.getElementById('companyCards');
@@ -2219,6 +2342,8 @@ function showCompanySelector(){
       '</div>';
   }).join('');
   sel.style.display = 'block';
+  document.getElementById('panel').style.display = 'none';
+  document.getElementById('panelBtn').classList.remove('sb-active');
   document.getElementById('workspace').style.display = 'none';
   document.getElementById('viewtabs').style.display = 'none';
   { const ml=document.getElementById('menuLabel'); if(ml) ml.style.display='none'; }
@@ -2259,6 +2384,7 @@ document.querySelectorAll('.viewtab').forEach(t =>
   const app = document.getElementById('app');
   const tg = document.getElementById('sbToggle'); if(tg) tg.onclick = ()=>app.classList.add('sb-open');
   const bd = document.getElementById('sbBackdrop'); if(bd) bd.onclick = ()=>app.classList.remove('sb-open');
+  const pb = document.getElementById('panelBtn'); if(pb) pb.onclick = ()=>{ app.classList.remove('sb-open'); showPanel(); };
   // Color accent personalization (per browser, persisted)
   const PRESETS = ['#B8B0A4','#4d8aa8','#7fa890','#c07a55','#9b6b9e','#c98aa6'];
   const pop = document.getElementById('themePop');
