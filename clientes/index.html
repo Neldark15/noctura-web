@@ -109,6 +109,15 @@ input:focus,textarea:focus{outline:1px solid var(--silver)}
 .sb-item svg{width:17px;height:17px;opacity:.8;flex-shrink:0}
 .sb-item.sb-active{background:rgba(255,255,255,.06);color:var(--ivory)}
 .sb-item.sb-active svg{opacity:1;color:var(--accent)}
+/* collapsible sidebar groups */
+.sb-group{display:flex;flex-direction:column}
+.sb-grp-h{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:13px 12px 6px;transition:color .15s}
+.sb-grp-h:hover{color:var(--bone)}
+.sb-grp-h .chev{opacity:.6;transition:transform .22s}
+.sb-group.collapsed .sb-grp-h .chev{transform:rotate(-90deg)}
+.sb-grp-body{display:flex;flex-direction:column;gap:2px;max-height:340px;overflow:hidden;transition:max-height .25s ease,opacity .2s}
+.sb-group.collapsed .sb-grp-body{max-height:0;opacity:0;pointer-events:none}
+.sb-count{margin-left:auto;font-size:10px;font-weight:700;color:#111;background:var(--accent);border-radius:10px;padding:1px 7px;min-width:18px;text-align:center;line-height:1.5}
 #panel{padding:0 26px}
 .pnl-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}
 .pnl-stat{border:1px solid var(--charcoal);border-radius:11px;padding:18px;background:linear-gradient(180deg,#121216,#0d0d10)}
@@ -569,10 +578,28 @@ body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .pnl-card 
   <nav class="sb-nav">
     <div class="sb-label" id="menuLabel">Menú</div>
     <div class="viewtabs" id="viewtabs">
-      <button class="viewtab active" data-view="calendario"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span>Calendario</span></button>
-      <button class="viewtab" data-view="resultados"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l3.5-4 3 3L21 7"></path></svg><span>Resultados</span></button>
-      <button class="viewtab" data-view="proyectos"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg><span>Proyectos</span></button>
-      <button class="viewtab" data-view="estrategia"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1z"></path></svg><span>Estrategia</span></button>
+      <button class="viewtab active" data-view="inicio"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg><span>Inicio</span></button>
+      <div class="sb-group" data-grp="contenido">
+        <button class="sb-grp-h" data-grp="contenido"><span>Contenido</span><svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="sb-grp-body">
+          <button class="viewtab" data-view="calendario"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span>Calendario</span></button>
+          <button class="viewtab" data-view="aprobaciones"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 12.5l2.5 2.5 4.5-5"></path></svg><span>Aprobaciones</span><span class="sb-count" id="aprobCount"></span></button>
+          <button class="viewtab" data-view="estrategia"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1z"></path></svg><span>Estrategia</span></button>
+        </div>
+      </div>
+      <div class="sb-group" data-grp="desempeno">
+        <button class="sb-grp-h" data-grp="desempeno"><span>Desempeño</span><svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="sb-grp-body">
+          <button class="viewtab" data-view="resultados"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l3.5-4 3 3L21 7"></path></svg><span>Resultados</span></button>
+          <button class="viewtab" data-view="proyectos"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg><span>Proyectos</span></button>
+        </div>
+      </div>
+      <div class="sb-group" data-grp="cuenta" id="grpCuenta" style="display:none">
+        <button class="sb-grp-h" data-grp="cuenta"><span>Mi cuenta</span><svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="sb-grp-body">
+          <button class="sb-item" id="miPerfilBtn"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg><span>Mi perfil</span></button>
+        </div>
+      </div>
     </div>
     <div class="sb-label" id="adminLabel" style="display:none">Administración</div>
     <button class="sb-item" id="panelBtn" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1"></rect><rect x="13" y="3" width="8" height="6" rx="1"></rect><rect x="13" y="11" width="8" height="10" rx="1"></rect><rect x="3" y="15" width="8" height="6" rx="1"></rect></svg><span>Panel</span></button>
@@ -626,6 +653,34 @@ body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .pnl-card 
 
   <!-- Onboarding questionnaire banner (clients) -->
   <div id="cuestBanner" style="display:none"></div>
+
+  <!-- ===== VISTA: INICIO (resumen) ===== -->
+  <div id="viewInicio" class="view" style="display:none">
+    <section style="padding-top:30px"><div class="wrap">
+      <div class="workspace-head">
+        <div>
+          <div class="kick">Resumen</div>
+          <h2 class="sec-h" id="inicioGreeting" style="margin-bottom:6px">Inicio</h2>
+          <p class="muted" id="inicioSub" style="font-size:13px;letter-spacing:1px"></p>
+        </div>
+      </div>
+      <div id="inicioContent"></div>
+    </div></section>
+  </div>
+
+  <!-- ===== VISTA: APROBACIONES (pendientes de tu aprobacion) ===== -->
+  <div id="viewAprobaciones" class="view" style="display:none">
+    <section style="padding-top:30px"><div class="wrap">
+      <div class="workspace-head">
+        <div>
+          <div class="kick">Tu revision</div>
+          <h2 class="sec-h" style="margin-bottom:6px">Aprobaciones</h2>
+          <p class="muted" style="font-size:13px">Todo lo que esta esperando tu aprobacion, en un solo lugar.</p>
+        </div>
+      </div>
+      <div id="aprobContent"></div>
+    </div></section>
+  </div>
 
   <!-- ===== VISTA: CALENDARIO (area de trabajo, por defecto) ===== -->
   <div id="viewCalendario" class="view">
@@ -917,28 +972,114 @@ function renderClient(){
   { const pb=document.getElementById('panelBtn'); if(pb) pb.classList.remove('sb-active'); }
   document.getElementById('viewtabs').style.display = '';
   { const ml=document.getElementById('menuLabel'); if(ml) ml.style.display=''; }
-  switchView('calendario');
+  { const gc=document.getElementById('grpCuenta'); if(gc) gc.style.display = (ROLE!=='admin') ? '' : 'none'; }
+  switchView('inicio');
   // Onboarding banner (clients only).
   document.getElementById('cuestBanner').style.display = 'none';
   if(ROLE !== 'admin') loadCuestionario();
-  loadRevs().then(()=>renderCal());
+  loadRevs().then(()=>{
+    renderCal(); refreshAprobBadge();
+    const av=document.querySelector('.viewtab.active');
+    if(av && av.dataset.view==='inicio') renderInicio();
+    else if(av && av.dataset.view==='aprobaciones') renderAprobaciones();
+  });
   subscribeRevs();
 }
 
 /* ---------- VIEW SWITCHING (workspace) ---------- */
 function switchView(view){
-  const views = { calendario:'viewCalendario', resultados:'viewResultados', estrategia:'viewEstrategia', proyectos:'viewProyectos' };
-  if(!views[view]) view = 'calendario';
+  const views = { inicio:'viewInicio', calendario:'viewCalendario', aprobaciones:'viewAprobaciones', resultados:'viewResultados', estrategia:'viewEstrategia', proyectos:'viewProyectos' };
+  if(!views[view]) view = 'inicio';
   Object.keys(views).forEach(k =>
     document.getElementById(views[k]).style.display = (k===view) ? 'block' : 'none'
   );
   document.querySelectorAll('.viewtab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
-  const PAGES = { calendario:'Calendario', resultados:'Resultados', estrategia:'Estrategia', proyectos:'Proyectos' };
-  const tp = document.getElementById('tbPage'); if(tp) tp.textContent = PAGES[view] || 'Calendario';
+  const PAGES = { inicio:'Inicio', calendario:'Calendario', aprobaciones:'Aprobaciones', resultados:'Resultados', estrategia:'Estrategia', proyectos:'Proyectos' };
+  const tp = document.getElementById('tbPage'); if(tp) tp.textContent = PAGES[view] || 'Inicio';
   document.getElementById('app').classList.remove('sb-open');
+  if(view === 'inicio') renderInicio();
+  if(view === 'aprobaciones') renderAprobaciones();
   if(view === 'proyectos') loadProyectos();
   if(view === 'resultados') loadMetricas();
   window.scrollTo(0, 0);
+}
+
+/* ---------- INICIO + APROBACIONES (Fase A) ---------- */
+// Publicaciones con arte subido y aun no aprobado por el cliente.
+function pendingApprovals(){
+  const list=[];
+  if(!CLIENT || !CLIENT.plan) return list;
+  CLIENT.plan.forEach(m=>m.pubs.forEach(p=>{
+    const r=REV[keyOf(m,p.day)];
+    if(r && (r.images||[]).length>0 && !r.aprobado) list.push({m:m,p:p,images:(r.images||[]).length,comentario:r.comentario||''});
+  }));
+  list.sort((a,b)=> new Date(a.m.year,a.m.month-1,a.p.day) - new Date(b.m.year,b.m.month-1,b.p.day));
+  return list;
+}
+// Actualiza el contador del item "Aprobaciones" en el sidebar.
+function refreshAprobBadge(){
+  const el=document.getElementById('aprobCount'); if(!el) return;
+  const n=pendingApprovals().length;
+  el.textContent = n>0 ? n : '';
+  el.style.display = n>0 ? 'inline-flex' : 'none';
+}
+
+async function renderInicio(){
+  const c=document.getElementById('inicioContent'); if(!c || !CLIENT) return;
+  const g=document.getElementById('inicioGreeting'); if(g) g.textContent='Hola, '+CLIENT.name;
+  const s=document.getElementById('inicioSub'); if(s) s.textContent=CLIENT.tagline||'Tu seguimiento con NOCTURA';
+  const now=getNow(); const WD=['Dom','Lun','Mar','Mie','Jue','Vie','Sab']; const MNs=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const cm=CLIENT.plan.find(m=>m.year===now.getFullYear()&&m.month===now.getMonth()+1);
+  const pubsMonth=cm?cm.pubs.filter(p=>p.pilar!=='FESTIVO').length:0;
+  let aprobMonth=0; if(cm) cm.pubs.forEach(p=>{ if(eff(p,cm).estado==='aprobada') aprobMonth++; });
+  const pend=pendingApprovals();
+  const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate()); let next=null;
+  CLIENT.plan.forEach(m=>m.pubs.forEach(p=>{ const d=new Date(m.year,m.month-1,p.day); if(d>=t0 && (!next||d<next.d)) next={d:d,day:p.day,m:m,tema:(p.pilar==='PROYECTOS'?'Proyecto del mes':p.tema),fmt:p.fmt}; }));
+  const pendHtml='<div class="card" style="cursor:pointer'+(pend.length?';border-color:var(--gold)':'')+'" onclick="switchView(\'aprobaciones\')">'+
+    '<div class="kick">Pendiente de tu aprobacion</div>'+
+    '<div style="font-family:var(--serif);font-size:34px;line-height:1;color:'+(pend.length?'var(--gold)':'var(--ivory)')+';margin-top:8px">'+pend.length+'</div>'+
+    '<div class="muted" style="font-size:12.5px;margin-top:6px">'+(pend.length?'arte por revisar &middot; ir a aprobar &rarr;':'todo al dia &#10003;')+'</div></div>';
+  const nextHtml = next ? '<div class="card" style="cursor:pointer" onclick="switchView(\'calendario\')">'+
+    '<div class="kick">Proxima publicacion</div>'+
+    '<div style="font-size:16px;color:var(--ivory);margin-top:8px;line-height:1.3">'+esc(trim(next.tema,46))+'</div>'+
+    '<div class="muted" style="font-size:12.5px;margin-top:6px">'+WD[next.d.getDay()]+' '+next.day+' '+MNs[next.m.month-1]+' &middot; '+(FMT[next.fmt]||next.fmt)+' &rarr; ver calendario</div></div>' : '';
+  let metHtml='';
+  try{
+    const {data}=await sb.from('noctura_metricas').select('month,year,seguidores').eq('empresa',CLIENT.name);
+    if(data && data.length){ data.sort((a,b)=>(a.year*100+a.month)-(b.year*100+b.month)); const last=data[data.length-1], prev=data[data.length-2]; const delta=prev?last.seguidores-prev.seguidores:null;
+      metHtml='<div class="card" style="cursor:pointer" onclick="switchView(\'resultados\')"><div class="kick">Tu crecimiento</div>'+
+        '<div style="font-family:var(--serif);font-size:34px;line-height:1;color:var(--ivory);margin-top:8px">'+last.seguidores.toLocaleString('es-SV')+(delta!=null&&delta>0?' <span style="font-size:15px;color:#8fc7a0;font-family:var(--sans)">&#9650; +'+delta+'</span>':'')+'</div>'+
+        '<div class="muted" style="font-size:12.5px;margin-top:6px">Seguidores &middot; ver resultados &rarr;</div></div>';
+    }
+  }catch(e){}
+  c.innerHTML=
+    '<div class="pnl-summary" style="grid-template-columns:repeat(3,1fr);margin:6px 0 16px">'+
+      '<div class="pnl-stat"><div class="v">'+pubsMonth+'</div><div class="l">Publicaciones este mes</div></div>'+
+      '<div class="pnl-stat"><div class="v">'+aprobMonth+'</div><div class="l">Aprobadas</div></div>'+
+      '<div class="pnl-stat"><div class="v'+(pend.length?' alert':'')+'">'+pend.length+'</div><div class="l">Por aprobar</div></div>'+
+    '</div>'+
+    '<div class="grid g2" style="margin-top:4px">'+pendHtml+nextHtml+metHtml+'</div>';
+}
+
+function renderAprobaciones(){
+  const c=document.getElementById('aprobContent'); if(!c || !CLIENT) return;
+  const list=pendingApprovals();
+  if(!list.length){ c.innerHTML='<div style="text-align:center;color:var(--muted);padding:46px 0;font-size:15px">No tienes nada pendiente de aprobar &#10003;<br><span style="font-size:13px">Cuando NOCTURA suba arte nuevo para revisar, aparecera aqui.</span></div>'; return; }
+  const WD=['Dom','Lun','Mar','Mie','Jue','Vie','Sab']; const MNs=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  c.innerHTML='<p class="lead" style="margin:4px 0 14px;font-size:14px">Tenes <b>'+list.length+'</b> publicacion'+(list.length>1?'es':'')+' con arte esperando tu aprobacion. Haz clic para revisar y aprobar.</p>'+
+    '<div class="callist" style="display:flex">'+list.map(it=>{
+      const m=it.m,p=it.p,pl=CLIENT.pillars[p.pilar],e=eff(p,m);
+      const wd=WD[new Date(m.year,m.month-1,p.day).getDay()];
+      const tt=p.pilar==='PROYECTOS'?'Proyecto del mes':e.tema;
+      return '<div class="lrow" data-day="'+p.day+'" data-month="'+m.month+'">'+
+        '<div class="ldate"><span class="ld">'+p.day+'</span><span class="lwd">'+wd+' '+MNs[m.month-1]+'</span></div>'+
+        '<div class="ldot" style="background:'+(pl?pl.hex:'#888')+'"></div>'+
+        '<div class="lmain"><div class="ltt">'+esc(trim(tt,52))+'</div><div class="lsub">'+(FMT[p.fmt]||p.fmt)+' &middot; '+it.images+' imagen(es)'+(it.comentario?' &middot; con tu comentario':'')+'</div></div>'+
+        '<div class="lright"><span class="stpill st-revision">Por aprobar</span></div></div>';
+    }).join('')+'</div>';
+  c.querySelectorAll('.lrow[data-day]').forEach(el=>el.addEventListener('click',()=>{
+    const m=CLIENT.plan.find(x=>x.month===+el.dataset.month); if(!m) return; const p=m.pubs.find(x=>x.day===+el.dataset.day); if(p) openModal(p,m);
+  }));
 }
 
 /* ---------- STATIC SECTIONS ---------- */
@@ -1367,8 +1508,11 @@ function subscribeRevs(){
       const r=payload.new||payload.old; if(!r) return;
       const k=CLIENT.name+'-'+r.month+'-'+r.day;
       if(payload.eventType==='DELETE') delete REV[k]; else REV[k]=r;
-      const cv=document.getElementById('viewCalendario');
-      if(cv && cv.style.display!=='none') renderCal();
+      refreshAprobBadge();
+      const av=document.querySelector('.viewtab.active');
+      if(av && av.dataset.view==='aprobaciones') renderAprobaciones();
+      else if(av && av.dataset.view==='inicio') renderInicio();
+      else { const cv=document.getElementById('viewCalendario'); if(cv && cv.style.display!=='none') renderCal(); }
     })
     .subscribe();
 }
@@ -1399,6 +1543,7 @@ async function revSaveFields(p, m, fields, opts){
   const {data, error} = await sb.from('noctura_revisiones').upsert(row, {onConflict:'empresa,month,day'}).select().maybeSingle();
   if(error){ setRevStatus('No se pudo guardar: '+error.message, 'err'); return null; }
   REV[keyOf(m,p.day)] = data;
+  if(typeof refreshAprobBadge==='function') refreshAprobBadge();
   if(!opts.silent) setRevStatus('Guardado', 'ok');
   return data;
 }
@@ -2521,6 +2666,20 @@ document.querySelectorAll('.viewtab').forEach(t =>
   const tg = document.getElementById('sbToggle'); if(tg) tg.onclick = ()=>app.classList.add('sb-open');
   const bd = document.getElementById('sbBackdrop'); if(bd) bd.onclick = ()=>app.classList.remove('sb-open');
   const pb = document.getElementById('panelBtn'); if(pb) pb.onclick = ()=>{ app.classList.remove('sb-open'); showPanel(); };
+  // collapsible groups (persisted per browser)
+  let sbg={}; try{ sbg=JSON.parse(localStorage.getItem('noctura_sbgroups')||'{}'); }catch(e){}
+  document.querySelectorAll('.sb-grp-h').forEach(h=>{
+    const grp=h.parentElement, key=h.dataset.grp;
+    if(sbg[key]) grp.classList.add('collapsed');
+    h.addEventListener('click', ()=>{
+      grp.classList.toggle('collapsed');
+      sbg[key]=grp.classList.contains('collapsed');
+      try{ localStorage.setItem('noctura_sbgroups', JSON.stringify(sbg)); }catch(e){}
+    });
+  });
+  // "Mi perfil" -> abre el cuestionario del cliente
+  const mp=document.getElementById('miPerfilBtn');
+  if(mp) mp.onclick=()=>{ app.classList.remove('sb-open'); if(typeof loadCuestionario==='function'){ loadCuestionario().then(()=>{ if(typeof openCuestionario==='function') openCuestionario(false); }); } };
   // Color accent personalization (per browser, persisted)
   const PRESETS = ['#B8B0A4','#4d8aa8','#7fa890','#c07a55','#9b6b9e','#c98aa6'];
   const pop = document.getElementById('themePop');
