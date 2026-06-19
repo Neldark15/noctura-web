@@ -118,6 +118,18 @@ input:focus,textarea:focus{outline:1px solid var(--silver)}
 .sb-grp-body{display:flex;flex-direction:column;gap:2px;max-height:340px;overflow:hidden;transition:max-height .25s ease,opacity .2s}
 .sb-group.collapsed .sb-grp-body{max-height:0;opacity:0;pointer-events:none}
 .sb-count{margin-left:auto;font-size:10px;font-weight:700;color:#111;background:var(--accent);border-radius:10px;padding:1px 7px;min-width:18px;text-align:center;line-height:1.5}
+/* recursos / biblioteca */
+.recgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px}
+.rec-card{border:1px solid var(--glass-bd);border-radius:12px;background:var(--card-bg);box-shadow:var(--glass-hi);padding:18px;display:flex;flex-direction:column;min-height:118px}
+.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.rec-tipo{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;border:1px solid;border-radius:20px;padding:3px 9px;font-weight:600}
+.rec-dot{width:7px;height:7px;border-radius:50%}
+.rec-ext{color:var(--muted);font-size:14px}
+.rec-name{font-size:15.5px;color:var(--ivory);line-height:1.3;font-weight:500}
+.rec-desc{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+.rec-foot{margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rec-act{padding:8px 16px;font-size:12px;letter-spacing:.5px}
+.rec-admin{margin-left:auto;display:flex;gap:6px}
 #panel{padding:0 26px}
 .pnl-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0 8px}
 .pnl-stat{border:1px solid var(--charcoal);border-radius:11px;padding:18px;background:linear-gradient(180deg,#121216,#0d0d10)}
@@ -585,6 +597,7 @@ body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .pnl-card 
           <button class="viewtab" data-view="calendario"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span>Calendario</span></button>
           <button class="viewtab" data-view="aprobaciones"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 12.5l2.5 2.5 4.5-5"></path></svg><span>Aprobaciones</span><span class="sb-count" id="aprobCount"></span></button>
           <button class="viewtab" data-view="estrategia"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M15.6 8.4l-2.1 5.1-5.1 2.1 2.1-5.1 5.1-2.1z"></path></svg><span>Estrategia</span></button>
+          <button class="viewtab" data-view="recursos"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l2 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Recursos</span></button>
         </div>
       </div>
       <div class="sb-group" data-grp="desempeno">
@@ -679,6 +692,20 @@ body.light .sec-h,body.light .modal h3,body.light .tb-page,body.light .pnl-card 
         </div>
       </div>
       <div id="aprobContent"></div>
+    </div></section>
+  </div>
+
+  <!-- ===== VISTA: RECURSOS (biblioteca de la marca) ===== -->
+  <div id="viewRecursos" class="view" style="display:none">
+    <section style="padding-top:30px"><div class="wrap">
+      <div class="workspace-head">
+        <div>
+          <div class="kick">Biblioteca</div>
+          <h2 class="sec-h" style="margin-bottom:6px">Recursos</h2>
+          <p class="muted" id="recSub" style="font-size:13px">Logos, manual de marca, entregables y enlaces de tu marca, siempre a mano.</p>
+        </div>
+      </div>
+      <div id="recContent"></div>
     </div></section>
   </div>
 
@@ -988,17 +1015,18 @@ function renderClient(){
 
 /* ---------- VIEW SWITCHING (workspace) ---------- */
 function switchView(view){
-  const views = { inicio:'viewInicio', calendario:'viewCalendario', aprobaciones:'viewAprobaciones', resultados:'viewResultados', estrategia:'viewEstrategia', proyectos:'viewProyectos' };
+  const views = { inicio:'viewInicio', calendario:'viewCalendario', aprobaciones:'viewAprobaciones', recursos:'viewRecursos', resultados:'viewResultados', estrategia:'viewEstrategia', proyectos:'viewProyectos' };
   if(!views[view]) view = 'inicio';
   Object.keys(views).forEach(k =>
     document.getElementById(views[k]).style.display = (k===view) ? 'block' : 'none'
   );
   document.querySelectorAll('.viewtab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
-  const PAGES = { inicio:'Inicio', calendario:'Calendario', aprobaciones:'Aprobaciones', resultados:'Resultados', estrategia:'Estrategia', proyectos:'Proyectos' };
+  const PAGES = { inicio:'Inicio', calendario:'Calendario', aprobaciones:'Aprobaciones', recursos:'Recursos', resultados:'Resultados', estrategia:'Estrategia', proyectos:'Proyectos' };
   const tp = document.getElementById('tbPage'); if(tp) tp.textContent = PAGES[view] || 'Inicio';
   document.getElementById('app').classList.remove('sb-open');
   if(view === 'inicio') renderInicio();
   if(view === 'aprobaciones') renderAprobaciones();
+  if(view === 'recursos') renderRecursos();
   if(view === 'proyectos') loadProyectos();
   if(view === 'resultados') loadMetricas();
   window.scrollTo(0, 0);
@@ -1080,6 +1108,125 @@ function renderAprobaciones(){
   c.querySelectorAll('.lrow[data-day]').forEach(el=>el.addEventListener('click',()=>{
     const m=CLIENT.plan.find(x=>x.month===+el.dataset.month); if(!m) return; const p=m.pubs.find(x=>x.day===+el.dataset.day); if(p) openModal(p,m);
   }));
+}
+
+/* ---------- RECURSOS / BIBLIOTECA (Fase B) ---------- */
+const REC_TIPOS = { logo:'Logo / Marca', manual:'Manual', archivo:'Archivo', enlace:'Enlace', credenciales:'Credenciales', otro:'Otro' };
+const REC_HEX = { logo:'#b09a6a', manual:'#7fa890', archivo:'#3f6f8c', enlace:'#4d8aa8', credenciales:'#c07a55', otro:'#9b6b9e' };
+let REC_DATA = [];
+
+async function renderRecursos(){
+  const c=document.getElementById('recContent'); if(!c || !CLIENT) return;
+  const isAdmin = ROLE==='admin';
+  const sub=document.getElementById('recSub'); if(sub) sub.textContent = isAdmin
+    ? 'Sube y organiza los recursos de '+CLIENT.name+'. El cliente los ve y descarga aqui.'
+    : 'Logos, manual de marca, entregables y enlaces de tu marca, siempre a mano.';
+  c.innerHTML='<p class="muted" style="padding:14px 2px">Cargando recursos...</p>';
+  const {data,error}=await sb.from('noctura_recursos').select('*').eq('empresa',CLIENT.name).order('orden',{ascending:true}).order('created_at',{ascending:true});
+  if(error){ c.innerHTML='<p class="muted">No se pudieron cargar los recursos.</p>'; return; }
+  REC_DATA = data||[];
+  let html='';
+  if(isAdmin) html+='<div style="margin-bottom:16px"><button class="btn solid" id="addRecBtn">+ Agregar recurso</button></div>';
+  if(!REC_DATA.length){
+    html+='<div style="text-align:center;color:var(--muted);padding:44px 0;font-size:15px">'+(isAdmin?'Aun no hay recursos. Agrega el primero con el boton de arriba.':'Aun no hay recursos. NOCTURA los subira aqui pronto.')+'</div>';
+  } else {
+    html+='<div class="recgrid">'+REC_DATA.map(r=>recCard(r,isAdmin)).join('')+'</div>';
+  }
+  c.innerHTML=html;
+  const ab=document.getElementById('addRecBtn'); if(ab) ab.onclick=()=>openRecEditor(null);
+  c.querySelectorAll('[data-rec-open]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); recOpen(b.dataset.url||'', b.dataset.path||''); }));
+  c.querySelectorAll('[data-rec-edit]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); openRecEditor(REC_DATA.find(x=>x.id===b.dataset.recEdit)); }));
+  c.querySelectorAll('[data-rec-del]').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); recDelete(REC_DATA.find(x=>x.id===b.dataset.recDel), b); }));
+}
+
+function recCard(r, isAdmin){
+  const hex=REC_HEX[r.tipo]||'#888', tipoLabel=REC_TIPOS[r.tipo]||r.tipo;
+  const isLink = !!r.url && !r.path;
+  const actionLabel = r.path ? 'Descargar' : (r.url ? 'Abrir' : '');
+  const adminCtrls = isAdmin ? '<div class="rec-admin"><button class="mini" data-rec-edit="'+r.id+'">Editar</button><button class="mini" data-rec-del="'+r.id+'">Eliminar</button></div>' : '';
+  const action = actionLabel ? '<button class="btn rec-act" data-rec-open="1" data-url="'+esc(r.url||'')+'" data-path="'+esc(r.path||'')+'">'+actionLabel+'</button>' : '';
+  return '<div class="rec-card">'+
+    '<div class="rec-top"><span class="rec-tipo" style="border-color:'+hex+';color:'+hex+'"><span class="rec-dot" style="background:'+hex+'"></span>'+esc(tipoLabel)+'</span>'+(isLink?'<span class="rec-ext" title="Enlace externo">&#8599;</span>':'')+'</div>'+
+    '<div class="rec-name">'+esc(r.titulo)+'</div>'+
+    (r.descripcion?'<div class="rec-desc">'+esc(r.descripcion)+'</div>':'')+
+    '<div class="rec-foot">'+action+adminCtrls+'</div>'+
+  '</div>';
+}
+
+async function recOpen(url, path){
+  if(path){
+    const {data,error}=await sb.storage.from('recursos').createSignedUrl(path,3600);
+    if(data && data.signedUrl) window.open(data.signedUrl,'_blank','noopener');
+    else alert('No se pudo abrir el archivo'+(error?': '+error.message:''));
+  } else if(url){
+    const u=/^https?:\/\//i.test(url)?url:'https://'+url;
+    window.open(u,'_blank','noopener');
+  }
+}
+
+function openRecEditor(r){
+  const isNew=!r; r=r||{titulo:'',tipo:'archivo',descripcion:'',url:'',path:''};
+  const tipos=Object.keys(REC_TIPOS);
+  document.getElementById('modal').innerHTML=
+    '<span class="x" id="xclose">×</span>'+
+    '<span class="mtag" style="background:var(--charcoal)">ADMIN · Recurso</span>'+
+    '<h3>'+(isNew?'Agregar recurso':'Editar recurso')+'</h3>'+
+    '<div class="meta">Recurso de '+esc(CLIENT.name)+' — el cliente lo vera en su seccion Recursos.</div>'+
+    '<div class="field"><div class="lab">Titulo</div><input id="rc_titulo" value="'+esc(r.titulo)+'" placeholder="Ej. Logo principal (PNG)"></div>'+
+    '<div class="field"><div class="lab">Tipo</div><select id="rc_tipo">'+tipos.map(t=>'<option value="'+t+'"'+(t===r.tipo?' selected':'')+'>'+REC_TIPOS[t]+'</option>').join('')+'</select></div>'+
+    '<div class="field"><div class="lab">Descripcion (opcional)</div><textarea id="rc_desc" rows="2">'+esc(r.descripcion||'')+'</textarea></div>'+
+    '<div class="field"><div class="lab">Enlace (Drive, web, etc.)</div><input id="rc_url" value="'+esc(r.url||'')+'" placeholder="https://..."></div>'+
+    '<div class="field"><div class="lab">o subir un archivo'+(r.path?' (ya hay uno cargado)':'')+'</div><label class="revupload" id="rc_uplbl"><input type="file" id="rc_file" hidden><span style="font-size:18px;line-height:1">+</span> '+(r.path?'Reemplazar archivo':'Subir archivo')+'</label> <span id="rc_fname" class="muted" style="font-size:12px"></span></div>'+
+    '<div class="mrow"><button class="btn solid" id="rc_save">Guardar</button>'+(isNew?'':'<button class="btn" id="rc_del">Eliminar</button>')+'<button class="btn" id="rc_close">Cerrar</button></div>'+
+    '<div class="err" id="rc_err"></div>';
+  document.getElementById('ov').classList.add('show');
+  document.getElementById('xclose').onclick=closeModal;
+  document.getElementById('rc_close').onclick=closeModal;
+  const fi=document.getElementById('rc_file'), fn=document.getElementById('rc_fname');
+  if(fi) fi.onchange=()=>{ fn.textContent=fi.files[0]?fi.files[0].name:''; };
+  document.getElementById('rc_save').onclick=()=>saveRec(r, isNew);
+  const dl=document.getElementById('rc_del'); if(dl) dl.onclick=()=>{ if(confirm('¿Eliminar este recurso?')) recDelete(r); };
+}
+
+async function saveRec(r, isNew){
+  const btn=document.getElementById('rc_save'), err=document.getElementById('rc_err');
+  const titulo=document.getElementById('rc_titulo').value.trim();
+  const tipo=document.getElementById('rc_tipo').value;
+  const desc=document.getElementById('rc_desc').value.trim();
+  const url=document.getElementById('rc_url').value.trim();
+  const file=document.getElementById('rc_file').files[0];
+  if(!titulo){ err.textContent='Ponle un titulo.'; return; }
+  if(!url && !file && !r.path){ err.textContent='Agrega un enlace o sube un archivo.'; return; }
+  btn.textContent='Guardando...'; err.textContent='';
+  let path=r.path||null;
+  try{
+    if(file){
+      if(file.size>20*1024*1024){ err.textContent='El archivo supera 20MB.'; btn.textContent='Guardar'; return; }
+      const ext=((file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'')||'bin').slice(0,6);
+      const id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(Date.now()+'-'+Math.random().toString(36).slice(2));
+      const np=CLIENT.name+'/'+id+'.'+ext;
+      const up=await sb.storage.from('recursos').upload(np,file,{contentType:file.type});
+      if(up.error){ err.textContent='Error al subir: '+up.error.message; btn.textContent='Guardar'; return; }
+      if(r.path) sb.storage.from('recursos').remove([r.path]);
+      path=np;
+    }
+    const row={ empresa:CLIENT.name, titulo:titulo, tipo:tipo, descripcion:desc||null, url:(url||null), path:path, created_by:USER.id };
+    const res = isNew
+      ? await sb.from('noctura_recursos').insert(row).select().maybeSingle()
+      : await sb.from('noctura_recursos').update(row).eq('id',r.id).select().maybeSingle();
+    if(res.error){ err.textContent='No se pudo guardar: '+res.error.message; btn.textContent='Guardar'; return; }
+    closeModal(); renderRecursos();
+  }catch(e){ err.textContent='Error: '+(e.message||e); btn.textContent='Guardar'; }
+}
+
+async function recDelete(r, btnEl){
+  if(!r) return;
+  if(btnEl && btnEl.dataset.confirm!=='1'){ btnEl.dataset.confirm='1'; btnEl.textContent='¿Seguro?'; setTimeout(()=>{ if(btnEl){ btnEl.dataset.confirm='0'; btnEl.textContent='Eliminar'; } },2500); return; }
+  if(r.path) await sb.storage.from('recursos').remove([r.path]);
+  const {error}=await sb.from('noctura_recursos').delete().eq('id',r.id);
+  if(error){ alert('No se pudo eliminar: '+error.message); return; }
+  if(document.getElementById('ov').classList.contains('show')) closeModal();
+  renderRecursos();
 }
 
 /* ---------- STATIC SECTIONS ---------- */
