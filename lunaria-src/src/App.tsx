@@ -133,6 +133,12 @@ export default function App() {
         </EffectComposer>
       </Canvas>
 
+      {/* Volver al sitio de NOCTURA */}
+      <a className="back-noctura" href="/" aria-label="Volver a NOCTURA">
+        <span className="bn-arrow" aria-hidden="true">←</span>
+        <span className="bn-label">NOCTURA</span>
+      </a>
+
       <div className="hint">
         WASD / flechas: mover · arrastra: rotar cámara · Shift: correr · Espacio: saltar
       </div>

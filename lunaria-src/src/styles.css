@@ -77,6 +77,53 @@ canvas {
   text-align: center;
 }
 
+/* Botón "volver a NOCTURA" — píldora de vidrio abajo-izquierda, gemela del salto */
+.back-noctura {
+  position: absolute;
+  left: 24px;
+  bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 17px 11px 14px;
+  background: var(--glass);
+  border: 1px solid var(--glass-bd);
+  border-radius: 14px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  color: var(--ui-fg);
+  font-family: var(--ui-font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-decoration: none;
+  user-select: none;
+  opacity: 0.72;
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.05s;
+}
+
+.back-noctura:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.back-noctura:active {
+  transform: scale(0.97);
+}
+
+.back-noctura .bn-arrow {
+  color: var(--ui-gold);
+  font-size: 15px;
+  line-height: 1;
+  transform: translateY(-0.5px);
+  transition: transform 0.2s ease;
+}
+
+.back-noctura:hover .bn-arrow {
+  transform: translateX(-2px) translateY(-0.5px);
+}
+
 /* Vidrio base de los paneles (gravedad / viajar): sutil, se aviva al pasar el cursor */
 .panel,
 .travel {
