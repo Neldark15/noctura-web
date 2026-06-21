@@ -1,0 +1,460 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0a0a14;
+}
+
+canvas {
+  display: block;
+  touch-action: none; /* evita que el navegador robe los gestos en móvil */
+}
+
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+}
+
+:root {
+  --ui-fg: rgba(236, 238, 247, 0.86);
+  --ui-dim: rgba(236, 238, 247, 0.42);
+  --ui-gold: #ffcf8a;
+  --glass: rgba(12, 15, 28, 0.22);
+  --glass-bd: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(16px) saturate(1.15);
+  --ctrl: rgba(255, 255, 255, 0.05);
+  --ctrl-bd: rgba(255, 255, 255, 0.1);
+  --ui-font: ui-sans-serif, system-ui, -apple-system, "SF Pro Display", sans-serif;
+}
+
+.ui {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  color: var(--ui-fg);
+  font-family: var(--ui-font);
+  pointer-events: none;
+  user-select: none;
+}
+
+.ui h1 {
+  font-size: clamp(28px, 6vw, 56px);
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ui p {
+  margin-top: 6px;
+  opacity: 0.5;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* Pista de controles — muy tenue, centrada arriba */
+.hint {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--ui-dim);
+  font-family: var(--ui-font);
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+}
+
+/* Vidrio base de los paneles (gravedad / viajar): sutil, se aviva al pasar el cursor */
+.panel,
+.travel {
+  position: absolute;
+  top: 20px;
+  background: var(--glass);
+  border: 1px solid var(--glass-bd);
+  border-radius: 16px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  color: var(--ui-fg);
+  font-family: var(--ui-font);
+  user-select: none;
+  opacity: 0.7;
+  transition: opacity 0.28s ease, background 0.28s ease;
+}
+
+.panel:hover,
+.travel:hover {
+  opacity: 1;
+}
+
+/* Panel de gravedad */
+.panel {
+  left: 20px;
+  width: 188px;
+  padding: 13px 15px;
+}
+
+.panel-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: var(--ui-dim);
+}
+
+.panel-row strong {
+  font-size: 18px;
+  color: var(--ui-gold);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Slider minimalista */
+.panel input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  margin: 13px 0 9px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+}
+
+.panel input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--ui-gold);
+  box-shadow: 0 0 10px rgba(255, 207, 138, 0.5);
+  cursor: pointer;
+}
+
+.panel input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--ui-gold);
+  box-shadow: 0 0 10px rgba(255, 207, 138, 0.5);
+  cursor: pointer;
+}
+
+.panel-hint {
+  font-size: 10px;
+  opacity: 0.4;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* Botón de cámara (no usado normalmente) */
+.cam-toggle {
+  position: absolute;
+  top: 150px;
+  left: 20px;
+  padding: 9px 13px;
+  background: var(--ctrl);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 12px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  color: var(--ui-fg);
+  font-family: var(--ui-font);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.7;
+  transition: opacity 0.15s, transform 0.05s;
+}
+
+.cam-toggle:hover {
+  opacity: 1;
+}
+
+.cam-toggle:active {
+  transform: scale(0.97);
+}
+
+/* Botones de acción (correr / saludar) */
+.actions {
+  position: absolute;
+  left: 26px;
+  bottom: 130px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  user-select: none;
+}
+
+.act-btn {
+  padding: 11px 16px;
+  font-size: 13px;
+  font-family: var(--ui-font);
+  color: var(--ui-fg);
+  background: var(--ctrl);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 14px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  opacity: 0.75;
+  transition: opacity 0.12s, background 0.12s, transform 0.05s;
+}
+
+.act-btn:hover {
+  opacity: 1;
+}
+
+.act-btn:active {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(0.96);
+}
+
+/* Navegador de animaciones (debug) */
+.animdbg {
+  position: absolute;
+  top: 168px;
+  left: 20px;
+  width: 200px;
+  padding: 12px 14px;
+  background: var(--glass);
+  border: 1px solid var(--glass-bd);
+  border-radius: 14px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  color: var(--ui-fg);
+  font-family: var(--ui-font);
+  user-select: none;
+}
+
+.animdbg-title {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.animdbg-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.animdbg-row strong {
+  font-size: 18px;
+  color: var(--ui-gold);
+  min-width: 56px;
+  text-align: center;
+}
+
+.animdbg-row button {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 16px;
+  color: var(--ui-fg);
+  background: var(--ctrl);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.animdbg-row button:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.animdbg-play {
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 0;
+  font-size: 12px;
+  color: #9fd0ff;
+  background: var(--ctrl);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.animdbg-play:active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Tablero de viaje (elegir destino) */
+.travel {
+  right: 20px;
+  width: 166px;
+  padding: 13px 14px;
+}
+
+.travel-title {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ui-dim);
+  margin-bottom: 11px;
+}
+
+.travel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 12px;
+  margin-top: 6px;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--ui-fg);
+  background: var(--ctrl);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.05s;
+}
+
+.travel-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.travel-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.travel-btn.here {
+  border-color: rgba(255, 207, 138, 0.45);
+  color: var(--ui-gold);
+  background: rgba(255, 207, 138, 0.06);
+  cursor: default;
+}
+
+.travel-btn .tag {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+
+.travel-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.travel-warp {
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #bcd6f5;
+  text-align: center;
+  padding: 8px 0 2px;
+  opacity: 0.85;
+}
+
+/* Botón de salto — fantasma */
+.jump-btn {
+  position: absolute;
+  right: 188px;
+  bottom: 42px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--ui-fg);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--ctrl-bd);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  opacity: 0.68;
+  transition: opacity 0.12s, background 0.12s, transform 0.05s;
+}
+
+.jump-btn:hover {
+  opacity: 1;
+}
+
+.jump-btn:active {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.94);
+}
+
+/* D-pad táctil — fantasma, se aviva al tocar */
+.dpad {
+  position: absolute;
+  right: 26px;
+  bottom: 30px;
+  width: 138px;
+  height: 138px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 7px;
+  user-select: none;
+  touch-action: none;
+}
+
+.dbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--ui-fg);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--ctrl-bd);
+  border-radius: 14px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.12s, background 0.12s, transform 0.05s;
+}
+
+.dbtn:hover {
+  opacity: 0.9;
+}
+
+.dbtn:active {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.94);
+  opacity: 1;
+}
+
+.dbtn.up {
+  grid-column: 2;
+  grid-row: 1;
+}
+.dbtn.left {
+  grid-column: 1;
+  grid-row: 2;
+}
+.dbtn.right {
+  grid-column: 3;
+  grid-row: 2;
+}
+.dbtn.down {
+  grid-column: 2;
+  grid-row: 3;
+}

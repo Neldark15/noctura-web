@@ -11,3 +11,8 @@ Thumbs.db
 png-transparent-full-moon-earth-supermoon-.png
 
 .vercel
+
+# LUNARIA source build artifacts
+lunaria-src/node_modules/
+lunaria-src/dist/
+lunaria-src/LUNARIA.html
