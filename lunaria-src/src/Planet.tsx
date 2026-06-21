@@ -34,7 +34,7 @@ export default function Planet() {
       friction={1}
     >
       {/* terreno realista (la malla que se ve = la malla de colisión) */}
-      <mesh geometry={geo} frustumCulled={false}>
+      <mesh geometry={geo} frustumCulled={false} userData={{ lensflare: 'no-occlusion' }}>
         <meshStandardMaterial vertexColors roughness={0.92} metalness={0} fog={false} />
       </mesh>
 

@@ -101,29 +101,31 @@ export default function App() {
         {/* Post-proceso: AO + brillo + god rays + lens flare (refracción) */}
         <EffectComposer>
           <N8AO aoRadius={0.7} intensity={3.5} distanceFalloff={1} color="#06070f" halfRes />
-          <Bloom intensity={0.8} luminanceThreshold={0.5} luminanceSmoothing={0.3} mipmapBlur />
+          <Bloom intensity={0.55} luminanceThreshold={0.72} luminanceSmoothing={0.28} mipmapBlur />
+          {/* God rays: la luna SÍ ocluye la fuente; bajamos weight/exposure/clampMax
+              para que los rayos sean un acento en el cielo y no laven la superficie. */}
           <GodRays
             sun={sunRef}
             samples={30}
-            density={0.92}
+            density={0.88}
             decay={0.92}
-            weight={0.5}
-            exposure={0.5}
-            clampMax={1}
+            weight={0.22}
+            exposure={0.28}
+            clampMax={0.55}
             blur
             resolutionScale={0.5}
           />
           <LensFlare
             lensPosition={SUN.center}
-            glareSize={0.22}
+            glareSize={0.16}
             starPoints={6}
             flareSize={0.012}
-            haloScale={0.6}
-            colorGain={new THREE.Color(8, 5.5, 2.5)}
+            haloScale={0.55}
+            colorGain={new THREE.Color(6, 4, 2)}
             secondaryGhosts
             aditionalStreaks
             starBurst={false}
-            opacity={0.85}
+            opacity={0.6}
             smoothTime={0.08}
           />
           <Noise opacity={0.05} />

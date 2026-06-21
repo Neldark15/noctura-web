@@ -27,7 +27,9 @@ export default function Moon() {
   const geometry = useMemo(() => buildMoonGeometry(144, true, true), []) // detalle alto (luna 3×), albedo por vértice
 
   return (
-    <mesh geometry={geometry} receiveShadow>
+    // userData.lensflare='no-occlusion' → el LensFlare se apaga cuando la luna
+    // se interpone entre la cámara y el sol (si no, el destello la atraviesa).
+    <mesh geometry={geometry} receiveShadow userData={{ lensflare: 'no-occlusion' }}>
       <meshToonMaterial vertexColors color="#ffffff" gradientMap={gradient} />
       <Outlines thickness={1.5} color="#15172a" />
     </mesh>

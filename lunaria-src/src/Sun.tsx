@@ -35,7 +35,7 @@ const Sun = forwardRef<THREE.Mesh>(function Sun(_, ref) {
         <meshBasicMaterial color={new THREE.Color(3.6, 2.5, 1.15)} toneMapped={false} fog={false} />
       </mesh>
 
-      <sprite scale={[SUN.radius * 4.5, SUN.radius * 4.5, 1]}>
+      <sprite scale={[SUN.radius * 3.6, SUN.radius * 3.6, 1]}>
         <spriteMaterial
           map={glow}
           color="#ffd9a0"
@@ -44,10 +44,10 @@ const Sun = forwardRef<THREE.Mesh>(function Sun(_, ref) {
           blending={THREE.AdditiveBlending}
           fog={false}
           toneMapped={false}
-          opacity={0.9}
+          opacity={0.72}
         />
       </sprite>
-      <sprite scale={[SUN.radius * 9, SUN.radius * 9, 1]}>
+      <sprite scale={[SUN.radius * 5.6, SUN.radius * 5.6, 1]}>
         <spriteMaterial
           map={glow}
           color="#ff9a55"
@@ -56,7 +56,7 @@ const Sun = forwardRef<THREE.Mesh>(function Sun(_, ref) {
           blending={THREE.AdditiveBlending}
           fog={false}
           toneMapped={false}
-          opacity={0.5}
+          opacity={0.3}
         />
       </sprite>
     </group>
